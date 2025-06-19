@@ -1,0 +1,18 @@
+% Auto-generated PGFPlots figure for T=128
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}
+  \begin{axis}[
+    xlabel={$\lg n$},
+    ylabel={Time (ms)},
+    grid=major,
+    legend style={at={(0,1)}, anchor=north west, legend cell align=left}
+  ]
+    \addplot+[mark=*, thick, color=blue] table[x index=1,y index=0] {bench_data/T128__baseline.dat};
+    \addlegendentry{Baseline}
+    \addplot+[mark=*, thick, color=orange] table[x index=1,y index=0] {bench_data/T128__compiled_verifier.dat};
+    \addlegendentry{Compiled verifier}
+  \end{axis}
+\end{tikzpicture}
+\caption{Timing for $t = 2^{7}$ across $n$ values.}
+\end{figure}

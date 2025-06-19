@@ -1,0 +1,36 @@
+[package]
+name = "matvec"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.100"
+ark-crypto-primitives = "0.5.0"
+ark-ff = "0.5.0"
+ark-serialize = "0.5.0"
+ark-std = "0.5.0"
+blake3 = {version = "1.8.2", features = ["rayon"]}
+rand = "0.9.1"
+rand_core = "0.9.3"
+rayon = "1.11.0"
+sha2 = "0.10.9"
+sha3 = "0.10.8"
+spongefish = { git = "https://github.com/arkworks-rs/spongefish" }
+spongefish-pow = { git = "https://github.com/arkworks-rs/spongefish" }
+tfhe-ntt = "0.6.0"
+whir = { git = "https://github.com/WizardOfMenlo/whir.git", rev = "22c675807fc9295fef68a11945713dc3e184e1c1" }
+
+[dev-dependencies]
+criterion = "0.7.0"
+
+[[bin]]
+name = "matvec"
+path = "src/bin/main.rs"
+
+[[bench]]
+name = "cyclotomic_ring_bench"
+harness = false
+
+[[bench]]
+name = "functionality_bench"
+harness = false

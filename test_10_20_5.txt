@@ -1,0 +1,52 @@
+   Compiling matvec v0.1.0 (/Users/louis/Documents/zama/matvecmul)
+    Finished `release` profile [optimized] target(s) in 2.91s
+     Running unittests src/lib.rs (target/release/deps/matvec-2358c18e7308964f)
+
+running 11 tests
+test arith::cyclotomic_ring::test::test_basic_mul ... ok
+test arith::cyclotomic_ring::test::test_mul_via_basic ... ok
+test arith::linalg::test::process ... ok
+test arith::cyclotomic_ring::test::test_monomial_mult ... ok
+test arith::polynomial_ring::test::test_long_division_by_cyclotomic ... ok
+test arith::cyclotomic_ring::test::test_ntt_mul ... ok
+test arith::polynomial_ring::test::test_mul_and_long_division ... ok
+test protocol::sumcheck::multilinear::tests::test_fast_eval_structured ... ok
+test arith::cyclotomic_ring::test::test_mul_via_ntt ... ok
+test rlwe::test::test_enc_dec ... ok
+test protocol::sumcheck::tests::test_sum_check ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/main.rs (target/release/deps/matvec-e2e397d5187dc8d8)
+
+running 1 test
+test test::test_functionality has been running for over 60 seconds
+processing x took: 3.817791ms
+processing y took: 59.291µs
+time to concat: 696.833µs
+time to absorb: 778.584µs
+Squeezing challenges took: 3.667µs
+Computing unpadded Z1 MLEs took: 593.625µs
+Verifying Z1 took: 13.583µs
+Evaluating eq_tau took: 1.833µs
+Evaluating x_alpha took: 27.292µs
+Evaluating ell took: 21.75µs
+WHIR verifying m took: 2.242041ms
+Verifying Z3 took: 8.417µs
+Evaluating ell for Z3 took: 21.958µs
+Setting up Whir took: 6.375µs
+WHIR Verifying r took: 917.709µs
+Evaluating eq_tau for Z3 took: 1.292µs
+Building eq_tau for Z2 took: 792ns
+Computing y_alpha evaluations took: 56.333µs
+Evaluating Z2 took: 333ns
+test test::test_functionality ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 117.11s
+
+   Doc-tests matvec
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

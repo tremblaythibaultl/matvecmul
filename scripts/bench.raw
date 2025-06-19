@@ -1,0 +1,2488 @@
+warning: unused import: `time::Instant`
+ --> src/protocol/verifier/mod.rs:1:32
+  |
+1 | use std::{marker::PhantomData, time::Instant};
+  |                                ^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: `matvec` (lib) generated 1 warning (run `cargo fix --lib -p matvec` to apply 1 suggestion)
+   Compiling matvec v0.1.0 (/Users/louis/Documents/zama/matvecmul)
+warning: function `bench_whir_prover` is never used
+  --> benches/functionality_bench.rs:72:4
+   |
+72 | fn bench_whir_prover(c: &mut Criterion) {
+   |    ^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: function `bench_parallel_plaintext_matvec` is never used
+   --> benches/functionality_bench.rs:120:4
+    |
+120 | fn bench_parallel_plaintext_matvec(c: &mut Criterion) {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `matvec` (bench "functionality_bench") generated 2 warnings
+    Finished `bench` profile [optimized] target(s) in 3.04s
+     Running benches/functionality_bench.rs (/Users/louis/Documents/zama/matvecmul/target/release/deps/functionality_bench-35113ee7f75d00d3)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H2: Collecting 10 samples in estimated 5.0009 s (50k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H2
+                        time:   [6.5312 µs 6.7038 µs 6.7878 µs]
+                        change: [−2.2170% +1.4944% +5.4882%] (p = 0.49 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H4: Collecting 10 samples in estimated 5.0011 s (43k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H4
+                        time:   [13.211 µs 13.422 µs 13.564 µs]
+                        change: [−0.4672% +1.9724% +4.3707%] (p = 0.14 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H8: Collecting 10 samples in estimated 5.0067 s (33k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H8
+                        time:   [26.501 µs 27.210 µs 27.547 µs]
+                        change: [−8.5597% −3.8753% +0.9075%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H16: Collecting 10 samples in estimated 5.0063 s (22k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H16
+                        time:   [54.257 µs 55.573 µs 56.265 µs]
+                        change: [−4.4906% −0.3788% +3.9001%] (p = 0.87 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H32: Collecting 10 samples in estimated 5.0159 s (14k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H32
+                        time:   [109.02 µs 111.72 µs 112.85 µs]
+                        change: [−14.889% −9.3763% −3.7592%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H64: Collecting 10 samples in estimated 5.0158 s (7810 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T2_H64
+                        time:   [206.68 µs 212.55 µs 219.24 µs]
+                        change: [−6.7518% −2.3122% +2.5915%] (p = 0.39 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H2: Collecting 10 samples in estimated 5.0075 s (27k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H2
+                        time:   [13.748 µs 13.995 µs 14.188 µs]
+                        change: [−28.300% −18.988% −9.6228%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H4: Collecting 10 samples in estimated 5.0080 s (22k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H4
+                        time:   [26.558 µs 27.427 µs 27.907 µs]
+                        change: [−6.6802% −2.4248% +1.9338%] (p = 0.32 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H8: Collecting 10 samples in estimated 5.0079 s (17k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H8
+                        time:   [54.120 µs 55.283 µs 55.770 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H16: Collecting 10 samples in estimated 5.0176 s (11k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H16
+                        time:   [109.35 µs 111.77 µs 112.82 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H32: Collecting 10 samples in estimated 5.0146 s (7040 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H32
+                        time:   [213.33 µs 217.30 µs 220.59 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H64: Collecting 10 samples in estimated 5.0537 s (3960 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T4_H64
+                        time:   [416.85 µs 425.08 µs 435.48 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H2: Collecting 10 samples in estimated 5.0163 s (14k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H2
+                        time:   [37.041 µs 37.769 µs 39.268 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H4: Collecting 10 samples in estimated 5.0031 s (12k iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H4
+                        time:   [64.357 µs 65.085 µs 66.645 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H8: Collecting 10 samples in estimated 5.0276 s (8745 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H8
+                        time:   [118.14 µs 120.33 µs 124.17 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H16: Collecting 10 samples in estimated 5.0142 s (5830 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H16
+                        time:   [223.17 µs 226.73 µs 232.11 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H32: Collecting 10 samples in estimated 5.0375 s (3520 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H32
+                        time:   [431.21 µs 442.96 µs 460.26 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H64: Collecting 10 samples in estimated 5.0777 s (1980 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T8_H64
+                        time:   [818.47 µs 828.39 µs 836.28 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H2: Collecting 10 samples in estimated 5.0329 s (7150 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H2
+                        time:   [70.813 µs 72.669 µs 75.804 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H4: Collecting 10 samples in estimated 5.0385 s (5940 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H4
+                        time:   [118.89 µs 121.86 µs 126.80 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H8: Collecting 10 samples in estimated 5.0609 s (4510 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H8
+                        time:   [221.99 µs 225.25 µs 231.46 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H16: Collecting 10 samples in estimated 5.0457 s (2970 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H16
+                        time:   [427.39 µs 435.06 µs 450.99 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H32: Collecting 10 samples in estimated 5.0878 s (1815 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H32
+                        time:   [823.47 µs 830.85 µs 843.35 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H64: Collecting 10 samples in estimated 5.2443 s (1045 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T16_H64
+                        time:   [1.5370 ms 1.5657 ms 1.5795 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H2: Collecting 10 samples in estimated 5.0436 s (3630 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H2
+                        time:   [138.17 µs 142.43 µs 149.38 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H4: Collecting 10 samples in estimated 5.0455 s (3025 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H4
+                        time:   [233.77 µs 237.81 µs 245.76 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H8: Collecting 10 samples in estimated 5.0799 s (2255 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H8
+                        time:   [434.51 µs 443.52 µs 459.06 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H16: Collecting 10 samples in estimated 5.1289 s (1540 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H16
+                        time:   [821.79 µs 833.84 µs 853.43 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H32: Collecting 10 samples in estimated 5.1734 s (935 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H32
+                        time:   [1.5616 ms 1.5765 ms 1.5876 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H64: Collecting 10 samples in estimated 5.4713 s (550 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T32_H64
+                        time:   [3.0015 ms 3.0080 ms 3.0131 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H2: Collecting 10 samples in estimated 5.0534 s (1815 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H2
+                        time:   [276.18 µs 289.50 µs 319.20 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H4: Collecting 10 samples in estimated 5.1800 s (1540 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H4
+                        time:   [470.90 µs 475.22 µs 483.92 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H8: Collecting 10 samples in estimated 5.1344 s (1155 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H8
+                        time:   [847.12 µs 854.09 µs 867.35 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H16: Collecting 10 samples in estimated 5.1396 s (770 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H16
+                        time:   [1.5960 ms 1.6088 ms 1.6266 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H32: Collecting 10 samples in estimated 5.5387 s (495 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H32
+                        time:   [2.9826 ms 3.0142 ms 3.0317 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H64: Collecting 10 samples in estimated 5.4760 s (275 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T64_H64
+                        time:   [5.9733 ms 6.0346 ms 6.0822 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H2: Collecting 10 samples in estimated 5.1830 s (935 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H2
+                        time:   [487.89 µs 494.61 µs 506.41 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H4: Collecting 10 samples in estimated 5.0903 s (770 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H4
+                        time:   [811.18 µs 826.81 µs 851.50 µs]
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H8: Collecting 10 samples in estimated 5.3131 s (605 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H8
+                        time:   [1.6176 ms 1.6328 ms 1.6519 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H16: Collecting 10 samples in estimated 5.1607 s (385 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H16
+                        time:   [3.0190 ms 3.0393 ms 3.0581 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H32: Collecting 10 samples in estimated 6.0806 s (275 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H32
+                        time:   [6.0399 ms 6.0670 ms 6.0922 ms]
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low mild
+  2 (20.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H64: Collecting 10 samples in estimated 6.5850 s (165 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T128_H64
+                        time:   [11.955 ms 12.050 ms 12.110 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H2: Collecting 10 samples in estimated 5.5395 s (495 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H2
+                        time:   [939.75 µs 950.40 µs 960.61 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H4: Collecting 10 samples in estimated 5.1743 s (385 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H4
+                        time:   [1.7087 ms 1.7208 ms 1.7284 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H8: Collecting 10 samples in estimated 5.8616 s (330 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H8
+                        time:   [3.0845 ms 3.1077 ms 3.1244 ms]
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low mild
+  2 (20.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H16: Collecting 10 samples in estimated 5.8695 s (220 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H16
+                        time:   [6.1190 ms 6.1459 ms 6.1784 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H32: Collecting 10 samples in estimated 7.3197 s (165 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H32
+                        time:   [12.161 ms 12.260 ms 12.336 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H64: Collecting 10 samples in estimated 8.7900 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T256_H64
+                        time:   [24.348 ms 24.442 ms 24.491 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H2: Collecting 10 samples in estimated 5.0506 s (220 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H2
+                        time:   [1.7976 ms 1.8246 ms 1.8516 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H4: Collecting 10 samples in estimated 5.9968 s (220 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H4
+                        time:   [3.1655 ms 3.1813 ms 3.1980 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H8: Collecting 10 samples in estimated 5.9839 s (165 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H8
+                        time:   [6.0688 ms 6.1010 ms 6.1630 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H16: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H16: Collecting 10 samples in estimated 5.9266 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H16
+                        time:   [12.056 ms 12.128 ms 12.175 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H32: Collecting 10 samples in estimated 9.8176 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H32
+                        time:   [24.224 ms 24.340 ms 24.404 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 9.3s or enable flat sampling.
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H64: Collecting 10 samples in estimated 9.3454 s (55 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T512_H64
+                        time:   [48.994 ms 49.275 ms 49.473 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H2
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H2: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H2: Collecting 10 samples in estimated 5.0707 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H2: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H2
+                        time:   [3.1442 ms 3.1611 ms 3.1722 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H4
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H4: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H4: Collecting 10 samples in estimated 6.0038 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H4: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H4
+                        time:   [6.2159 ms 6.3069 ms 6.3523 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H8
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H8: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H8: Collecting 10 samples in estimated 7.9916 s (110 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H8: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H8
+                        time:   [12.136 ms 12.200 ms 12.232 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H16
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 5.9s or enable flat sampling.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H16: Collecting 10 samples in estimated 5.9292 s (55 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H16: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H16
+                        time:   [24.083 ms 24.339 ms 24.623 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H32
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H32: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H32: Collecting 10 samples in estimated 5.6951 s (30 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H32: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H32
+                        time:   [48.623 ms 48.954 ms 49.321 ms]
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H64
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H64: Warming up for 3.0000 s
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H64: Collecting 10 samples in estimated 6.6822 s (20 iterations)
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H64: Analyzing
+plaintext_matvec/plaintext_matvec/T1024_H64
+                        time:   [97.550 ms 97.806 ms 98.062 ms]
+
+Benchmarking vector_encryption/vector_encryption/T2_H2
+Benchmarking vector_encryption/vector_encryption/T2_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H2: Collecting 10 samples in estimated 5.0066 s (32k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H2: Analyzing
+vector_encryption/vector_encryption/T2_H2
+                        time:   [63.533 µs 63.678 µs 63.754 µs]
+                        change: [−0.1770% +0.7192% +1.7238%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T2_H4
+Benchmarking vector_encryption/vector_encryption/T2_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H4: Collecting 10 samples in estimated 5.0022 s (30k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H4: Analyzing
+vector_encryption/vector_encryption/T2_H4
+                        time:   [63.576 µs 63.829 µs 63.998 µs]
+                        change: [−0.4022% +0.3500% +1.2332%] (p = 0.45 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T2_H8
+Benchmarking vector_encryption/vector_encryption/T2_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H8: Collecting 10 samples in estimated 5.0044 s (27k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H8: Analyzing
+vector_encryption/vector_encryption/T2_H8
+                        time:   [63.763 µs 64.077 µs 64.342 µs]
+Benchmarking vector_encryption/vector_encryption/T2_H16
+Benchmarking vector_encryption/vector_encryption/T2_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H16: Collecting 10 samples in estimated 5.0036 s (22k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H16: Analyzing
+vector_encryption/vector_encryption/T2_H16
+                        time:   [63.365 µs 63.579 µs 63.689 µs]
+Benchmarking vector_encryption/vector_encryption/T2_H32
+Benchmarking vector_encryption/vector_encryption/T2_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H32: Collecting 10 samples in estimated 5.0118 s (16k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H32: Analyzing
+vector_encryption/vector_encryption/T2_H32
+                        time:   [63.140 µs 63.400 µs 63.648 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T2_H64
+Benchmarking vector_encryption/vector_encryption/T2_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T2_H64: Collecting 10 samples in estimated 5.0058 s (11k iterations)
+Benchmarking vector_encryption/vector_encryption/T2_H64: Analyzing
+vector_encryption/vector_encryption/T2_H64
+                        time:   [62.241 µs 62.601 µs 63.103 µs]
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low severe
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T4_H2
+Benchmarking vector_encryption/vector_encryption/T4_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H2: Collecting 10 samples in estimated 5.0001 s (17k iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H2: Analyzing
+vector_encryption/vector_encryption/T4_H2
+                        time:   [127.50 µs 127.76 µs 127.89 µs]
+                        change: [+0.2142% +1.2070% +2.3139%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking vector_encryption/vector_encryption/T4_H4
+Benchmarking vector_encryption/vector_encryption/T4_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H4: Collecting 10 samples in estimated 5.0125 s (16k iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H4: Analyzing
+vector_encryption/vector_encryption/T4_H4
+                        time:   [127.77 µs 127.99 µs 128.30 µs]
+                        change: [+0.6039% +1.2730% +2.1020%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T4_H8
+Benchmarking vector_encryption/vector_encryption/T4_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H8: Collecting 10 samples in estimated 5.0012 s (14k iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H8: Analyzing
+vector_encryption/vector_encryption/T4_H8
+                        time:   [127.91 µs 128.40 µs 129.27 µs]
+Benchmarking vector_encryption/vector_encryption/T4_H16
+Benchmarking vector_encryption/vector_encryption/T4_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H16: Collecting 10 samples in estimated 5.0082 s (11k iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H16: Analyzing
+vector_encryption/vector_encryption/T4_H16
+                        time:   [127.72 µs 128.30 µs 128.97 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking vector_encryption/vector_encryption/T4_H32
+Benchmarking vector_encryption/vector_encryption/T4_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H32: Collecting 10 samples in estimated 5.0230 s (8415 iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H32: Analyzing
+vector_encryption/vector_encryption/T4_H32
+                        time:   [126.74 µs 128.63 µs 129.73 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T4_H64
+Benchmarking vector_encryption/vector_encryption/T4_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T4_H64: Collecting 10 samples in estimated 5.0253 s (5005 iterations)
+Benchmarking vector_encryption/vector_encryption/T4_H64: Analyzing
+vector_encryption/vector_encryption/T4_H64
+                        time:   [125.19 µs 126.02 µs 126.40 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T8_H2
+Benchmarking vector_encryption/vector_encryption/T8_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H2: Collecting 10 samples in estimated 5.0017 s (8415 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H2: Analyzing
+vector_encryption/vector_encryption/T8_H2
+                        time:   [256.91 µs 258.00 µs 258.60 µs]
+Benchmarking vector_encryption/vector_encryption/T8_H4
+Benchmarking vector_encryption/vector_encryption/T8_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H4: Collecting 10 samples in estimated 5.0298 s (7865 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H4: Analyzing
+vector_encryption/vector_encryption/T8_H4
+                        time:   [256.83 µs 258.16 µs 258.84 µs]
+Benchmarking vector_encryption/vector_encryption/T8_H8
+Benchmarking vector_encryption/vector_encryption/T8_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H8: Collecting 10 samples in estimated 5.0374 s (7040 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H8: Analyzing
+vector_encryption/vector_encryption/T8_H8
+                        time:   [254.25 µs 256.58 µs 258.04 µs]
+Benchmarking vector_encryption/vector_encryption/T8_H16
+Benchmarking vector_encryption/vector_encryption/T8_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H16: Collecting 10 samples in estimated 5.0203 s (5720 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H16: Analyzing
+vector_encryption/vector_encryption/T8_H16
+                        time:   [254.20 µs 255.98 µs 256.95 µs]
+Benchmarking vector_encryption/vector_encryption/T8_H32
+Benchmarking vector_encryption/vector_encryption/T8_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H32: Collecting 10 samples in estimated 5.0188 s (4015 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H32: Analyzing
+vector_encryption/vector_encryption/T8_H32
+                        time:   [253.50 µs 255.69 µs 257.15 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T8_H64
+Benchmarking vector_encryption/vector_encryption/T8_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T8_H64: Collecting 10 samples in estimated 5.0413 s (2585 iterations)
+Benchmarking vector_encryption/vector_encryption/T8_H64: Analyzing
+vector_encryption/vector_encryption/T8_H64
+                        time:   [253.08 µs 253.32 µs 253.46 µs]
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low mild
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T16_H2
+Benchmarking vector_encryption/vector_encryption/T16_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H2: Collecting 10 samples in estimated 5.0030 s (4290 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H2: Analyzing
+vector_encryption/vector_encryption/T16_H2
+                        time:   [513.61 µs 515.59 µs 516.92 µs]
+Benchmarking vector_encryption/vector_encryption/T16_H4
+Benchmarking vector_encryption/vector_encryption/T16_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H4: Collecting 10 samples in estimated 5.0036 s (4015 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H4: Analyzing
+vector_encryption/vector_encryption/T16_H4
+                        time:   [511.92 µs 514.73 µs 516.18 µs]
+Benchmarking vector_encryption/vector_encryption/T16_H8
+Benchmarking vector_encryption/vector_encryption/T16_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H8: Collecting 10 samples in estimated 5.0368 s (3575 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H8: Analyzing
+vector_encryption/vector_encryption/T16_H8
+                        time:   [511.52 µs 513.92 µs 515.65 µs]
+Benchmarking vector_encryption/vector_encryption/T16_H16
+Benchmarking vector_encryption/vector_encryption/T16_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H16: Collecting 10 samples in estimated 5.0915 s (2860 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H16: Analyzing
+vector_encryption/vector_encryption/T16_H16
+                        time:   [511.18 µs 513.70 µs 515.24 µs]
+Benchmarking vector_encryption/vector_encryption/T16_H32
+Benchmarking vector_encryption/vector_encryption/T16_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H32: Collecting 10 samples in estimated 5.0994 s (2035 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H32: Analyzing
+vector_encryption/vector_encryption/T16_H32
+                        time:   [506.16 µs 511.54 µs 515.31 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T16_H64
+Benchmarking vector_encryption/vector_encryption/T16_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T16_H64: Collecting 10 samples in estimated 5.1971 s (1320 iterations)
+Benchmarking vector_encryption/vector_encryption/T16_H64: Analyzing
+vector_encryption/vector_encryption/T16_H64
+                        time:   [495.22 µs 500.39 µs 507.43 µs]
+Benchmarking vector_encryption/vector_encryption/T32_H2
+Benchmarking vector_encryption/vector_encryption/T32_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H2: Collecting 10 samples in estimated 5.0614 s (2200 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H2: Analyzing
+vector_encryption/vector_encryption/T32_H2
+                        time:   [1.0281 ms 1.0327 ms 1.0353 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T32_H4
+Benchmarking vector_encryption/vector_encryption/T32_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H4: Collecting 10 samples in estimated 5.0141 s (2035 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H4: Analyzing
+vector_encryption/vector_encryption/T32_H4
+                        time:   [1.0237 ms 1.0283 ms 1.0307 ms]
+Benchmarking vector_encryption/vector_encryption/T32_H8
+Benchmarking vector_encryption/vector_encryption/T32_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H8: Collecting 10 samples in estimated 5.1342 s (1815 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H8: Analyzing
+vector_encryption/vector_encryption/T32_H8
+                        time:   [1.0227 ms 1.0269 ms 1.0301 ms]
+Benchmarking vector_encryption/vector_encryption/T32_H16
+Benchmarking vector_encryption/vector_encryption/T32_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H16: Collecting 10 samples in estimated 5.0853 s (1430 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H16: Analyzing
+vector_encryption/vector_encryption/T32_H16
+                        time:   [1.0239 ms 1.0288 ms 1.0316 ms]
+Benchmarking vector_encryption/vector_encryption/T32_H32
+Benchmarking vector_encryption/vector_encryption/T32_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H32: Collecting 10 samples in estimated 5.2416 s (1045 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H32: Analyzing
+vector_encryption/vector_encryption/T32_H32
+                        time:   [1.0196 ms 1.0306 ms 1.0356 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T32_H64
+Benchmarking vector_encryption/vector_encryption/T32_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T32_H64: Collecting 10 samples in estimated 5.2107 s (715 iterations)
+Benchmarking vector_encryption/vector_encryption/T32_H64: Analyzing
+vector_encryption/vector_encryption/T32_H64
+                        time:   [1.0206 ms 1.0258 ms 1.0310 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T64_H2
+Benchmarking vector_encryption/vector_encryption/T64_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H2: Collecting 10 samples in estimated 5.0083 s (1100 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H2: Analyzing
+vector_encryption/vector_encryption/T64_H2
+                        time:   [2.0512 ms 2.0603 ms 2.0660 ms]
+Benchmarking vector_encryption/vector_encryption/T64_H4
+Benchmarking vector_encryption/vector_encryption/T64_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H4: Collecting 10 samples in estimated 5.1700 s (1045 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H4: Analyzing
+vector_encryption/vector_encryption/T64_H4
+                        time:   [2.0492 ms 2.0586 ms 2.0661 ms]
+Benchmarking vector_encryption/vector_encryption/T64_H8
+Benchmarking vector_encryption/vector_encryption/T64_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H8: Collecting 10 samples in estimated 5.3094 s (935 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H8: Analyzing
+vector_encryption/vector_encryption/T64_H8
+                        time:   [2.0547 ms 2.0666 ms 2.0730 ms]
+Benchmarking vector_encryption/vector_encryption/T64_H16
+Benchmarking vector_encryption/vector_encryption/T64_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H16: Collecting 10 samples in estimated 5.0748 s (715 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H16: Analyzing
+vector_encryption/vector_encryption/T64_H16
+                        time:   [2.0534 ms 2.0625 ms 2.0668 ms]
+Benchmarking vector_encryption/vector_encryption/T64_H32
+Benchmarking vector_encryption/vector_encryption/T64_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H32: Collecting 10 samples in estimated 5.1594 s (550 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H32: Analyzing
+vector_encryption/vector_encryption/T64_H32
+                        time:   [2.0360 ms 2.0535 ms 2.0653 ms]
+Benchmarking vector_encryption/vector_encryption/T64_H64
+Benchmarking vector_encryption/vector_encryption/T64_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T64_H64: Collecting 10 samples in estimated 5.1910 s (330 iterations)
+Benchmarking vector_encryption/vector_encryption/T64_H64: Analyzing
+vector_encryption/vector_encryption/T64_H64
+                        time:   [2.0484 ms 2.0510 ms 2.0560 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T128_H2
+Benchmarking vector_encryption/vector_encryption/T128_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H2: Collecting 10 samples in estimated 5.0231 s (550 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H2: Analyzing
+vector_encryption/vector_encryption/T128_H2
+                        time:   [4.1124 ms 4.1264 ms 4.1362 ms]
+Benchmarking vector_encryption/vector_encryption/T128_H4
+Benchmarking vector_encryption/vector_encryption/T128_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H4: Collecting 10 samples in estimated 5.4281 s (550 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H4: Analyzing
+vector_encryption/vector_encryption/T128_H4
+                        time:   [4.1175 ms 4.1344 ms 4.1434 ms]
+Benchmarking vector_encryption/vector_encryption/T128_H8
+Benchmarking vector_encryption/vector_encryption/T128_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H8: Collecting 10 samples in estimated 5.6013 s (495 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H8: Analyzing
+vector_encryption/vector_encryption/T128_H8
+                        time:   [4.1242 ms 4.1388 ms 4.1454 ms]
+Benchmarking vector_encryption/vector_encryption/T128_H16
+Benchmarking vector_encryption/vector_encryption/T128_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H16: Collecting 10 samples in estimated 5.2310 s (385 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H16: Analyzing
+vector_encryption/vector_encryption/T128_H16
+                        time:   [4.1324 ms 4.1440 ms 4.1524 ms]
+Benchmarking vector_encryption/vector_encryption/T128_H32
+Benchmarking vector_encryption/vector_encryption/T128_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H32: Collecting 10 samples in estimated 5.5002 s (275 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H32: Analyzing
+vector_encryption/vector_encryption/T128_H32
+                        time:   [4.1062 ms 4.1315 ms 4.1428 ms]
+Benchmarking vector_encryption/vector_encryption/T128_H64
+Benchmarking vector_encryption/vector_encryption/T128_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T128_H64: Collecting 10 samples in estimated 5.1935 s (165 iterations)
+Benchmarking vector_encryption/vector_encryption/T128_H64: Analyzing
+vector_encryption/vector_encryption/T128_H64
+                        time:   [4.0914 ms 4.0979 ms 4.1040 ms]
+Benchmarking vector_encryption/vector_encryption/T256_H2
+Benchmarking vector_encryption/vector_encryption/T256_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H2: Collecting 10 samples in estimated 5.0524 s (275 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H2: Analyzing
+vector_encryption/vector_encryption/T256_H2
+                        time:   [8.2127 ms 8.2406 ms 8.2563 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T256_H4
+Benchmarking vector_encryption/vector_encryption/T256_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H4: Collecting 10 samples in estimated 5.4735 s (275 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H4: Analyzing
+vector_encryption/vector_encryption/T256_H4
+                        time:   [8.2476 ms 8.2552 ms 8.2593 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking vector_encryption/vector_encryption/T256_H8
+Benchmarking vector_encryption/vector_encryption/T256_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H8: Collecting 10 samples in estimated 6.0790 s (275 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H8: Analyzing
+vector_encryption/vector_encryption/T256_H8
+                        time:   [8.2433 ms 8.2571 ms 8.2659 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking vector_encryption/vector_encryption/T256_H16
+Benchmarking vector_encryption/vector_encryption/T256_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H16: Collecting 10 samples in estimated 6.2468 s (220 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H16: Analyzing
+vector_encryption/vector_encryption/T256_H16
+                        time:   [8.2360 ms 8.2553 ms 8.2657 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking vector_encryption/vector_encryption/T256_H32
+Benchmarking vector_encryption/vector_encryption/T256_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H32: Collecting 10 samples in estimated 6.6195 s (165 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H32: Analyzing
+vector_encryption/vector_encryption/T256_H32
+                        time:   [8.3091 ms 8.3285 ms 8.3419 ms]
+Benchmarking vector_encryption/vector_encryption/T256_H64
+Benchmarking vector_encryption/vector_encryption/T256_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T256_H64: Collecting 10 samples in estimated 6.9265 s (110 iterations)
+Benchmarking vector_encryption/vector_encryption/T256_H64: Analyzing
+vector_encryption/vector_encryption/T256_H64
+                        time:   [8.1808 ms 8.2272 ms 8.2475 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H2
+Benchmarking vector_encryption/vector_encryption/T512_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T512_H2: Collecting 10 samples in estimated 6.1397 s (165 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H2: Analyzing
+vector_encryption/vector_encryption/T512_H2
+                        time:   [16.300 ms 16.351 ms 16.373 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H4
+Benchmarking vector_encryption/vector_encryption/T512_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T512_H4: Collecting 10 samples in estimated 6.4545 s (165 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H4: Analyzing
+vector_encryption/vector_encryption/T512_H4
+                        time:   [16.422 ms 16.459 ms 16.482 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H8
+Benchmarking vector_encryption/vector_encryption/T512_H8: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T512_H8: Collecting 10 samples in estimated 7.4959 s (165 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H8: Analyzing
+vector_encryption/vector_encryption/T512_H8
+                        time:   [16.373 ms 16.429 ms 16.454 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H16
+Benchmarking vector_encryption/vector_encryption/T512_H16: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T512_H16: Collecting 10 samples in estimated 6.2634 s (110 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H16: Analyzing
+vector_encryption/vector_encryption/T512_H16
+                        time:   [16.316 ms 16.326 ms 16.337 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H32
+Benchmarking vector_encryption/vector_encryption/T512_H32: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T512_H32: Collecting 10 samples in estimated 8.8245 s (110 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H32: Analyzing
+vector_encryption/vector_encryption/T512_H32
+                        time:   [16.416 ms 16.466 ms 16.494 ms]
+Benchmarking vector_encryption/vector_encryption/T512_H64
+Benchmarking vector_encryption/vector_encryption/T512_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 7.4s or enable flat sampling.
+Benchmarking vector_encryption/vector_encryption/T512_H64: Collecting 10 samples in estimated 7.3598 s (55 iterations)
+Benchmarking vector_encryption/vector_encryption/T512_H64: Analyzing
+vector_encryption/vector_encryption/T512_H64
+                        time:   [16.726 ms 16.760 ms 16.776 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T1024_H2
+Benchmarking vector_encryption/vector_encryption/T1024_H2: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T1024_H2: Collecting 10 samples in estimated 8.0901 s (110 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H2: Analyzing
+vector_encryption/vector_encryption/T1024_H2
+                        time:   [32.918 ms 32.986 ms 33.016 ms]
+Benchmarking vector_encryption/vector_encryption/T1024_H4
+Benchmarking vector_encryption/vector_encryption/T1024_H4: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T1024_H4: Collecting 10 samples in estimated 8.8174 s (110 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H4: Analyzing
+vector_encryption/vector_encryption/T1024_H4
+                        time:   [32.825 ms 32.906 ms 32.942 ms]
+Benchmarking vector_encryption/vector_encryption/T1024_H8
+Benchmarking vector_encryption/vector_encryption/T1024_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 5.0s or enable flat sampling.
+Benchmarking vector_encryption/vector_encryption/T1024_H8: Collecting 10 samples in estimated 5.0309 s (55 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H8: Analyzing
+vector_encryption/vector_encryption/T1024_H8
+                        time:   [32.745 ms 32.759 ms 32.773 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T1024_H16
+Benchmarking vector_encryption/vector_encryption/T1024_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 6.3s or enable flat sampling.
+Benchmarking vector_encryption/vector_encryption/T1024_H16: Collecting 10 samples in estimated 6.2851 s (55 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H16: Analyzing
+vector_encryption/vector_encryption/T1024_H16
+                        time:   [32.615 ms 32.696 ms 32.777 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T1024_H32
+Benchmarking vector_encryption/vector_encryption/T1024_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 9.3s or enable flat sampling.
+Benchmarking vector_encryption/vector_encryption/T1024_H32: Collecting 10 samples in estimated 9.3039 s (55 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H32: Analyzing
+vector_encryption/vector_encryption/T1024_H32
+                        time:   [32.800 ms 32.803 ms 32.806 ms]
+Benchmarking vector_encryption/vector_encryption/T1024_H64
+Benchmarking vector_encryption/vector_encryption/T1024_H64: Warming up for 3.0000 s
+Benchmarking vector_encryption/vector_encryption/T1024_H64: Collecting 10 samples in estimated 5.4488 s (20 iterations)
+Benchmarking vector_encryption/vector_encryption/T1024_H64: Analyzing
+vector_encryption/vector_encryption/T1024_H64
+                        time:   [32.781 ms 32.890 ms 32.957 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+
+Benchmarking prover_computation/prover_computation/T2_H2
+Benchmarking prover_computation/prover_computation/T2_H2: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T2_H2: Collecting 10 samples in estimated 5.2639 s (275 iterations)
+Benchmarking prover_computation/prover_computation/T2_H2: Analyzing
+prover_computation/prover_computation/T2_H2
+                        time:   [19.165 ms 19.190 ms 19.221 ms]
+                        change: [−3.4108% −2.4151% −1.5212%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T2_H4
+Benchmarking prover_computation/prover_computation/T2_H4: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T2_H4: Collecting 10 samples in estimated 6.1251 s (165 iterations)
+Benchmarking prover_computation/prover_computation/T2_H4: Analyzing
+prover_computation/prover_computation/T2_H4
+                        time:   [37.115 ms 37.164 ms 37.197 ms]
+                        change: [−3.9227% −2.8327% −1.7745%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T2_H8
+Benchmarking prover_computation/prover_computation/T2_H8: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T2_H8: Collecting 10 samples in estimated 7.7731 s (110 iterations)
+Benchmarking prover_computation/prover_computation/T2_H8: Analyzing
+prover_computation/prover_computation/T2_H8
+                        time:   [70.469 ms 70.531 ms 70.610 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T2_H16
+Benchmarking prover_computation/prover_computation/T2_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 6.8s or enable flat sampling.
+Benchmarking prover_computation/prover_computation/T2_H16: Collecting 10 samples in estimated 6.7710 s (55 iterations)
+Benchmarking prover_computation/prover_computation/T2_H16: Analyzing
+prover_computation/prover_computation/T2_H16
+                        time:   [122.54 ms 122.62 ms 122.69 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T2_H32
+Benchmarking prover_computation/prover_computation/T2_H32: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T2_H32: Collecting 10 samples in estimated 6.8177 s (30 iterations)
+Benchmarking prover_computation/prover_computation/T2_H32: Analyzing
+prover_computation/prover_computation/T2_H32
+                        time:   [226.70 ms 226.99 ms 227.28 ms]
+Benchmarking prover_computation/prover_computation/T2_H64
+Benchmarking prover_computation/prover_computation/T2_H64: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T2_H64: Collecting 10 samples in estimated 8.8416 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T2_H64: Analyzing
+prover_computation/prover_computation/T2_H64
+                        time:   [441.84 ms 442.57 ms 443.41 ms]
+Benchmarking prover_computation/prover_computation/T4_H2
+Benchmarking prover_computation/prover_computation/T4_H2: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T4_H2: Collecting 10 samples in estimated 5.7583 s (165 iterations)
+Benchmarking prover_computation/prover_computation/T4_H2: Analyzing
+prover_computation/prover_computation/T4_H2
+                        time:   [34.838 ms 34.898 ms 34.943 ms]
+                        change: [−2.4256% −2.0682% −1.7379%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T4_H4
+Benchmarking prover_computation/prover_computation/T4_H4: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T4_H4: Collecting 10 samples in estimated 7.2304 s (110 iterations)
+Benchmarking prover_computation/prover_computation/T4_H4: Analyzing
+prover_computation/prover_computation/T4_H4
+                        time:   [65.612 ms 65.667 ms 65.723 ms]
+                        change: [−2.8080% −1.7148% −0.8246%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T4_H8
+Benchmarking prover_computation/prover_computation/T4_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 6.4s or enable flat sampling.
+Benchmarking prover_computation/prover_computation/T4_H8: Collecting 10 samples in estimated 6.3785 s (55 iterations)
+Benchmarking prover_computation/prover_computation/T4_H8: Analyzing
+prover_computation/prover_computation/T4_H8
+                        time:   [116.20 ms 116.38 ms 116.60 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T4_H16
+Benchmarking prover_computation/prover_computation/T4_H16: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T4_H16: Collecting 10 samples in estimated 6.7835 s (30 iterations)
+Benchmarking prover_computation/prover_computation/T4_H16: Analyzing
+prover_computation/prover_computation/T4_H16
+                        time:   [225.67 ms 225.91 ms 226.16 ms]
+Benchmarking prover_computation/prover_computation/T4_H32
+Benchmarking prover_computation/prover_computation/T4_H32: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T4_H32: Collecting 10 samples in estimated 8.5903 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T4_H32: Analyzing
+prover_computation/prover_computation/T4_H32
+                        time:   [427.65 ms 428.36 ms 429.09 ms]
+Benchmarking prover_computation/prover_computation/T4_H64
+Benchmarking prover_computation/prover_computation/T4_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.4s.
+Benchmarking prover_computation/prover_computation/T4_H64: Collecting 10 samples in estimated 8.4483 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T4_H64: Analyzing
+prover_computation/prover_computation/T4_H64
+                        time:   [843.07 ms 845.06 ms 847.00 ms]
+Benchmarking prover_computation/prover_computation/T8_H2
+Benchmarking prover_computation/prover_computation/T8_H2: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T8_H2: Collecting 10 samples in estimated 7.0093 s (110 iterations)
+Benchmarking prover_computation/prover_computation/T8_H2: Analyzing
+prover_computation/prover_computation/T8_H2
+                        time:   [63.513 ms 63.577 ms 63.633 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T8_H4
+Benchmarking prover_computation/prover_computation/T8_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 6.1s or enable flat sampling.
+Benchmarking prover_computation/prover_computation/T8_H4: Collecting 10 samples in estimated 6.1454 s (55 iterations)
+Benchmarking prover_computation/prover_computation/T8_H4: Analyzing
+prover_computation/prover_computation/T8_H4
+                        time:   [111.57 ms 111.76 ms 111.93 ms]
+Benchmarking prover_computation/prover_computation/T8_H8
+Benchmarking prover_computation/prover_computation/T8_H8: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T8_H8: Collecting 10 samples in estimated 6.5851 s (30 iterations)
+Benchmarking prover_computation/prover_computation/T8_H8: Analyzing
+prover_computation/prover_computation/T8_H8
+                        time:   [219.43 ms 219.80 ms 220.20 ms]
+Benchmarking prover_computation/prover_computation/T8_H16
+Benchmarking prover_computation/prover_computation/T8_H16: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T8_H16: Collecting 10 samples in estimated 8.5832 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T8_H16: Analyzing
+prover_computation/prover_computation/T8_H16
+                        time:   [428.31 ms 428.83 ms 429.33 ms]
+Benchmarking prover_computation/prover_computation/T8_H32
+Benchmarking prover_computation/prover_computation/T8_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.3s.
+Benchmarking prover_computation/prover_computation/T8_H32: Collecting 10 samples in estimated 8.3037 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T8_H32: Analyzing
+prover_computation/prover_computation/T8_H32
+                        time:   [829.03 ms 831.66 ms 834.86 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T8_H64
+Benchmarking prover_computation/prover_computation/T8_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.6s.
+Benchmarking prover_computation/prover_computation/T8_H64: Collecting 10 samples in estimated 16.583 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T8_H64: Analyzing
+prover_computation/prover_computation/T8_H64
+                        time:   [1.6556 s 1.6589 s 1.6625 s]
+Benchmarking prover_computation/prover_computation/T16_H2
+Benchmarking prover_computation/prover_computation/T16_H2: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 6.1s or enable flat sampling.
+Benchmarking prover_computation/prover_computation/T16_H2: Collecting 10 samples in estimated 6.0691 s (55 iterations)
+Benchmarking prover_computation/prover_computation/T16_H2: Analyzing
+prover_computation/prover_computation/T16_H2
+                        time:   [109.93 ms 110.17 ms 110.38 ms]
+Benchmarking prover_computation/prover_computation/T16_H4
+Benchmarking prover_computation/prover_computation/T16_H4: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T16_H4: Collecting 10 samples in estimated 6.4803 s (30 iterations)
+Benchmarking prover_computation/prover_computation/T16_H4: Analyzing
+prover_computation/prover_computation/T16_H4
+                        time:   [215.37 ms 215.75 ms 216.13 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T16_H8
+Benchmarking prover_computation/prover_computation/T16_H8: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T16_H8: Collecting 10 samples in estimated 8.4975 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T16_H8: Analyzing
+prover_computation/prover_computation/T16_H8
+                        time:   [423.45 ms 424.32 ms 425.04 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T16_H16
+Benchmarking prover_computation/prover_computation/T16_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.3s.
+Benchmarking prover_computation/prover_computation/T16_H16: Collecting 10 samples in estimated 8.3250 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T16_H16: Analyzing
+prover_computation/prover_computation/T16_H16
+                        time:   [831.53 ms 833.41 ms 835.11 ms]
+Benchmarking prover_computation/prover_computation/T16_H32
+Benchmarking prover_computation/prover_computation/T16_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.4s.
+Benchmarking prover_computation/prover_computation/T16_H32: Collecting 10 samples in estimated 16.415 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T16_H32: Analyzing
+prover_computation/prover_computation/T16_H32
+                        time:   [1.6464 s 1.6502 s 1.6541 s]
+Found 4 outliers among 10 measurements (40.00%)
+  2 (20.00%) low mild
+  2 (20.00%) high mild
+Benchmarking prover_computation/prover_computation/T16_H64
+Benchmarking prover_computation/prover_computation/T16_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 33.1s.
+Benchmarking prover_computation/prover_computation/T16_H64: Collecting 10 samples in estimated 33.101 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T16_H64: Analyzing
+prover_computation/prover_computation/T16_H64
+                        time:   [3.2949 s 3.3015 s 3.3078 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T32_H2
+Benchmarking prover_computation/prover_computation/T32_H2: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T32_H2: Collecting 10 samples in estimated 6.4170 s (30 iterations)
+Benchmarking prover_computation/prover_computation/T32_H2: Analyzing
+prover_computation/prover_computation/T32_H2
+                        time:   [214.30 ms 214.64 ms 214.97 ms]
+Benchmarking prover_computation/prover_computation/T32_H4
+Benchmarking prover_computation/prover_computation/T32_H4: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T32_H4: Collecting 10 samples in estimated 8.4315 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T32_H4: Analyzing
+prover_computation/prover_computation/T32_H4
+                        time:   [419.94 ms 421.04 ms 422.15 ms]
+Benchmarking prover_computation/prover_computation/T32_H8
+Benchmarking prover_computation/prover_computation/T32_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.3s.
+Benchmarking prover_computation/prover_computation/T32_H8: Collecting 10 samples in estimated 8.2512 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T32_H8: Analyzing
+prover_computation/prover_computation/T32_H8
+                        time:   [825.47 ms 827.67 ms 830.80 ms]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T32_H16
+Benchmarking prover_computation/prover_computation/T32_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.4s.
+Benchmarking prover_computation/prover_computation/T32_H16: Collecting 10 samples in estimated 16.426 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T32_H16: Analyzing
+prover_computation/prover_computation/T32_H16
+                        time:   [1.6425 s 1.6475 s 1.6526 s]
+Benchmarking prover_computation/prover_computation/T32_H32
+Benchmarking prover_computation/prover_computation/T32_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 32.8s.
+Benchmarking prover_computation/prover_computation/T32_H32: Collecting 10 samples in estimated 32.795 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T32_H32: Analyzing
+prover_computation/prover_computation/T32_H32
+                        time:   [3.2814 s 3.2870 s 3.2930 s]
+Benchmarking prover_computation/prover_computation/T32_H64
+Benchmarking prover_computation/prover_computation/T32_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 65.9s.
+Benchmarking prover_computation/prover_computation/T32_H64: Collecting 10 samples in estimated 65.865 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T32_H64: Analyzing
+prover_computation/prover_computation/T32_H64
+                        time:   [6.5952 s 6.6064 s 6.6194 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T64_H2
+Benchmarking prover_computation/prover_computation/T64_H2: Warming up for 3.0000 s
+Benchmarking prover_computation/prover_computation/T64_H2: Collecting 10 samples in estimated 8.3422 s (20 iterations)
+Benchmarking prover_computation/prover_computation/T64_H2: Analyzing
+prover_computation/prover_computation/T64_H2
+                        time:   [416.27 ms 416.70 ms 417.17 ms]
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low severe
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T64_H4
+Benchmarking prover_computation/prover_computation/T64_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.2s.
+Benchmarking prover_computation/prover_computation/T64_H4: Collecting 10 samples in estimated 8.2328 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T64_H4: Analyzing
+prover_computation/prover_computation/T64_H4
+                        time:   [820.65 ms 822.53 ms 824.24 ms]
+Benchmarking prover_computation/prover_computation/T64_H8
+Benchmarking prover_computation/prover_computation/T64_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.4s.
+Benchmarking prover_computation/prover_computation/T64_H8: Collecting 10 samples in estimated 16.441 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T64_H8: Analyzing
+prover_computation/prover_computation/T64_H8
+                        time:   [1.6380 s 1.6429 s 1.6471 s]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T64_H16
+Benchmarking prover_computation/prover_computation/T64_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 33.0s.
+Benchmarking prover_computation/prover_computation/T64_H16: Collecting 10 samples in estimated 33.018 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T64_H16: Analyzing
+prover_computation/prover_computation/T64_H16
+                        time:   [3.2837 s 3.2922 s 3.3000 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T64_H32
+Benchmarking prover_computation/prover_computation/T64_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 66.1s.
+Benchmarking prover_computation/prover_computation/T64_H32: Collecting 10 samples in estimated 66.071 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T64_H32: Analyzing
+prover_computation/prover_computation/T64_H32
+                        time:   [6.5831 s 6.5932 s 6.6039 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T64_H64
+Benchmarking prover_computation/prover_computation/T64_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 132.5s.
+Benchmarking prover_computation/prover_computation/T64_H64: Collecting 10 samples in estimated 132.49 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T64_H64: Analyzing
+prover_computation/prover_computation/T64_H64
+                        time:   [13.215 s 13.246 s 13.273 s]
+Benchmarking prover_computation/prover_computation/T128_H2
+Benchmarking prover_computation/prover_computation/T128_H2: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 8.2s.
+Benchmarking prover_computation/prover_computation/T128_H2: Collecting 10 samples in estimated 8.1914 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H2: Analyzing
+prover_computation/prover_computation/T128_H2
+                        time:   [816.69 ms 818.68 ms 820.65 ms]
+Benchmarking prover_computation/prover_computation/T128_H4
+Benchmarking prover_computation/prover_computation/T128_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.4s.
+Benchmarking prover_computation/prover_computation/T128_H4: Collecting 10 samples in estimated 16.441 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H4: Analyzing
+prover_computation/prover_computation/T128_H4
+                        time:   [1.6267 s 1.6319 s 1.6365 s]
+Benchmarking prover_computation/prover_computation/T128_H8
+Benchmarking prover_computation/prover_computation/T128_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 33.0s.
+Benchmarking prover_computation/prover_computation/T128_H8: Collecting 10 samples in estimated 33.043 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H8: Analyzing
+prover_computation/prover_computation/T128_H8
+                        time:   [3.2739 s 3.2835 s 3.2939 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T128_H16
+Benchmarking prover_computation/prover_computation/T128_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 65.8s.
+Benchmarking prover_computation/prover_computation/T128_H16: Collecting 10 samples in estimated 65.757 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H16: Analyzing
+prover_computation/prover_computation/T128_H16
+                        time:   [6.5875 s 6.6045 s 6.6235 s]
+Benchmarking prover_computation/prover_computation/T128_H32
+Benchmarking prover_computation/prover_computation/T128_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 132.2s.
+Benchmarking prover_computation/prover_computation/T128_H32: Collecting 10 samples in estimated 132.24 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H32: Analyzing
+prover_computation/prover_computation/T128_H32
+                        time:   [13.172 s 13.191 s 13.209 s]
+Benchmarking prover_computation/prover_computation/T128_H64
+Benchmarking prover_computation/prover_computation/T128_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 267.6s.
+Benchmarking prover_computation/prover_computation/T128_H64: Collecting 10 samples in estimated 267.62 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T128_H64: Analyzing
+prover_computation/prover_computation/T128_H64
+                        time:   [26.463 s 26.516 s 26.565 s]
+Benchmarking prover_computation/prover_computation/T256_H2
+Benchmarking prover_computation/prover_computation/T256_H2: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 16.3s.
+Benchmarking prover_computation/prover_computation/T256_H2: Collecting 10 samples in estimated 16.337 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H2: Analyzing
+prover_computation/prover_computation/T256_H2
+                        time:   [1.6284 s 1.6318 s 1.6358 s]
+Benchmarking prover_computation/prover_computation/T256_H4
+Benchmarking prover_computation/prover_computation/T256_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 32.7s.
+Benchmarking prover_computation/prover_computation/T256_H4: Collecting 10 samples in estimated 32.719 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H4: Analyzing
+prover_computation/prover_computation/T256_H4
+                        time:   [3.2721 s 3.2771 s 3.2813 s]
+Benchmarking prover_computation/prover_computation/T256_H8
+Benchmarking prover_computation/prover_computation/T256_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 66.2s.
+Benchmarking prover_computation/prover_computation/T256_H8: Collecting 10 samples in estimated 66.248 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H8: Analyzing
+prover_computation/prover_computation/T256_H8
+                        time:   [6.5842 s 6.5928 s 6.6007 s]
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T256_H16
+Benchmarking prover_computation/prover_computation/T256_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 132.0s.
+Benchmarking prover_computation/prover_computation/T256_H16: Collecting 10 samples in estimated 132.04 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H16: Analyzing
+prover_computation/prover_computation/T256_H16
+                        time:   [13.214 s 13.313 s 13.481 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T256_H32
+Benchmarking prover_computation/prover_computation/T256_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 266.8s.
+Benchmarking prover_computation/prover_computation/T256_H32: Collecting 10 samples in estimated 266.79 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H32: Analyzing
+prover_computation/prover_computation/T256_H32
+                        time:   [26.447 s 26.522 s 26.628 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T256_H64
+Benchmarking prover_computation/prover_computation/T256_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 538.5s.
+Benchmarking prover_computation/prover_computation/T256_H64: Collecting 10 samples in estimated 538.48 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T256_H64: Analyzing
+prover_computation/prover_computation/T256_H64
+                        time:   [53.343 s 53.477 s 53.652 s]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T512_H2
+Benchmarking prover_computation/prover_computation/T512_H2: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 33.2s.
+Benchmarking prover_computation/prover_computation/T512_H2: Collecting 10 samples in estimated 33.181 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H2: Analyzing
+prover_computation/prover_computation/T512_H2
+                        time:   [3.2748 s 3.2844 s 3.2939 s]
+Benchmarking prover_computation/prover_computation/T512_H4
+Benchmarking prover_computation/prover_computation/T512_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 66.0s.
+Benchmarking prover_computation/prover_computation/T512_H4: Collecting 10 samples in estimated 66.036 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H4: Analyzing
+prover_computation/prover_computation/T512_H4
+                        time:   [6.5880 s 6.6054 s 6.6226 s]
+Benchmarking prover_computation/prover_computation/T512_H8
+Benchmarking prover_computation/prover_computation/T512_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 132.5s.
+Benchmarking prover_computation/prover_computation/T512_H8: Collecting 10 samples in estimated 132.53 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H8: Analyzing
+prover_computation/prover_computation/T512_H8
+                        time:   [13.195 s 13.263 s 13.341 s]
+Benchmarking prover_computation/prover_computation/T512_H16
+Benchmarking prover_computation/prover_computation/T512_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 265.3s.
+Benchmarking prover_computation/prover_computation/T512_H16: Collecting 10 samples in estimated 265.33 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H16: Analyzing
+prover_computation/prover_computation/T512_H16
+                        time:   [26.400 s 26.511 s 26.646 s]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking prover_computation/prover_computation/T512_H32
+Benchmarking prover_computation/prover_computation/T512_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 534.4s.
+Benchmarking prover_computation/prover_computation/T512_H32: Collecting 10 samples in estimated 534.40 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H32: Analyzing
+prover_computation/prover_computation/T512_H32
+                        time:   [53.153 s 53.269 s 53.399 s]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T512_H64
+Benchmarking prover_computation/prover_computation/T512_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 1088.4s.
+Benchmarking prover_computation/prover_computation/T512_H64: Collecting 10 samples in estimated 1088.4 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T512_H64: Analyzing
+prover_computation/prover_computation/T512_H64
+                        time:   [107.78 s 107.97 s 108.15 s]
+Benchmarking prover_computation/prover_computation/T1024_H2
+Benchmarking prover_computation/prover_computation/T1024_H2: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 66.2s.
+Benchmarking prover_computation/prover_computation/T1024_H2: Collecting 10 samples in estimated 66.235 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H2: Analyzing
+prover_computation/prover_computation/T1024_H2
+                        time:   [6.6022 s 6.6142 s 6.6291 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T1024_H4
+Benchmarking prover_computation/prover_computation/T1024_H4: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 133.5s.
+Benchmarking prover_computation/prover_computation/T1024_H4: Collecting 10 samples in estimated 133.45 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H4: Analyzing
+prover_computation/prover_computation/T1024_H4
+                        time:   [13.243 s 13.263 s 13.285 s]
+Benchmarking prover_computation/prover_computation/T1024_H8
+Benchmarking prover_computation/prover_computation/T1024_H8: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 265.9s.
+Benchmarking prover_computation/prover_computation/T1024_H8: Collecting 10 samples in estimated 265.88 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H8: Analyzing
+prover_computation/prover_computation/T1024_H8
+                        time:   [26.473 s 26.536 s 26.626 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T1024_H16
+Benchmarking prover_computation/prover_computation/T1024_H16: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 532.2s.
+Benchmarking prover_computation/prover_computation/T1024_H16: Collecting 10 samples in estimated 532.24 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H16: Analyzing
+prover_computation/prover_computation/T1024_H16
+                        time:   [53.073 s 53.141 s 53.206 s]
+Benchmarking prover_computation/prover_computation/T1024_H32
+Benchmarking prover_computation/prover_computation/T1024_H32: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 1079.9s.
+Benchmarking prover_computation/prover_computation/T1024_H32: Collecting 10 samples in estimated 1079.9 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H32: Analyzing
+prover_computation/prover_computation/T1024_H32
+                        time:   [107.50 s 107.66 s 107.82 s]
+Benchmarking prover_computation/prover_computation/T1024_H64
+Benchmarking prover_computation/prover_computation/T1024_H64: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 2195.5s.
+Benchmarking prover_computation/prover_computation/T1024_H64: Collecting 10 samples in estimated 2195.5 s (10 iterations)
+Benchmarking prover_computation/prover_computation/T1024_H64: Analyzing
+prover_computation/prover_computation/T1024_H64
+                        time:   [218.26 s 218.87 s 219.55 s]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+
+Benchmarking result_decryption/result_decryption/T2_H2
+Benchmarking result_decryption/result_decryption/T2_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H2: Collecting 10 samples in estimated 5.0027 s (60k iterations)
+Benchmarking result_decryption/result_decryption/T2_H2: Analyzing
+result_decryption/result_decryption/T2_H2
+                        time:   [82.739 µs 84.466 µs 86.263 µs]
+                        change: [−12.317% −8.4162% −5.6691%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T2_H4
+Benchmarking result_decryption/result_decryption/T2_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H4: Collecting 10 samples in estimated 5.0002 s (51k iterations)
+Benchmarking result_decryption/result_decryption/T2_H4: Analyzing
+result_decryption/result_decryption/T2_H4
+                        time:   [87.483 µs 88.759 µs 91.046 µs]
+                        change: [−20.951% −18.429% −16.010%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T2_H8
+Benchmarking result_decryption/result_decryption/T2_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H8: Collecting 10 samples in estimated 5.0083 s (30k iterations)
+Benchmarking result_decryption/result_decryption/T2_H8: Analyzing
+result_decryption/result_decryption/T2_H8
+                        time:   [168.42 µs 170.72 µs 172.33 µs]
+Benchmarking result_decryption/result_decryption/T2_H16
+Benchmarking result_decryption/result_decryption/T2_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H16: Collecting 10 samples in estimated 5.0030 s (14k iterations)
+Benchmarking result_decryption/result_decryption/T2_H16: Analyzing
+result_decryption/result_decryption/T2_H16
+                        time:   [347.65 µs 348.43 µs 349.20 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T2_H32
+Benchmarking result_decryption/result_decryption/T2_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H32: Collecting 10 samples in estimated 5.0255 s (9075 iterations)
+Benchmarking result_decryption/result_decryption/T2_H32: Analyzing
+result_decryption/result_decryption/T2_H32
+                        time:   [540.72 µs 542.63 µs 545.06 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T2_H64
+Benchmarking result_decryption/result_decryption/T2_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T2_H64: Collecting 10 samples in estimated 5.0177 s (5170 iterations)
+Benchmarking result_decryption/result_decryption/T2_H64: Analyzing
+result_decryption/result_decryption/T2_H64
+                        time:   [957.61 µs 970.71 µs 985.21 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T4_H2
+Benchmarking result_decryption/result_decryption/T4_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H2: Collecting 10 samples in estimated 5.0011 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T4_H2: Analyzing
+result_decryption/result_decryption/T4_H2
+                        time:   [89.069 µs 90.340 µs 92.527 µs]
+                        change: [−0.0697% +0.8822% +2.4679%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T4_H4
+Benchmarking result_decryption/result_decryption/T4_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H4: Collecting 10 samples in estimated 5.0056 s (46k iterations)
+Benchmarking result_decryption/result_decryption/T4_H4: Analyzing
+result_decryption/result_decryption/T4_H4
+                        time:   [105.92 µs 107.67 µs 109.38 µs]
+                        change: [−9.7325% −5.1426% −1.3319%] (p = 0.02 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T4_H8
+Benchmarking result_decryption/result_decryption/T4_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H8: Collecting 10 samples in estimated 5.0059 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T4_H8: Analyzing
+result_decryption/result_decryption/T4_H8
+                        time:   [207.27 µs 208.12 µs 208.95 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T4_H16
+Benchmarking result_decryption/result_decryption/T4_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H16: Collecting 10 samples in estimated 5.0176 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T4_H16: Analyzing
+result_decryption/result_decryption/T4_H16
+                        time:   [340.93 µs 341.47 µs 341.90 µs]
+Benchmarking result_decryption/result_decryption/T4_H32
+Benchmarking result_decryption/result_decryption/T4_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H32: Collecting 10 samples in estimated 5.0143 s (9240 iterations)
+Benchmarking result_decryption/result_decryption/T4_H32: Analyzing
+result_decryption/result_decryption/T4_H32
+                        time:   [542.46 µs 544.94 µs 547.05 µs]
+Benchmarking result_decryption/result_decryption/T4_H64
+Benchmarking result_decryption/result_decryption/T4_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T4_H64: Collecting 10 samples in estimated 5.0222 s (4950 iterations)
+Benchmarking result_decryption/result_decryption/T4_H64: Analyzing
+result_decryption/result_decryption/T4_H64
+                        time:   [971.41 µs 983.00 µs 997.11 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T8_H2
+Benchmarking result_decryption/result_decryption/T8_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H2: Collecting 10 samples in estimated 5.0008 s (55k iterations)
+Benchmarking result_decryption/result_decryption/T8_H2: Analyzing
+result_decryption/result_decryption/T8_H2
+                        time:   [88.302 µs 89.623 µs 91.186 µs]
+Found 4 outliers among 10 measurements (40.00%)
+  2 (20.00%) low mild
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H4
+Benchmarking result_decryption/result_decryption/T8_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H4: Collecting 10 samples in estimated 5.0048 s (45k iterations)
+Benchmarking result_decryption/result_decryption/T8_H4: Analyzing
+result_decryption/result_decryption/T8_H4
+                        time:   [107.31 µs 112.30 µs 118.57 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H8
+Benchmarking result_decryption/result_decryption/T8_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H8: Collecting 10 samples in estimated 5.0045 s (26k iterations)
+Benchmarking result_decryption/result_decryption/T8_H8: Analyzing
+result_decryption/result_decryption/T8_H8
+                        time:   [206.34 µs 209.30 µs 210.88 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T8_H16
+Benchmarking result_decryption/result_decryption/T8_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H16: Collecting 10 samples in estimated 5.0090 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T8_H16: Analyzing
+result_decryption/result_decryption/T8_H16
+                        time:   [339.48 µs 340.19 µs 340.86 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H32
+Benchmarking result_decryption/result_decryption/T8_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H32: Collecting 10 samples in estimated 5.0053 s (9240 iterations)
+Benchmarking result_decryption/result_decryption/T8_H32: Analyzing
+result_decryption/result_decryption/T8_H32
+                        time:   [541.02 µs 547.70 µs 559.05 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H64
+Benchmarking result_decryption/result_decryption/T8_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T8_H64: Collecting 10 samples in estimated 5.0378 s (5170 iterations)
+Benchmarking result_decryption/result_decryption/T8_H64: Analyzing
+result_decryption/result_decryption/T8_H64
+                        time:   [962.39 µs 973.42 µs 984.45 µs]
+Benchmarking result_decryption/result_decryption/T16_H2
+Benchmarking result_decryption/result_decryption/T16_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H2: Collecting 10 samples in estimated 5.0001 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T16_H2: Analyzing
+result_decryption/result_decryption/T16_H2
+                        time:   [89.091 µs 89.178 µs 89.265 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T16_H4
+Benchmarking result_decryption/result_decryption/T16_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H4: Collecting 10 samples in estimated 5.0004 s (45k iterations)
+Benchmarking result_decryption/result_decryption/T16_H4: Analyzing
+result_decryption/result_decryption/T16_H4
+                        time:   [108.39 µs 108.90 µs 109.35 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T16_H8
+Benchmarking result_decryption/result_decryption/T16_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H8: Collecting 10 samples in estimated 5.0010 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T16_H8: Analyzing
+result_decryption/result_decryption/T16_H8
+                        time:   [197.61 µs 206.51 µs 210.35 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T16_H16
+Benchmarking result_decryption/result_decryption/T16_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H16: Collecting 10 samples in estimated 5.0065 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T16_H16: Analyzing
+result_decryption/result_decryption/T16_H16
+                        time:   [341.54 µs 342.28 µs 343.27 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T16_H32
+Benchmarking result_decryption/result_decryption/T16_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H32: Collecting 10 samples in estimated 5.0082 s (8965 iterations)
+Benchmarking result_decryption/result_decryption/T16_H32: Analyzing
+result_decryption/result_decryption/T16_H32
+                        time:   [539.50 µs 541.18 µs 542.81 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T16_H64
+Benchmarking result_decryption/result_decryption/T16_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T16_H64: Collecting 10 samples in estimated 5.0428 s (5060 iterations)
+Benchmarking result_decryption/result_decryption/T16_H64: Analyzing
+result_decryption/result_decryption/T16_H64
+                        time:   [989.72 µs 1.0054 ms 1.0429 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T32_H2
+Benchmarking result_decryption/result_decryption/T32_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H2: Collecting 10 samples in estimated 5.0047 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T32_H2: Analyzing
+result_decryption/result_decryption/T32_H2
+                        time:   [89.165 µs 89.253 µs 89.362 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T32_H4
+Benchmarking result_decryption/result_decryption/T32_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H4: Collecting 10 samples in estimated 5.0046 s (46k iterations)
+Benchmarking result_decryption/result_decryption/T32_H4: Analyzing
+result_decryption/result_decryption/T32_H4
+                        time:   [107.24 µs 110.96 µs 117.27 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T32_H8
+Benchmarking result_decryption/result_decryption/T32_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H8: Collecting 10 samples in estimated 5.0108 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T32_H8: Analyzing
+result_decryption/result_decryption/T32_H8
+                        time:   [209.14 µs 210.09 µs 211.15 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T32_H16
+Benchmarking result_decryption/result_decryption/T32_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H16: Collecting 10 samples in estimated 5.0162 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T32_H16: Analyzing
+result_decryption/result_decryption/T32_H16
+                        time:   [342.07 µs 342.75 µs 343.45 µs]
+Benchmarking result_decryption/result_decryption/T32_H32
+Benchmarking result_decryption/result_decryption/T32_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H32: Collecting 10 samples in estimated 5.0172 s (9295 iterations)
+Benchmarking result_decryption/result_decryption/T32_H32: Analyzing
+result_decryption/result_decryption/T32_H32
+                        time:   [539.59 µs 540.90 µs 542.71 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T32_H64
+Benchmarking result_decryption/result_decryption/T32_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T32_H64: Collecting 10 samples in estimated 5.0277 s (5005 iterations)
+Benchmarking result_decryption/result_decryption/T32_H64: Analyzing
+result_decryption/result_decryption/T32_H64
+                        time:   [966.64 µs 993.88 µs 1.0282 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H2
+Benchmarking result_decryption/result_decryption/T64_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H2: Collecting 10 samples in estimated 5.0013 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T64_H2: Analyzing
+result_decryption/result_decryption/T64_H2
+                        time:   [89.136 µs 89.208 µs 89.261 µs]
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low mild
+  2 (20.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H4
+Benchmarking result_decryption/result_decryption/T64_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H4: Collecting 10 samples in estimated 5.0008 s (46k iterations)
+Benchmarking result_decryption/result_decryption/T64_H4: Analyzing
+result_decryption/result_decryption/T64_H4
+                        time:   [106.93 µs 107.62 µs 108.17 µs]
+Benchmarking result_decryption/result_decryption/T64_H8
+Benchmarking result_decryption/result_decryption/T64_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H8: Collecting 10 samples in estimated 5.0100 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T64_H8: Analyzing
+result_decryption/result_decryption/T64_H8
+                        time:   [207.85 µs 209.16 µs 210.55 µs]
+Benchmarking result_decryption/result_decryption/T64_H16
+Benchmarking result_decryption/result_decryption/T64_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H16: Collecting 10 samples in estimated 5.0176 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T64_H16: Analyzing
+result_decryption/result_decryption/T64_H16
+                        time:   [338.70 µs 339.71 µs 340.77 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H32
+Benchmarking result_decryption/result_decryption/T64_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H32: Collecting 10 samples in estimated 5.0235 s (9295 iterations)
+Benchmarking result_decryption/result_decryption/T64_H32: Analyzing
+result_decryption/result_decryption/T64_H32
+                        time:   [539.72 µs 541.22 µs 542.90 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H64
+Benchmarking result_decryption/result_decryption/T64_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T64_H64: Collecting 10 samples in estimated 5.0421 s (5115 iterations)
+Benchmarking result_decryption/result_decryption/T64_H64: Analyzing
+result_decryption/result_decryption/T64_H64
+                        time:   [966.86 µs 1.0298 ms 1.1627 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T128_H2
+Benchmarking result_decryption/result_decryption/T128_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H2: Collecting 10 samples in estimated 5.0008 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T128_H2: Analyzing
+result_decryption/result_decryption/T128_H2
+                        time:   [89.054 µs 89.225 µs 89.369 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T128_H4
+Benchmarking result_decryption/result_decryption/T128_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H4: Collecting 10 samples in estimated 5.0045 s (46k iterations)
+Benchmarking result_decryption/result_decryption/T128_H4: Analyzing
+result_decryption/result_decryption/T128_H4
+                        time:   [108.83 µs 111.86 µs 118.64 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T128_H8
+Benchmarking result_decryption/result_decryption/T128_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H8: Collecting 10 samples in estimated 5.0095 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T128_H8: Analyzing
+result_decryption/result_decryption/T128_H8
+                        time:   [207.72 µs 209.78 µs 212.51 µs]
+Benchmarking result_decryption/result_decryption/T128_H16
+Benchmarking result_decryption/result_decryption/T128_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H16: Collecting 10 samples in estimated 5.0091 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T128_H16: Analyzing
+result_decryption/result_decryption/T128_H16
+                        time:   [335.79 µs 339.75 µs 343.17 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T128_H32
+Benchmarking result_decryption/result_decryption/T128_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H32: Collecting 10 samples in estimated 5.0285 s (9020 iterations)
+Benchmarking result_decryption/result_decryption/T128_H32: Analyzing
+result_decryption/result_decryption/T128_H32
+                        time:   [542.04 µs 565.02 µs 585.75 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T128_H64
+Benchmarking result_decryption/result_decryption/T128_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T128_H64: Collecting 10 samples in estimated 5.0447 s (5115 iterations)
+Benchmarking result_decryption/result_decryption/T128_H64: Analyzing
+result_decryption/result_decryption/T128_H64
+                        time:   [977.68 µs 985.45 µs 993.75 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T256_H2
+Benchmarking result_decryption/result_decryption/T256_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H2: Collecting 10 samples in estimated 5.0027 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T256_H2: Analyzing
+result_decryption/result_decryption/T256_H2
+                        time:   [88.787 µs 90.066 µs 91.744 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T256_H4
+Benchmarking result_decryption/result_decryption/T256_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H4: Collecting 10 samples in estimated 5.0001 s (47k iterations)
+Benchmarking result_decryption/result_decryption/T256_H4: Analyzing
+result_decryption/result_decryption/T256_H4
+                        time:   [105.42 µs 106.83 µs 108.35 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H8
+Benchmarking result_decryption/result_decryption/T256_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H8: Collecting 10 samples in estimated 5.0021 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T256_H8: Analyzing
+result_decryption/result_decryption/T256_H8
+                        time:   [207.41 µs 208.27 µs 208.92 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T256_H16
+Benchmarking result_decryption/result_decryption/T256_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H16: Collecting 10 samples in estimated 5.0187 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T256_H16: Analyzing
+result_decryption/result_decryption/T256_H16
+                        time:   [339.84 µs 340.47 µs 341.06 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H32
+Benchmarking result_decryption/result_decryption/T256_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H32: Collecting 10 samples in estimated 5.0207 s (9240 iterations)
+Benchmarking result_decryption/result_decryption/T256_H32: Analyzing
+result_decryption/result_decryption/T256_H32
+                        time:   [539.99 µs 543.20 µs 545.22 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T256_H64
+Benchmarking result_decryption/result_decryption/T256_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T256_H64: Collecting 10 samples in estimated 5.0069 s (5115 iterations)
+Benchmarking result_decryption/result_decryption/T256_H64: Analyzing
+result_decryption/result_decryption/T256_H64
+                        time:   [966.22 µs 976.61 µs 986.41 µs]
+Benchmarking result_decryption/result_decryption/T512_H2
+Benchmarking result_decryption/result_decryption/T512_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H2: Collecting 10 samples in estimated 5.0004 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T512_H2: Analyzing
+result_decryption/result_decryption/T512_H2
+                        time:   [89.076 µs 89.268 µs 89.415 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking result_decryption/result_decryption/T512_H4
+Benchmarking result_decryption/result_decryption/T512_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H4: Collecting 10 samples in estimated 5.0033 s (45k iterations)
+Benchmarking result_decryption/result_decryption/T512_H4: Analyzing
+result_decryption/result_decryption/T512_H4
+                        time:   [101.84 µs 105.36 µs 107.73 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T512_H8
+Benchmarking result_decryption/result_decryption/T512_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H8: Collecting 10 samples in estimated 5.0009 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T512_H8: Analyzing
+result_decryption/result_decryption/T512_H8
+                        time:   [206.61 µs 207.80 µs 208.93 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T512_H16
+Benchmarking result_decryption/result_decryption/T512_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H16: Collecting 10 samples in estimated 5.0162 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T512_H16: Analyzing
+result_decryption/result_decryption/T512_H16
+                        time:   [339.07 µs 340.12 µs 341.26 µs]
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T512_H32
+Benchmarking result_decryption/result_decryption/T512_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H32: Collecting 10 samples in estimated 5.0265 s (9295 iterations)
+Benchmarking result_decryption/result_decryption/T512_H32: Analyzing
+result_decryption/result_decryption/T512_H32
+                        time:   [541.32 µs 543.10 µs 546.32 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T512_H64
+Benchmarking result_decryption/result_decryption/T512_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T512_H64: Collecting 10 samples in estimated 5.0200 s (5115 iterations)
+Benchmarking result_decryption/result_decryption/T512_H64: Analyzing
+result_decryption/result_decryption/T512_H64
+                        time:   [981.03 µs 1.0356 ms 1.1305 ms]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T1024_H2
+Benchmarking result_decryption/result_decryption/T1024_H2: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H2: Collecting 10 samples in estimated 5.0021 s (56k iterations)
+Benchmarking result_decryption/result_decryption/T1024_H2: Analyzing
+result_decryption/result_decryption/T1024_H2
+                        time:   [89.222 µs 89.313 µs 89.429 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking result_decryption/result_decryption/T1024_H4
+Benchmarking result_decryption/result_decryption/T1024_H4: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H4: Collecting 10 samples in estimated 5.0015 s (46k iterations)
+Benchmarking result_decryption/result_decryption/T1024_H4: Analyzing
+result_decryption/result_decryption/T1024_H4
+                        time:   [104.69 µs 106.51 µs 108.08 µs]
+Benchmarking result_decryption/result_decryption/T1024_H8
+Benchmarking result_decryption/result_decryption/T1024_H8: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H8: Collecting 10 samples in estimated 5.0092 s (24k iterations)
+Benchmarking result_decryption/result_decryption/T1024_H8: Analyzing
+result_decryption/result_decryption/T1024_H8
+                        time:   [206.38 µs 207.72 µs 208.67 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T1024_H16
+Benchmarking result_decryption/result_decryption/T1024_H16: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H16: Collecting 10 samples in estimated 5.0115 s (15k iterations)
+Benchmarking result_decryption/result_decryption/T1024_H16: Analyzing
+result_decryption/result_decryption/T1024_H16
+                        time:   [330.03 µs 338.10 µs 344.58 µs]
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T1024_H32
+Benchmarking result_decryption/result_decryption/T1024_H32: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H32: Collecting 10 samples in estimated 5.0024 s (9185 iterations)
+Benchmarking result_decryption/result_decryption/T1024_H32: Analyzing
+result_decryption/result_decryption/T1024_H32
+                        time:   [542.93 µs 547.99 µs 551.28 µs]
+Benchmarking result_decryption/result_decryption/T1024_H64
+Benchmarking result_decryption/result_decryption/T1024_H64: Warming up for 3.0000 s
+Benchmarking result_decryption/result_decryption/T1024_H64: Collecting 10 samples in estimated 5.0067 s (5555 iterations)
+Benchmarking result_decryption/result_decryption/T1024_H64: Analyzing
+result_decryption/result_decryption/T1024_H64
+                        time:   [868.37 µs 870.11 µs 873.78 µs]
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+
+Benchmarking verifier_computation/verifier_computation/T2_H2
+Benchmarking verifier_computation/verifier_computation/T2_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H2: Collecting 10 samples in estimated 5.0745 s (3575 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H2: Analyzing
+verifier_computation/verifier_computation/T2_H2
+                        time:   [1.3917 ms 1.4096 ms 1.4585 ms]
+                        change: [−3.3196% −0.4253% +4.3929%] (p = 0.88 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 168240
+Benchmarking verifier_computation/verifier_computation/T2_H4
+Benchmarking verifier_computation/verifier_computation/T2_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H4: Collecting 10 samples in estimated 5.0171 s (2860 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H4: Analyzing
+verifier_computation/verifier_computation/T2_H4
+                        time:   [1.7827 ms 1.7862 ms 1.7888 ms]
+                        change: [−6.1688% −5.7023% −5.2125%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 225080
+Benchmarking verifier_computation/verifier_computation/T2_H8
+Benchmarking verifier_computation/verifier_computation/T2_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H8: Collecting 10 samples in estimated 5.0172 s (2530 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H8: Analyzing
+verifier_computation/verifier_computation/T2_H8
+                        time:   [1.9987 ms 2.0073 ms 2.0130 ms]
+                        change: [−5.2257% −4.2421% −2.7662%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 254808
+Benchmarking verifier_computation/verifier_computation/T2_H16
+Benchmarking verifier_computation/verifier_computation/T2_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H16: Collecting 10 samples in estimated 5.0564 s (2365 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H16: Analyzing
+verifier_computation/verifier_computation/T2_H16
+                        time:   [2.1442 ms 2.1569 ms 2.1652 ms]
+                        change: [−5.1547% −4.6902% −4.2577%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 273384
+Benchmarking verifier_computation/verifier_computation/T2_H32
+Benchmarking verifier_computation/verifier_computation/T2_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H32: Collecting 10 samples in estimated 5.0028 s (1980 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H32: Analyzing
+verifier_computation/verifier_computation/T2_H32
+                        time:   [2.5153 ms 2.5337 ms 2.5490 ms]
+                        change: [−3.9391% −3.4117% −2.9639%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high severe
+Proof size (in bytes): 316672
+Benchmarking verifier_computation/verifier_computation/T2_H64
+Benchmarking verifier_computation/verifier_computation/T2_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T2_H64: Collecting 10 samples in estimated 5.1270 s (1705 iterations)
+Benchmarking verifier_computation/verifier_computation/T2_H64: Analyzing
+verifier_computation/verifier_computation/T2_H64
+                        time:   [2.9754 ms 2.9789 ms 2.9827 ms]
+                        change: [−5.5230% −5.2712% −4.9616%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 364680
+Benchmarking verifier_computation/verifier_computation/T4_H2
+Benchmarking verifier_computation/verifier_computation/T4_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H2: Collecting 10 samples in estimated 5.0847 s (3245 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H2: Analyzing
+verifier_computation/verifier_computation/T4_H2
+                        time:   [1.5698 ms 1.5724 ms 1.5753 ms]
+                        change: [−1.3730% +0.6678% +3.4194%] (p = 0.67 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 192096
+Benchmarking verifier_computation/verifier_computation/T4_H4
+Benchmarking verifier_computation/verifier_computation/T4_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H4: Collecting 10 samples in estimated 5.0918 s (2750 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H4: Analyzing
+verifier_computation/verifier_computation/T4_H4
+                        time:   [1.8555 ms 1.8593 ms 1.8617 ms]
+                        change: [−3.7507% −3.3626% −2.9228%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 234104
+Benchmarking verifier_computation/verifier_computation/T4_H8
+Benchmarking verifier_computation/verifier_computation/T4_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H8: Collecting 10 samples in estimated 5.0225 s (2420 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H8: Analyzing
+verifier_computation/verifier_computation/T4_H8
+                        time:   [2.0762 ms 2.0865 ms 2.0915 ms]
+                        change: [−5.9883% −4.4639% −3.3916%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Proof size (in bytes): 266328
+Benchmarking verifier_computation/verifier_computation/T4_H16
+Benchmarking verifier_computation/verifier_computation/T4_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H16: Collecting 10 samples in estimated 5.0611 s (2090 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H16: Analyzing
+verifier_computation/verifier_computation/T4_H16
+                        time:   [2.4212 ms 2.4252 ms 2.4295 ms]
+                        change: [−3.4235% −2.2467% −0.5372%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 304400
+Benchmarking verifier_computation/verifier_computation/T4_H32
+Benchmarking verifier_computation/verifier_computation/T4_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H32: Collecting 10 samples in estimated 5.1138 s (1980 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H32: Analyzing
+verifier_computation/verifier_computation/T4_H32
+                        time:   [2.5807 ms 2.5851 ms 2.5885 ms]
+                        change: [−5.9142% −5.3964% −5.0407%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 331536
+Benchmarking verifier_computation/verifier_computation/T4_H64
+Benchmarking verifier_computation/verifier_computation/T4_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T4_H64: Collecting 10 samples in estimated 5.0296 s (1650 iterations)
+Benchmarking verifier_computation/verifier_computation/T4_H64: Analyzing
+verifier_computation/verifier_computation/T4_H64
+                        time:   [3.0327 ms 3.0397 ms 3.0454 ms]
+                        change: [−5.1777% −4.8718% −4.5366%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 373960
+Benchmarking verifier_computation/verifier_computation/T8_H2
+Benchmarking verifier_computation/verifier_computation/T8_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H2: Collecting 10 samples in estimated 5.0810 s (3025 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H2: Analyzing
+verifier_computation/verifier_computation/T8_H2
+                        time:   [1.6758 ms 1.6794 ms 1.6814 ms]
+                        change: [−5.3094% −4.2707% −2.9395%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 202240
+Benchmarking verifier_computation/verifier_computation/T8_H4
+Benchmarking verifier_computation/verifier_computation/T8_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H4: Collecting 10 samples in estimated 5.0909 s (2585 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H4: Analyzing
+verifier_computation/verifier_computation/T8_H4
+                        time:   [1.9747 ms 1.9796 ms 1.9836 ms]
+                        change: [−4.3804% −4.1828% −3.9754%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 244472
+Benchmarking verifier_computation/verifier_computation/T8_H8
+Benchmarking verifier_computation/verifier_computation/T8_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H8: Collecting 10 samples in estimated 5.0972 s (2200 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H8: Analyzing
+verifier_computation/verifier_computation/T8_H8
+                        time:   [2.3317 ms 2.3365 ms 2.3406 ms]
+                        change: [−3.5976% −3.0648% −2.3978%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 293152
+Benchmarking verifier_computation/verifier_computation/T8_H16
+Benchmarking verifier_computation/verifier_computation/T8_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H16: Collecting 10 samples in estimated 5.0110 s (1980 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H16: Analyzing
+verifier_computation/verifier_computation/T8_H16
+                        time:   [2.5270 ms 2.5305 ms 2.5353 ms]
+                        change: [−3.3745% −2.5839% −1.6095%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 321344
+Benchmarking verifier_computation/verifier_computation/T8_H32
+Benchmarking verifier_computation/verifier_computation/T8_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H32: Collecting 10 samples in estimated 5.1020 s (1925 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H32: Analyzing
+verifier_computation/verifier_computation/T8_H32
+                        time:   [2.6465 ms 2.6536 ms 2.6579 ms]
+                        change: [−4.2061% −3.4774% −2.5523%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 341136
+Benchmarking verifier_computation/verifier_computation/T8_H64
+Benchmarking verifier_computation/verifier_computation/T8_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T8_H64: Collecting 10 samples in estimated 5.0230 s (1650 iterations)
+Benchmarking verifier_computation/verifier_computation/T8_H64: Analyzing
+verifier_computation/verifier_computation/T8_H64
+                        time:   [3.0610 ms 3.0674 ms 3.0728 ms]
+                        change: [−7.0991% −6.4590% −5.6878%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 379144
+Benchmarking verifier_computation/verifier_computation/T16_H2
+Benchmarking verifier_computation/verifier_computation/T16_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H2: Collecting 10 samples in estimated 5.0510 s (2860 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H2: Analyzing
+verifier_computation/verifier_computation/T16_H2
+                        time:   [1.7630 ms 1.7670 ms 1.7701 ms]
+                        change: [−1.3037% −0.6551% +0.1013%] (p = 0.10 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 214112
+Benchmarking verifier_computation/verifier_computation/T16_H4
+Benchmarking verifier_computation/verifier_computation/T16_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H4: Collecting 10 samples in estimated 5.0999 s (2255 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H4: Analyzing
+verifier_computation/verifier_computation/T16_H4
+                        time:   [2.2529 ms 2.2593 ms 2.2698 ms]
+                        change: [−2.7574% −2.4279% −2.0609%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 276672
+Benchmarking verifier_computation/verifier_computation/T16_H8
+Benchmarking verifier_computation/verifier_computation/T16_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H8: Collecting 10 samples in estimated 5.0144 s (2090 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H8: Analyzing
+verifier_computation/verifier_computation/T16_H8
+                        time:   [2.4270 ms 2.4314 ms 2.4360 ms]
+                        change: [−4.8495% −4.5138% −4.1811%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Proof size (in bytes): 313936
+Benchmarking verifier_computation/verifier_computation/T16_H16
+Benchmarking verifier_computation/verifier_computation/T16_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H16: Collecting 10 samples in estimated 5.0869 s (1980 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H16: Analyzing
+verifier_computation/verifier_computation/T16_H16
+                        time:   [2.5626 ms 2.5686 ms 2.5745 ms]
+                        change: [−4.5476% −3.2426% −1.5492%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 334720
+Benchmarking verifier_computation/verifier_computation/T16_H32
+Benchmarking verifier_computation/verifier_computation/T16_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H32: Collecting 10 samples in estimated 5.1329 s (1870 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H32: Analyzing
+verifier_computation/verifier_computation/T16_H32
+                        time:   [2.7441 ms 2.7518 ms 2.7621 ms]
+                        change: [−6.0337% −5.4325% −4.7618%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 349968
+Benchmarking verifier_computation/verifier_computation/T16_H64
+Benchmarking verifier_computation/verifier_computation/T16_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T16_H64: Collecting 10 samples in estimated 5.0461 s (1485 iterations)
+Benchmarking verifier_computation/verifier_computation/T16_H64: Analyzing
+verifier_computation/verifier_computation/T16_H64
+                        time:   [3.3962 ms 3.3999 ms 3.4038 ms]
+                        change: [−6.4120% −6.0539% −5.7522%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 412336
+Benchmarking verifier_computation/verifier_computation/T32_H2
+Benchmarking verifier_computation/verifier_computation/T32_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H2: Collecting 10 samples in estimated 5.0507 s (2420 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H2: Analyzing
+verifier_computation/verifier_computation/T32_H2
+                        time:   [2.0819 ms 2.0867 ms 2.0949 ms]
+                        change: [−4.4617% −4.0132% −3.5264%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 240584
+Benchmarking verifier_computation/verifier_computation/T32_H4
+Benchmarking verifier_computation/verifier_computation/T32_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H4: Collecting 10 samples in estimated 5.0359 s (2090 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H4: Analyzing
+verifier_computation/verifier_computation/T32_H4
+                        time:   [2.4185 ms 2.4257 ms 2.4352 ms]
+                        change: [−1.8250% −1.4001% −0.9755%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 298768
+Benchmarking verifier_computation/verifier_computation/T32_H8
+Benchmarking verifier_computation/verifier_computation/T32_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H8: Collecting 10 samples in estimated 5.0975 s (1980 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H8: Analyzing
+verifier_computation/verifier_computation/T32_H8
+                        time:   [2.5744 ms 2.5814 ms 2.5883 ms]
+                        change: [−4.7417% −4.2494% −3.7846%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 322288
+Benchmarking verifier_computation/verifier_computation/T32_H16
+Benchmarking verifier_computation/verifier_computation/T32_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H16: Collecting 10 samples in estimated 5.0719 s (1870 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H16: Analyzing
+verifier_computation/verifier_computation/T32_H16
+                        time:   [2.7102 ms 2.7186 ms 2.7267 ms]
+                        change: [−3.6865% −2.6861% −1.5551%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Proof size (in bytes): 342752
+Benchmarking verifier_computation/verifier_computation/T32_H32
+Benchmarking verifier_computation/verifier_computation/T32_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H32: Collecting 10 samples in estimated 5.0518 s (1650 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H32: Analyzing
+verifier_computation/verifier_computation/T32_H32
+                        time:   [3.0696 ms 3.0745 ms 3.0775 ms]
+                        change: [−2.8601% −2.3558% −1.9284%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 379192
+Benchmarking verifier_computation/verifier_computation/T32_H64
+Benchmarking verifier_computation/verifier_computation/T32_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T32_H64: Collecting 10 samples in estimated 5.0872 s (1430 iterations)
+Benchmarking verifier_computation/verifier_computation/T32_H64: Analyzing
+verifier_computation/verifier_computation/T32_H64
+                        time:   [3.5653 ms 3.6038 ms 3.6482 ms]
+                        change: [−9.3402% −7.3170% −5.8469%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 435008
+Benchmarking verifier_computation/verifier_computation/T64_H2
+Benchmarking verifier_computation/verifier_computation/T64_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H2: Collecting 10 samples in estimated 5.1180 s (2310 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H2: Analyzing
+verifier_computation/verifier_computation/T64_H2
+                        time:   [2.2338 ms 2.2408 ms 2.2480 ms]
+                        change: [−6.4568% −5.6555% −4.7407%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 260728
+Benchmarking verifier_computation/verifier_computation/T64_H4
+Benchmarking verifier_computation/verifier_computation/T64_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H4: Collecting 10 samples in estimated 5.0448 s (1925 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H4: Analyzing
+verifier_computation/verifier_computation/T64_H4
+                        time:   [2.6135 ms 2.6188 ms 2.6267 ms]
+                        change: [−2.5823% −1.7534% −0.7070%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 305008
+Benchmarking verifier_computation/verifier_computation/T64_H8
+Benchmarking verifier_computation/verifier_computation/T64_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H8: Collecting 10 samples in estimated 5.0588 s (1815 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H8: Analyzing
+verifier_computation/verifier_computation/T64_H8
+                        time:   [2.7799 ms 2.7907 ms 2.8022 ms]
+                        change: [−2.5952% −1.9595% −1.2717%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 332144
+Benchmarking verifier_computation/verifier_computation/T64_H16
+Benchmarking verifier_computation/verifier_computation/T64_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H16: Collecting 10 samples in estimated 5.0270 s (1650 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H16: Analyzing
+verifier_computation/verifier_computation/T64_H16
+                        time:   [3.0451 ms 3.0512 ms 3.0621 ms]
+                        change: [−6.9729% −6.0666% −4.9755%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 368904
+Benchmarking verifier_computation/verifier_computation/T64_H32
+Benchmarking verifier_computation/verifier_computation/T64_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H32: Collecting 10 samples in estimated 5.0359 s (1540 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H32: Analyzing
+verifier_computation/verifier_computation/T64_H32
+                        time:   [3.2390 ms 3.2818 ms 3.3209 ms]
+                        change: [−5.0206% −4.2475% −3.4238%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 403240
+Benchmarking verifier_computation/verifier_computation/T64_H64
+Benchmarking verifier_computation/verifier_computation/T64_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T64_H64: Collecting 10 samples in estimated 5.0057 s (1375 iterations)
+Benchmarking verifier_computation/verifier_computation/T64_H64: Analyzing
+verifier_computation/verifier_computation/T64_H64
+                        time:   [3.6384 ms 3.6446 ms 3.6509 ms]
+                        change: [−4.8883% −4.1993% −3.6597%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 442624
+Benchmarking verifier_computation/verifier_computation/T128_H2
+Benchmarking verifier_computation/verifier_computation/T128_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H2: Collecting 10 samples in estimated 5.0039 s (2035 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H2: Analyzing
+verifier_computation/verifier_computation/T128_H2
+                        time:   [2.4524 ms 2.4556 ms 2.4611 ms]
+                        change: [−3.7767% −3.2527% −2.6996%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 268344
+Benchmarking verifier_computation/verifier_computation/T128_H4
+Benchmarking verifier_computation/verifier_computation/T128_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H4: Collecting 10 samples in estimated 5.1102 s (1760 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H4: Analyzing
+verifier_computation/verifier_computation/T128_H4
+                        time:   [2.8941 ms 2.9079 ms 2.9202 ms]
+                        change: [+1.4090% +2.2097% +2.9833%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 311984
+Benchmarking verifier_computation/verifier_computation/T128_H8
+Benchmarking verifier_computation/verifier_computation/T128_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H8: Collecting 10 samples in estimated 5.1600 s (1650 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H8: Analyzing
+verifier_computation/verifier_computation/T128_H8
+                        time:   [3.0872 ms 3.1294 ms 3.1853 ms]
+                        change: [−4.3914% −3.3493% −2.1541%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 358744
+Benchmarking verifier_computation/verifier_computation/T128_H16
+Benchmarking verifier_computation/verifier_computation/T128_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H16: Collecting 10 samples in estimated 5.0142 s (1485 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H16: Analyzing
+verifier_computation/verifier_computation/T128_H16
+                        time:   [3.3745 ms 3.3802 ms 3.3853 ms]
+                        change: [−5.5471% −5.0239% −4.5203%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 394328
+Benchmarking verifier_computation/verifier_computation/T128_H32
+Benchmarking verifier_computation/verifier_computation/T128_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H32: Collecting 10 samples in estimated 5.0000 s (1430 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H32: Analyzing
+verifier_computation/verifier_computation/T128_H32
+                        time:   [3.4952 ms 3.5045 ms 3.5159 ms]
+                        change: [−5.5692% −5.2262% −4.9071%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 412776
+Benchmarking verifier_computation/verifier_computation/T128_H64
+Benchmarking verifier_computation/verifier_computation/T128_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T128_H64: Collecting 10 samples in estimated 5.0217 s (1265 iterations)
+Benchmarking verifier_computation/verifier_computation/T128_H64: Analyzing
+verifier_computation/verifier_computation/T128_H64
+                        time:   [3.9768 ms 3.9864 ms 3.9941 ms]
+                        change: [−7.6205% −6.9887% −6.4853%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 451808
+Benchmarking verifier_computation/verifier_computation/T256_H2
+Benchmarking verifier_computation/verifier_computation/T256_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H2: Collecting 10 samples in estimated 5.1012 s (1705 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H2: Analyzing
+verifier_computation/verifier_computation/T256_H2
+                        time:   [2.9752 ms 2.9847 ms 2.9907 ms]
+                        change: [−5.4402% −4.9580% −4.5105%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 283544
+Benchmarking verifier_computation/verifier_computation/T256_H4
+Benchmarking verifier_computation/verifier_computation/T256_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H4: Collecting 10 samples in estimated 5.0740 s (1485 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H4: Analyzing
+verifier_computation/verifier_computation/T256_H4
+                        time:   [3.4207 ms 3.4302 ms 3.4378 ms]
+                        change: [−4.9649% −4.5300% −4.0682%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Proof size (in bytes): 339992
+Benchmarking verifier_computation/verifier_computation/T256_H8
+Benchmarking verifier_computation/verifier_computation/T256_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H8: Collecting 10 samples in estimated 5.1113 s (1375 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H8: Analyzing
+verifier_computation/verifier_computation/T256_H8
+                        time:   [3.7087 ms 3.7228 ms 3.7319 ms]
+                        change: [−6.3387% −5.8557% −5.4084%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 381608
+Benchmarking verifier_computation/verifier_computation/T256_H16
+Benchmarking verifier_computation/verifier_computation/T256_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H16: Collecting 10 samples in estimated 5.1386 s (1320 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H16: Analyzing
+verifier_computation/verifier_computation/T256_H16
+                        time:   [3.8952 ms 3.9021 ms 3.9144 ms]
+                        change: [−5.3522% −4.8794% −4.3532%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 402744
+Benchmarking verifier_computation/verifier_computation/T256_H32
+Benchmarking verifier_computation/verifier_computation/T256_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H32: Collecting 10 samples in estimated 5.0913 s (1265 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H32: Analyzing
+verifier_computation/verifier_computation/T256_H32
+                        time:   [4.0293 ms 4.2126 ms 4.3564 ms]
+                        change: [−6.5140% −4.4735% −1.4513%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 419464
+Benchmarking verifier_computation/verifier_computation/T256_H64
+Benchmarking verifier_computation/verifier_computation/T256_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T256_H64: Collecting 10 samples in estimated 5.1220 s (1100 iterations)
+Benchmarking verifier_computation/verifier_computation/T256_H64: Analyzing
+verifier_computation/verifier_computation/T256_H64
+                        time:   [4.6327 ms 4.6668 ms 4.7083 ms]
+                        change: [−7.6202% −6.0282% −3.6335%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 478888
+Benchmarking verifier_computation/verifier_computation/T512_H2
+Benchmarking verifier_computation/verifier_computation/T512_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H2: Collecting 10 samples in estimated 5.0213 s (1265 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H2: Analyzing
+verifier_computation/verifier_computation/T512_H2
+                        time:   [3.9594 ms 3.9733 ms 3.9871 ms]
+                        change: [−4.2153% −3.6834% −3.1362%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 307552
+Benchmarking verifier_computation/verifier_computation/T512_H4
+Benchmarking verifier_computation/verifier_computation/T512_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H4: Collecting 10 samples in estimated 5.0151 s (1155 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H4: Analyzing
+verifier_computation/verifier_computation/T512_H4
+                        time:   [4.3449 ms 4.3528 ms 4.3606 ms]
+                        change: [+0.5032% +0.9226% +1.3422%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 363912
+Benchmarking verifier_computation/verifier_computation/T512_H8
+Benchmarking verifier_computation/verifier_computation/T512_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H8: Collecting 10 samples in estimated 5.2262 s (1155 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H8: Analyzing
+verifier_computation/verifier_computation/T512_H8
+                        time:   [4.5086 ms 4.5351 ms 4.5633 ms]
+                        change: [−2.4317% −1.5862% −0.8664%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 387912
+Benchmarking verifier_computation/verifier_computation/T512_H16
+Benchmarking verifier_computation/verifier_computation/T512_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H16: Collecting 10 samples in estimated 5.1197 s (1100 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H16: Analyzing
+verifier_computation/verifier_computation/T512_H16
+                        time:   [4.6654 ms 4.6706 ms 4.6799 ms]
+                        change: [−3.3708% −2.9839% −2.5623%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 414296
+Benchmarking verifier_computation/verifier_computation/T512_H32
+Benchmarking verifier_computation/verifier_computation/T512_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H32: Collecting 10 samples in estimated 5.2348 s (1045 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H32: Analyzing
+verifier_computation/verifier_computation/T512_H32
+                        time:   [5.0048 ms 5.0162 ms 5.0303 ms]
+                        change: [−3.9478% −3.5532% −3.1429%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 447536
+Benchmarking verifier_computation/verifier_computation/T512_H64
+Benchmarking verifier_computation/verifier_computation/T512_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T512_H64: Collecting 10 samples in estimated 5.0916 s (935 iterations)
+Benchmarking verifier_computation/verifier_computation/T512_H64: Analyzing
+verifier_computation/verifier_computation/T512_H64
+                        time:   [5.4141 ms 5.4232 ms 5.4319 ms]
+                        change: [−3.8963% −2.7006% −1.9178%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 503832
+Benchmarking verifier_computation/verifier_computation/T1024_H2
+Benchmarking verifier_computation/verifier_computation/T1024_H2: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H2: Collecting 10 samples in estimated 5.1614 s (880 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H2: Analyzing
+verifier_computation/verifier_computation/T1024_H2
+                        time:   [5.8743 ms 5.9086 ms 5.9741 ms]
+                        change: [+1.3380% +3.2517% +5.2573%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 330864
+Benchmarking verifier_computation/verifier_computation/T1024_H4
+Benchmarking verifier_computation/verifier_computation/T1024_H4: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H4: Collecting 10 samples in estimated 5.2986 s (935 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H4: Analyzing
+verifier_computation/verifier_computation/T1024_H4
+                        time:   [5.6755 ms 5.7014 ms 5.7312 ms]
+                        change: [−1.0638% −0.4324% +0.3103%] (p = 0.24 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 371304
+Benchmarking verifier_computation/verifier_computation/T1024_H8
+Benchmarking verifier_computation/verifier_computation/T1024_H8: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H8: Collecting 10 samples in estimated 5.3259 s (880 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H8: Analyzing
+verifier_computation/verifier_computation/T1024_H8
+                        time:   [5.8994 ms 5.9156 ms 5.9407 ms]
+                        change: [−8.3839% −7.9417% −7.4472%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 401160
+Benchmarking verifier_computation/verifier_computation/T1024_H16
+Benchmarking verifier_computation/verifier_computation/T1024_H16: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H16: Collecting 10 samples in estimated 5.2054 s (825 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H16: Analyzing
+verifier_computation/verifier_computation/T1024_H16
+                        time:   [6.3153 ms 6.3294 ms 6.3399 ms]
+                        change: [−5.9918% −3.3828% −1.5683%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 439328
+Benchmarking verifier_computation/verifier_computation/T1024_H32
+Benchmarking verifier_computation/verifier_computation/T1024_H32: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H32: Collecting 10 samples in estimated 5.0634 s (770 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H32: Analyzing
+verifier_computation/verifier_computation/T1024_H32
+                        time:   [6.5284 ms 6.6502 ms 6.7817 ms]
+                        change: [−4.0874% −3.1508% −1.9253%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 477088
+Benchmarking verifier_computation/verifier_computation/T1024_H64
+Benchmarking verifier_computation/verifier_computation/T1024_H64: Warming up for 3.0000 s
+Benchmarking verifier_computation/verifier_computation/T1024_H64: Collecting 10 samples in estimated 5.0416 s (715 iterations)
+Benchmarking verifier_computation/verifier_computation/T1024_H64: Analyzing
+verifier_computation/verifier_computation/T1024_H64
+                        time:   [6.9725 ms 7.0145 ms 7.0597 ms]
+                        change: [−1.3266% −0.8796% −0.3104%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 512984

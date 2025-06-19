@@ -1,0 +1,9 @@
+/target
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+scripts/bench_data
