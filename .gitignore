@@ -1,0 +1,12 @@
+.DS_Store
+/target
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+scripts/bench_data
+scripts/bench_figs
+scripts/bench_tables

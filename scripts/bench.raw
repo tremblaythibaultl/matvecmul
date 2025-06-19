@@ -1,0 +1,2429 @@
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H2
+                        time:   [2.8570 µs 2.9171 µs 2.9453 µs]
+                        change: [−7.2617% +2.7155% +14.526%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H4
+                        time:   [5.2978 µs 5.4365 µs 5.8187 µs]
+                        change: [−8.9860% +9.3708% +31.939%] (p = 0.42 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H8
+                        time:   [10.133 µs 11.119 µs 13.538 µs]
+                        change: [−13.193% +8.9743% +37.514%] (p = 0.49 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H16
+                        time:   [24.915 µs 31.697 µs 36.400 µs]
+                        change: [−7.4848% +7.3759% +23.296%] (p = 0.36 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H32
+                        time:   [67.795 µs 70.060 µs 71.136 µs]
+                        change: [−1.1253% +5.8523% +13.656%] (p = 0.15 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H64
+                        time:   [137.56 µs 140.67 µs 142.07 µs]
+                        change: [+2.0270% +9.7364% +16.454%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H128
+                        time:   [259.46 µs 263.32 µs 264.91 µs]
+                        change: [−3.6484% +1.8387% +7.7454%] (p = 0.56 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T2_H256
+                        time:   [554.95 µs 566.87 µs 571.89 µs]
+                        change: [+1.1339% +8.1341% +15.106%] (p = 0.04 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H2
+                        time:   [5.5787 µs 6.1927 µs 7.7043 µs]
+                        change: [−21.995% +0.6911% +30.946%] (p = 0.96 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H4
+                        time:   [13.770 µs 17.401 µs 19.933 µs]
+                        change: [−9.9480% +5.5253% +24.969%] (p = 0.55 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H8
+                        time:   [37.954 µs 39.340 µs 39.890 µs]
+                        change: [−4.1621% +4.5386% +13.436%] (p = 0.33 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H16
+                        time:   [73.563 µs 74.296 µs 75.152 µs]
+                        change: [−0.6227% +7.1824% +15.520%] (p = 0.11 > 0.05)
+                        No change in performance detected.
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low severe
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H32
+                        time:   [145.59 µs 148.34 µs 149.59 µs]
+                        change: [−2.4247% +4.8898% +12.628%] (p = 0.26 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H64
+                        time:   [287.51 µs 293.68 µs 296.02 µs]
+                        change: [−3.9994% +4.6198% +12.518%] (p = 0.29 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H128
+                        time:   [549.76 µs 556.05 µs 558.50 µs]
+                        change: [−5.9091% +0.4411% +7.2242%] (p = 0.90 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T4_H256
+                        time:   [1.1073 ms 1.1246 ms 1.1335 ms]
+                        change: [−3.6285% +3.0234% +10.395%] (p = 0.45 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H2
+                        time:   [22.254 µs 22.709 µs 22.884 µs]
+                        change: [−8.1563% +11.049% +37.530%] (p = 0.38 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H4
+                        time:   [40.832 µs 41.691 µs 42.033 µs]
+                        change: [−10.092% +10.167% +36.141%] (p = 0.41 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H8
+                        time:   [77.330 µs 78.732 µs 79.251 µs]
+                        change: [−12.584% +7.4880% +32.343%] (p = 0.54 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H16
+                        time:   [156.21 µs 159.45 µs 160.74 µs]
+                        change: [−12.656% +4.2239% +17.454%] (p = 0.67 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H32
+                        time:   [298.14 µs 303.27 µs 305.24 µs]
+                        change: [−3.9101% +4.5483% +13.748%] (p = 0.34 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H64
+                        time:   [601.02 µs 614.56 µs 619.95 µs]
+                        change: [−1.7520% +6.0149% +14.581%] (p = 0.20 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H128
+                        time:   [1.1818 ms 1.2183 ms 1.2334 ms]
+                        change: [−2.2682% +5.6465% +13.849%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T8_H256
+                        time:   [2.2785 ms 2.3152 ms 2.3299 ms]
+                        change: [−16.058% −0.5354% +22.313%] (p = 0.93 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H2
+                        time:   [42.842 µs 43.611 µs 43.917 µs]
+                        change: [−16.019% +5.7849% +30.236%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H4
+                        time:   [76.943 µs 79.574 µs 80.559 µs]
+                        change: [−21.759% −1.2366% +23.490%] (p = 0.90 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H8
+                        time:   [150.75 µs 156.33 µs 158.55 µs]
+                        change: [−19.719% +4.3240% +28.800%] (p = 0.74 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H16
+                        time:   [280.37 µs 287.40 µs 289.73 µs]
+                        change: [−26.303% −7.5659% +14.324%] (p = 0.53 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H32
+                        time:   [582.52 µs 595.80 µs 601.43 µs]
+                        change: [−11.940% +5.4222% +29.483%] (p = 0.67 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H64
+                        time:   [1.2300 ms 1.2534 ms 1.2630 ms]
+                        change: [−12.361% +9.4456% +33.576%] (p = 0.43 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H128
+                        time:   [2.3888 ms 2.4195 ms 2.4315 ms]
+                        change: [−13.104% +6.7774% +30.383%] (p = 0.58 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T16_H256
+                        time:   [4.8845 ms 4.9700 ms 5.0037 ms]
+                        change: [+1.9099% +6.2203% +10.118%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H2
+                        time:   [81.995 µs 84.410 µs 86.155 µs]
+                        change: [−13.987% +3.1089% +28.662%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H4
+                        time:   [161.35 µs 165.19 µs 166.82 µs]
+                        change: [−12.299% +7.5164% +32.458%] (p = 0.55 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H8
+                        time:   [299.82 µs 307.90 µs 316.20 µs]
+                        change: [−19.056% +4.5080% +29.992%] (p = 0.73 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H16
+                        time:   [604.04 µs 620.45 µs 627.68 µs]
+                        change: [−10.179% +5.7805% +29.945%] (p = 0.65 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H32
+                        time:   [1.2445 ms 1.2747 ms 1.2855 ms]
+                        change: [−10.788% +9.6375% +35.471%] (p = 0.43 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H64
+                        time:   [2.3995 ms 2.4526 ms 2.4933 ms]
+                        change: [−15.203% +6.1898% +29.256%] (p = 0.62 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H128
+                        time:   [4.6798 ms 4.7420 ms 4.7910 ms]
+                        change: [−3.5428% −0.2580% +2.9558%] (p = 0.88 > 0.05)
+                        No change in performance detected.
+Found 3 outliers among 10 measurements (30.00%)
+  2 (20.00%) low severe
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T32_H256
+                        time:   [9.1384 ms 9.1560 ms 9.1984 ms]
+                        change: [+1.3806% +2.0929% +2.7776%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H2
+                        time:   [169.76 µs 172.09 µs 173.61 µs]
+                        change: [−8.3206% +14.455% +42.172%] (p = 0.24 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H4
+                        time:   [287.84 µs 291.62 µs 293.07 µs]
+                        change: [−17.204% +2.2406% +26.008%] (p = 0.83 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H8
+                        time:   [559.49 µs 567.38 µs 571.81 µs]
+                        change: [−15.173% +4.8222% +28.415%] (p = 0.70 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H16
+                        time:   [1.1262 ms 1.1546 ms 1.1670 ms]
+                        change: [−17.771% +1.4044% +23.915%] (p = 0.89 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H32
+                        time:   [2.2252 ms 2.2871 ms 2.3109 ms]
+                        change: [−14.044% +5.3970% +26.472%] (p = 0.64 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H64
+                        time:   [4.5088 ms 4.6110 ms 4.6625 ms]
+                        change: [+1.0350% +5.7226% +9.7567%] (p = 0.03 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H128
+                        time:   [8.4216 ms 8.6311 ms 8.7218 ms]
+                        change: [+0.3641% +2.6133% +4.9134%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Benchmarking plaintext_matvec/plaintext_matvec/T64_H256
+                        time:   [17.515 ms 17.760 ms 17.973 ms]
+                        change: [+4.9970% +6.5317% +8.1386%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H2
+                        time:   [308.94 µs 312.93 µs 315.16 µs]
+                        change: [−13.048% +11.054% +37.521%] (p = 0.37 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H4
+                        time:   [523.79 µs 533.88 µs 541.00 µs]
+                        change: [−18.728% +0.5549% +21.298%] (p = 0.95 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H8
+                        time:   [948.22 µs 956.65 µs 960.68 µs]
+                        change: [−12.676% +2.2638% +23.958%] (p = 0.80 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H16
+                        time:   [1.7515 ms 1.7660 ms 1.7715 ms]
+                        change: [−19.904% −7.8036% −0.8054%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H32
+                        time:   [3.8464 ms 3.9113 ms 3.9446 ms]
+                        change: [+3.4692% +7.2524% +10.587%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H64
+                        time:   [7.2643 ms 7.3621 ms 7.4143 ms]
+                        change: [+2.5466% +4.5404% +6.3025%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H128
+                        time:   [13.779 ms 13.850 ms 13.884 ms]
+                        change: [−8.4947% −7.0414% −5.4580%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T128_H256
+                        time:   [27.818 ms 27.949 ms 28.007 ms]
+                        change: [+0.3941% +0.9489% +1.4760%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H2
+                        time:   [607.54 µs 636.12 µs 650.94 µs]
+                        change: [−15.669% +4.8058% +28.790%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H4
+                        time:   [1.0960 ms 1.1087 ms 1.1176 ms]
+                        change: [−9.6927% +12.476% +36.634%] (p = 0.27 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H8
+                        time:   [2.0889 ms 2.1319 ms 2.1487 ms]
+                        change: [−8.8966% +12.031% +36.095%] (p = 0.27 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H16
+                        time:   [4.0050 ms 4.1129 ms 4.1552 ms]
+                        change: [+10.752% +15.652% +19.709%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H32
+                        time:   [7.2960 ms 7.3359 ms 7.3522 ms]
+                        change: [+5.4632% +6.9293% +8.3301%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H64
+                        time:   [16.128 ms 16.166 ms 16.210 ms]
+                        change: [+11.118% +12.298% +13.530%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H128
+                        time:   [29.042 ms 29.565 ms 29.839 ms]
+                        change: [+4.4289% +6.1193% +7.8697%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T256_H256
+                        time:   [56.604 ms 56.995 ms 57.530 ms]
+                        change: [+4.5196% +5.3350% +6.4342%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H2
+                        time:   [1.1468 ms 1.1772 ms 1.1921 ms]
+                        change: [−14.951% +4.8403% +29.656%] (p = 0.73 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H4
+                        time:   [2.0676 ms 2.1388 ms 2.1691 ms]
+                        change: [−11.569% +4.4865% +27.933%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H8
+                        time:   [3.8698 ms 3.9130 ms 3.9650 ms]
+                        change: [+3.8924% +7.0850% +9.7741%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H16
+                        time:   [7.8396 ms 7.9373 ms 7.9737 ms]
+                        change: [+11.049% +14.273% +17.001%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H32
+                        time:   [14.566 ms 14.673 ms 14.815 ms]
+                        change: [+2.0793% +3.0275% +3.9910%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H64
+                        time:   [28.999 ms 29.073 ms 29.162 ms]
+                        change: [+4.9147% +5.1892% +5.4669%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H128
+                        time:   [57.949 ms 58.065 ms 58.179 ms]
+                        change: [+7.7697% +8.0591% +8.3361%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T512_H256
+                        time:   [106.77 ms 107.81 ms 109.56 ms]
+                        change: [−0.6163% +0.4347% +2.0969%] (p = 0.71 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H2
+                        time:   [2.2387 ms 2.2694 ms 2.2812 ms]
+                        change: [−14.241% +0.3714% +24.831%] (p = 0.94 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H4
+                        time:   [3.8091 ms 3.9760 ms 4.0490 ms]
+                        change: [−3.4270% +1.6457% +7.1830%] (p = 0.57 > 0.05)
+                        No change in performance detected.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H8
+                        time:   [7.4464 ms 7.4821 ms 7.4982 ms]
+                        change: [+3.0950% +4.3636% +5.7645%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H16
+                        time:   [14.982 ms 15.093 ms 15.170 ms]
+                        change: [+4.1244% +5.8653% +7.7101%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H32
+                        time:   [27.804 ms 27.924 ms 28.029 ms]
+                        change: [+0.6232% +1.0549% +1.5384%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H64
+                        time:   [60.099 ms 60.275 ms 60.448 ms]
+                        change: [+9.7817% +10.141% +10.512%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H128
+                        time:   [109.94 ms 110.35 ms 110.75 ms]
+                        change: [+1.5185% +1.9662% +2.4551%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking plaintext_matvec/plaintext_matvec/T1024_H256
+                        time:   [213.48 ms 213.61 ms 213.75 ms]
+                        change: [−0.4105% −0.2884% −0.1894%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+
+Benchmarking vector_encryption/vector_encryption/T2_H2
+                        time:   [97.579 µs 97.808 µs 98.054 µs]
+                        change: [−4.0446% −3.5176% −2.9724%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H4
+                        time:   [98.599 µs 98.755 µs 99.060 µs]
+                        change: [−3.2679% −2.4316% −1.5966%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H8
+                        time:   [98.851 µs 99.018 µs 99.320 µs]
+                        change: [−3.1549% −2.3636% −1.5791%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H16
+                        time:   [99.216 µs 99.365 µs 99.703 µs]
+                        change: [−2.6593% −1.7969% −0.9487%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H32
+                        time:   [99.331 µs 99.490 µs 99.876 µs]
+                        change: [−3.1896% −2.0849% −0.9832%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H64
+                        time:   [100.64 µs 100.91 µs 101.52 µs]
+                        change: [−3.5572% −1.7715% +0.0745%] (p = 0.08 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T2_H128
+                        time:   [102.27 µs 102.73 µs 103.73 µs]
+                        change: [−3.3528% −1.2732% +1.0256%] (p = 0.29 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T2_H256
+                        time:   [103.94 µs 104.66 µs 106.17 µs]
+                        change: [−2.9688% −0.3775% +2.2103%] (p = 0.78 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H2
+                        time:   [142.16 µs 143.30 µs 145.07 µs]
+                        change: [−4.4995% −2.1758% +0.1008%] (p = 0.10 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H4
+                        time:   [140.67 µs 141.67 µs 143.75 µs]
+                        change: [−5.0353% −1.8023% +1.1019%] (p = 0.29 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H8
+                        time:   [142.13 µs 143.44 µs 145.96 µs]
+                        change: [−4.2753% −1.0212% +2.0118%] (p = 0.56 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H16
+                        time:   [142.79 µs 143.79 µs 146.00 µs]
+                        change: [−4.6448% −1.5404% +1.7195%] (p = 0.40 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H32
+                        time:   [141.45 µs 142.49 µs 145.18 µs]
+                        change: [−6.2043% −1.7731% +2.5181%] (p = 0.48 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H64
+                        time:   [145.86 µs 147.40 µs 150.71 µs]
+                        change: [−5.5055% −1.3455% +2.8760%] (p = 0.57 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H128
+                        time:   [149.60 µs 151.58 µs 156.04 µs]
+                        change: [−6.8100% −2.7377% +1.5928%] (p = 0.25 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T4_H256
+                        time:   [158.78 µs 161.29 µs 165.99 µs]
+                        change: [−5.2012% −1.3429% +2.4814%] (p = 0.52 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H2
+                        time:   [209.40 µs 211.65 µs 216.72 µs]
+                        change: [−6.3055% −2.5150% +1.1275%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H4
+                        time:   [211.55 µs 213.71 µs 217.35 µs]
+                        change: [−5.4393% −1.4432% +2.4153%] (p = 0.52 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H8
+                        time:   [212.91 µs 214.91 µs 218.63 µs]
+                        change: [−2.4197% +1.3140% +5.3867%] (p = 0.53 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H16
+                        time:   [210.31 µs 212.38 µs 217.53 µs]
+                        change: [−5.7468% −1.4943% +2.7448%] (p = 0.53 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H32
+                        time:   [214.67 µs 217.42 µs 222.38 µs]
+                        change: [−4.2920% +0.6944% +6.6323%] (p = 0.81 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H64
+                        time:   [218.35 µs 221.05 µs 227.07 µs]
+                        change: [−6.0607% −1.0672% +4.2041%] (p = 0.70 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H128
+                        time:   [231.62 µs 234.39 µs 240.86 µs]
+                        change: [−6.6737% −2.6760% +1.4395%] (p = 0.24 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T8_H256
+                        time:   [244.26 µs 248.41 µs 256.31 µs]
+                        change: [−8.8310% −5.2097% −1.5137%] (p = 0.02 < 0.05)
+                        Performance has improved.
+Benchmarking vector_encryption/vector_encryption/T16_H2
+                        time:   [250.17 µs 255.38 µs 267.76 µs]
+                        change: [−5.7392% +3.3432% +12.148%] (p = 0.49 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H4
+                        time:   [243.71 µs 248.18 µs 258.36 µs]
+                        change: [−9.1557% −1.3857% +6.7506%] (p = 0.75 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H8
+                        time:   [249.43 µs 252.61 µs 259.99 µs]
+                        change: [−9.1816% −0.7344% +7.9437%] (p = 0.87 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H16
+                        time:   [253.18 µs 258.92 µs 271.36 µs]
+                        change: [−10.750% −2.1231% +7.7039%] (p = 0.67 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H32
+                        time:   [262.65 µs 267.73 µs 279.11 µs]
+                        change: [−11.608% −2.0240% +9.1053%] (p = 0.71 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H64
+                        time:   [274.73 µs 285.62 µs 307.02 µs]
+                        change: [−8.7389% +1.0842% +11.527%] (p = 0.84 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T16_H128
+                        time:   [312.06 µs 318.63 µs 333.21 µs]
+                        change: [−8.8239% −0.4556% +9.1544%] (p = 0.93 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T16_H256
+                        time:   [400.50 µs 412.90 µs 438.34 µs]
+                        change: [−8.9506% −3.1096% +2.9715%] (p = 0.37 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T32_H2
+                        time:   [230.13 µs 238.24 µs 253.93 µs]
+                        change: [−12.634% −0.2672% +13.023%] (p = 0.97 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T32_H4
+                        time:   [237.75 µs 244.66 µs 260.42 µs]
+                        change: [−15.542% −1.7109% +14.767%] (p = 0.83 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T32_H8
+                        time:   [240.93 µs 253.50 µs 272.06 µs]
+                        change: [−7.7992% +6.4419% +23.082%] (p = 0.44 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T32_H16
+                        time:   [262.03 µs 274.96 µs 291.30 µs]
+                        change: [−8.6626% +4.5332% +18.783%] (p = 0.54 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T32_H32
+                        time:   [291.18 µs 300.48 µs 319.05 µs]
+                        change: [−4.5735% +9.9042% +26.303%] (p = 0.24 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T32_H64
+                        time:   [311.78 µs 318.83 µs 331.52 µs]
+                        change: [−7.8800% +3.6430% +17.327%] (p = 0.60 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T32_H128
+                        time:   [440.31 µs 463.96 µs 509.38 µs]
+                        change: [−6.7608% +7.2380% +23.498%] (p = 0.35 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T32_H256
+                        time:   [548.93 µs 571.82 µs 610.61 µs]
+                        change: [−8.4327% +2.8266% +15.866%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T64_H2
+                        time:   [287.77 µs 293.80 µs 306.05 µs]
+                        change: [−6.1986% +5.2872% +18.360%] (p = 0.42 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T64_H4
+                        time:   [278.33 µs 284.16 µs 294.38 µs]
+                        change: [−9.3426% +3.4053% +18.113%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T64_H8
+                        time:   [282.64 µs 304.86 µs 330.32 µs]
+                        change: [−7.5933% +3.0128% +15.239%] (p = 0.63 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T64_H16
+                        time:   [295.96 µs 308.43 µs 327.69 µs]
+                        change: [−6.4037% +6.7481% +21.500%] (p = 0.38 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T64_H32
+                        time:   [306.33 µs 327.64 µs 347.93 µs]
+                        change: [−14.493% +1.9618% +20.923%] (p = 0.84 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T64_H64
+                        time:   [427.66 µs 453.24 µs 499.45 µs]
+                        change: [−8.2460% +7.2701% +25.098%] (p = 0.40 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T64_H128
+                        time:   [555.33 µs 574.15 µs 614.90 µs]
+                        change: [−5.8168% +5.9318% +19.516%] (p = 0.38 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T64_H256
+                        time:   [713.93 µs 756.42 µs 781.94 µs]
+                        change: [+0.9781% +5.5491% +10.212%] (p = 0.03 < 0.05)
+                        Change within noise threshold.
+Benchmarking vector_encryption/vector_encryption/T128_H2
+                        time:   [534.49 µs 554.39 µs 573.38 µs]
+                        change: [−9.5327% +3.5660% +18.519%] (p = 0.64 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking vector_encryption/vector_encryption/T128_H4
+                        time:   [473.38 µs 487.37 µs 513.92 µs]
+                        change: [−19.850% −9.8406% +1.8227%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T128_H8
+                        time:   [465.67 µs 489.66 µs 520.65 µs]
+                        change: [−12.988% −0.7738% +14.425%] (p = 0.92 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T128_H16
+                        time:   [450.17 µs 485.56 µs 553.78 µs]
+                        change: [−13.899% −1.8917% +13.006%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T128_H32
+                        time:   [624.61 µs 654.52 µs 715.27 µs]
+                        change: [−7.3194% +5.1225% +18.218%] (p = 0.44 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T128_H64
+                        time:   [692.80 µs 741.46 µs 825.05 µs]
+                        change: [−5.7778% +3.8661% +15.574%] (p = 0.50 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T128_H128
+                        time:   [949.10 µs 993.59 µs 1.0328 ms]
+                        change: [−1.4919% +4.4545% +10.138%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T128_H256
+                        time:   [900.97 µs 940.51 µs 983.11 µs]
+                        change: [−11.469% −5.2108% +1.6493%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H2
+                        time:   [755.64 µs 810.74 µs 891.54 µs]
+                        change: [−14.379% −5.3979% +2.8249%] (p = 0.28 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H4
+                        time:   [759.95 µs 793.96 µs 864.18 µs]
+                        change: [−10.201% +1.3898% +13.391%] (p = 0.83 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H8
+                        time:   [777.40 µs 841.60 µs 896.76 µs]
+                        change: [−9.1819% −1.0161% +7.9837%] (p = 0.83 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T256_H16
+                        time:   [862.25 µs 906.81 µs 981.20 µs]
+                        change: [−4.6956% +1.2083% +7.8482%] (p = 0.73 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H32
+                        time:   [971.45 µs 1.0045 ms 1.0492 ms]
+                        change: [−12.432% −5.0820% +3.6725%] (p = 0.26 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H64
+                        time:   [1.1450 ms 1.2480 ms 1.3079 ms]
+                        change: [−4.2915% +2.9245% +9.7942%] (p = 0.46 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H128
+                        time:   [1.0678 ms 1.1295 ms 1.1909 ms]
+                        change: [−8.3293% −1.0765% +6.4594%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T256_H256
+                        time:   [1.2530 ms 1.2901 ms 1.3263 ms]
+                        change: [−2.8117% +2.1069% +7.4824%] (p = 0.44 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T512_H2
+                        time:   [1.2163 ms 1.2610 ms 1.3414 ms]
+                        change: [−7.3309% +2.7790% +14.949%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T512_H4
+                        time:   [1.6365 ms 2.0494 ms 2.2563 ms]
+                        change: [−20.243% −0.5236% +23.621%] (p = 0.96 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T512_H8
+                        time:   [1.3812 ms 1.4268 ms 1.4813 ms]
+                        change: [−5.7570% +0.3081% +6.4337%] (p = 0.92 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T512_H16
+                        time:   [1.3053 ms 1.3737 ms 1.4792 ms]
+                        change: [−10.593% −2.4392% +6.4753%] (p = 0.61 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T512_H32
+                        time:   [1.5078 ms 1.5716 ms 1.6331 ms]
+                        change: [−10.457% −4.1308% +2.2695%] (p = 0.27 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T512_H64
+                        time:   [1.5927 ms 1.6625 ms 1.7269 ms]
+                        change: [−5.1460% +1.2382% +7.2852%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T512_H128
+                        time:   [1.4544 ms 1.5310 ms 1.6059 ms]
+                        change: [−15.523% −8.8452% −1.8748%] (p = 0.03 < 0.05)
+                        Performance has improved.
+Benchmarking vector_encryption/vector_encryption/T512_H256
+                        time:   [1.5699 ms 1.6801 ms 1.7716 ms]
+                        change: [−10.523% −1.6960% +7.9079%] (p = 0.74 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T1024_H2
+                        time:   [3.8594 ms 4.0390 ms 4.4682 ms]
+                        change: [−3.3774% +9.8475% +23.947%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T1024_H4
+                        time:   [2.3115 ms 2.3793 ms 2.4272 ms]
+                        change: [−3.9630% +1.1357% +5.8070%] (p = 0.68 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking vector_encryption/vector_encryption/T1024_H8
+                        time:   [2.2232 ms 2.3117 ms 2.4068 ms]
+                        change: [−6.4054% −1.2237% +4.3684%] (p = 0.68 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T1024_H16
+                        time:   [2.3114 ms 2.3968 ms 2.4924 ms]
+                        change: [−0.7977% +3.6500% +8.4609%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T1024_H32
+                        time:   [2.1729 ms 2.3080 ms 2.4535 ms]
+                        change: [−8.3094% −0.9732% +7.7965%] (p = 0.82 > 0.05)
+                        No change in performance detected.
+Benchmarking vector_encryption/vector_encryption/T1024_H64
+                        time:   [2.5006 ms 2.6153 ms 2.7174 ms]
+                        change: [+1.6967% +9.3643% +17.024%] (p = 0.02 < 0.05)
+                        Performance has regressed.
+Benchmarking vector_encryption/vector_encryption/T1024_H128
+                        time:   [2.4393 ms 2.6766 ms 2.9659 ms]
+                        change: [−1.6574% +8.7496% +20.972%] (p = 0.20 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking vector_encryption/vector_encryption/T1024_H256
+                        time:   [2.3013 ms 2.4939 ms 2.6748 ms]
+                        change: [−4.2579% +6.2201% +18.548%] (p = 0.30 > 0.05)
+                        No change in performance detected.
+
+Benchmarking prover_computation/prover_computation/T2_H2
+                        time:   [45.969 ms 46.910 ms 47.446 ms]
+                        change: [−10.598% −7.6601% −4.6460%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T2_H4
+                        time:   [67.839 ms 68.860 ms 69.568 ms]
+                        change: [−4.1694% −2.4939% −0.7269%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T2_H8
+                        time:   [88.046 ms 88.968 ms 89.891 ms]
+                        change: [−1.5012% −0.2234% +1.0469%] (p = 0.76 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T2_H16
+                        time:   [120.00 ms 121.86 ms 123.78 ms]
+                        change: [−5.6361% −3.7402% −1.9238%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T2_H32
+                        time:   [174.59 ms 177.32 ms 179.08 ms]
+                        change: [−5.7835% −4.1075% −2.4168%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T2_H64
+                        time:   [278.67 ms 284.20 ms 289.14 ms]
+                        change: [−2.4610% −0.0150% +2.2231%] (p = 0.99 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T2_H128
+                        time:   [429.31 ms 433.15 ms 437.57 ms]
+                        change: [+0.6701% +2.2447% +3.8526%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T2_H256
+                        time:   [660.55 ms 667.18 ms 673.92 ms]
+                        change: [+1.5526% +3.0466% +4.4352%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T4_H2
+                        time:   [56.348 ms 57.103 ms 58.188 ms]
+                        change: [−2.5307% +1.3102% +5.0500%] (p = 0.52 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T4_H4
+                        time:   [80.879 ms 81.678 ms 82.789 ms]
+                        change: [−2.0152% +0.1904% +2.5238%] (p = 0.88 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T4_H8
+                        time:   [103.98 ms 105.12 ms 106.28 ms]
+                        change: [−3.5651% −1.2937% +1.0102%] (p = 0.32 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T4_H16
+                        time:   [152.14 ms 154.20 ms 156.87 ms]
+                        change: [−1.8834% −0.2380% +1.2985%] (p = 0.78 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T4_H32
+                        time:   [223.45 ms 227.53 ms 231.59 ms]
+                        change: [+3.6382% +5.9976% +8.5751%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T4_H64
+                        time:   [334.07 ms 338.19 ms 341.76 ms]
+                        change: [+0.7536% +2.6919% +4.6317%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T4_H128
+                        time:   [558.74 ms 565.53 ms 572.85 ms]
+                        change: [+4.2668% +6.0633% +7.7340%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T4_H256
+                        time:   [882.28 ms 894.61 ms 911.65 ms]
+                        change: [+4.5650% +7.0018% +9.5048%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T8_H2
+                        time:   [70.306 ms 70.822 ms 71.573 ms]
+                        change: [+6.0801% +7.4948% +8.8051%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T8_H4
+                        time:   [101.30 ms 102.32 ms 103.44 ms]
+                        change: [+6.4662% +9.1603% +11.645%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T8_H8
+                        time:   [141.91 ms 143.16 ms 144.63 ms]
+                        change: [+3.7787% +5.5376% +7.4692%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T8_H16
+                        time:   [208.35 ms 210.52 ms 212.48 ms]
+                        change: [+3.7121% +5.2673% +6.8132%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T8_H32
+                        time:   [292.95 ms 297.72 ms 302.74 ms]
+                        change: [+1.5443% +4.4787% +7.1761%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T8_H64
+                        time:   [481.53 ms 484.63 ms 487.91 ms]
+                        change: [+0.3645% +3.0065% +5.4951%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T8_H128
+                        time:   [788.97 ms 798.19 ms 806.47 ms]
+                        change: [+2.7474% +4.4116% +6.0064%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T8_H256
+                        time:   [1.4239 s 1.4327 s 1.4418 s]
+                        change: [+0.2990% +1.0477% +1.8206%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T16_H2
+                        time:   [87.696 ms 88.775 ms 89.575 ms]
+                        change: [−4.6319% −2.8621% −1.2028%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T16_H4
+                        time:   [131.26 ms 132.09 ms 132.79 ms]
+                        change: [−6.7247% −4.6621% −2.3086%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T16_H8
+                        time:   [187.50 ms 189.26 ms 191.01 ms]
+                        change: [−4.1232% −2.9127% −1.7060%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T16_H16
+                        time:   [253.02 ms 255.16 ms 257.16 ms]
+                        change: [−9.0693% −7.0101% −4.7502%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T16_H32
+                        time:   [401.78 ms 405.32 ms 409.00 ms]
+                        change: [−6.4160% −4.2290% −2.0392%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T16_H64
+                        time:   [673.45 ms 678.66 ms 683.73 ms]
+                        change: [−1.2713% −0.0328% +1.2607%] (p = 0.96 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T16_H128
+                        time:   [1.2965 s 1.3030 s 1.3093 s]
+                        change: [−0.4919% +0.1589% +0.8290%] (p = 0.65 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T16_H256
+                        time:   [2.1449 s 2.1612 s 2.1788 s]
+                        change: [−0.8294% +0.1813% +1.0980%] (p = 0.75 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T32_H2
+                        time:   [118.85 ms 120.11 ms 121.69 ms]
+                        change: [−4.4065% −2.5519% −1.0137%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T32_H4
+                        time:   [176.89 ms 178.76 ms 180.10 ms]
+                        change: [−6.3773% −4.7233% −3.2687%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T32_H8
+                        time:   [235.66 ms 238.32 ms 241.01 ms]
+                        change: [−4.5041% −3.0446% −1.5518%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T32_H16
+                        time:   [367.63 ms 372.78 ms 378.34 ms]
+                        change: [−1.3867% +0.1591% +1.9826%] (p = 0.86 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T32_H32
+                        time:   [579.41 ms 584.04 ms 589.02 ms]
+                        change: [−2.9606% −1.5801% −0.0892%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T32_H64
+                        time:   [1.2009 s 1.2067 s 1.2131 s]
+                        change: [+0.0309% +0.8097% +1.6010%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T32_H128
+                        time:   [2.0479 s 2.0552 s 2.0649 s]
+                        change: [+0.3119% +0.9973% +1.6473%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T32_H256
+                        time:   [4.0432 s 4.0558 s 4.0699 s]
+                        change: [+0.4944% +1.0086% +1.5840%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T64_H2
+                        time:   [174.81 ms 176.97 ms 178.65 ms]
+                        change: [−1.4832% +0.2662% +2.1213%] (p = 0.79 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T64_H4
+                        time:   [245.54 ms 248.09 ms 250.73 ms]
+                        change: [−1.0837% +0.6643% +2.3735%] (p = 0.48 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T64_H8
+                        time:   [348.37 ms 351.48 ms 354.80 ms]
+                        change: [−3.6664% −2.5018% −1.2172%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking prover_computation/prover_computation/T64_H16
+                        time:   [542.17 ms 551.12 ms 560.67 ms]
+                        change: [−0.9918% +0.9461% +2.8001%] (p = 0.37 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T64_H32
+                        time:   [1.1062 s 1.1113 s 1.1174 s]
+                        change: [+0.7804% +1.5158% +2.3450%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking prover_computation/prover_computation/T64_H64
+                        time:   [1.9734 s 1.9835 s 1.9926 s]
+                        change: [−0.0320% +0.8780% +1.8065%] (p = 0.10 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T64_H128
+                        time:   [3.9238 s 3.9401 s 3.9554 s]
+                        change: [+0.5282% +1.0160% +1.5169%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T64_H256
+                        time:   [6.8285 s 6.8478 s 6.8656 s]
+                        change: [+0.2362% +0.5462% +0.8436%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T128_H2
+                        time:   [250.12 ms 255.35 ms 261.53 ms]
+                        change: [−4.4291% −1.3544% +1.6933%] (p = 0.42 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T128_H4
+                        time:   [372.23 ms 375.58 ms 378.99 ms]
+                        change: [+2.0738% +3.4205% +4.9147%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T128_H8
+                        time:   [537.49 ms 543.57 ms 549.42 ms]
+                        change: [+1.3874% +2.8276% +4.3112%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T128_H16
+                        time:   [979.41 ms 988.38 ms 996.86 ms]
+                        change: [+2.8054% +4.1499% +5.4498%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T128_H32
+                        time:   [1.7762 s 1.7843 s 1.7946 s]
+                        change: [−1.3905% −0.6560% +0.0752%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T128_H64
+                        time:   [3.8136 s 3.8321 s 3.8499 s]
+                        change: [+0.5008% +1.1125% +1.7303%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T128_H128
+                        time:   [6.7360 s 6.7652 s 6.7908 s]
+                        change: [+0.1694% +0.6563% +1.1150%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking prover_computation/prover_computation/T128_H256
+                        time:   [13.943 s 13.990 s 14.038 s]
+                        change: [−0.1208% +0.3902% +0.8515%] (p = 0.14 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T256_H2
+                        time:   [385.46 ms 387.81 ms 390.11 ms]
+                        change: [−0.3696% +1.2415% +2.8290%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T256_H4
+                        time:   [568.52 ms 572.62 ms 576.86 ms]
+                        change: [+2.1351% +3.6493% +5.1950%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T256_H8
+                        time:   [959.19 ms 968.30 ms 978.02 ms]
+                        change: [+4.3769% +5.4938% +6.8411%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T256_H16
+                        time:   [1.7984 s 1.8532 s 1.9067 s]
+                        change: [−1.8828% +1.3660% +4.2011%] (p = 0.42 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T256_H32
+                        time:   [3.8082 s 3.8262 s 3.8469 s]
+                        change: [+1.1728% +1.8640% +2.5754%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T256_H64
+                        time:   [6.6924 s 6.7149 s 6.7364 s]
+                        change: [−0.1615% +0.2531% +0.6614%] (p = 0.28 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T256_H128
+                        time:   [13.907 s 13.935 s 13.963 s]
+                        change: [+0.1850% +0.5158% +0.8367%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T256_H256
+                        time:   [24.963 s 25.030 s 25.095 s]
+                        change: [−0.3929% +0.0339% +0.4490%] (p = 0.88 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T512_H2
+                        time:   [600.61 ms 608.36 ms 616.83 ms]
+                        change: [−3.7855% −2.1816% −0.6287%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T512_H4
+                        time:   [982.96 ms 989.22 ms 995.03 ms]
+                        change: [+0.6610% +1.7878% +2.8992%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T512_H8
+                        time:   [1.4370 s 1.4472 s 1.4591 s]
+                        change: [+0.6476% +1.7894% +2.9579%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking prover_computation/prover_computation/T512_H16
+                        time:   [2.8872 s 2.9050 s 2.9213 s]
+                        change: [+2.3792% +3.2623% +4.1428%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking prover_computation/prover_computation/T512_H32
+                        time:   [5.8677 s 5.9810 s 6.1732 s]
+                        change: [+1.4991% +3.4733% +6.8024%] (p = 0.02 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T512_H64
+                        time:   [13.716 s 13.764 s 13.818 s]
+                        change: [−0.1800% +0.3080% +0.8249%] (p = 0.26 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T512_H128
+                        time:   [25.039 s 25.136 s 25.249 s]
+                        change: [−0.8948% −0.3734% +0.1821%] (p = 0.21 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T512_H256
+                        time:   [53.216 s 53.342 s 53.488 s]
+                        change: [+0.3561% +0.7912% +1.2216%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T1024_H2
+                        time:   [1.0992 s 1.1099 s 1.1211 s]
+                        change: [−1.8529% −0.4916% +0.9870%] (p = 0.51 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T1024_H4
+                        time:   [1.5639 s 1.5759 s 1.5888 s]
+                        change: [−0.0682% +1.1700% +2.4352%] (p = 0.10 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T1024_H8
+                        time:   [2.7002 s 2.7151 s 2.7320 s]
+                        change: [−3.8176% −1.7336% +0.0593%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T1024_H16
+                        time:   [4.6340 s 4.7044 s 4.7920 s]
+                        change: [−3.0546% −0.9105% +1.4254%] (p = 0.47 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T1024_H32
+                        time:   [12.469 s 12.567 s 12.702 s]
+                        change: [+1.4038% +2.6218% +3.9914%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking prover_computation/prover_computation/T1024_H64
+                        time:   [24.797 s 24.906 s 25.022 s]
+                        change: [−1.2843% −0.7404% −0.1661%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking prover_computation/prover_computation/T1024_H128
+                        time:   [53.366 s 53.648 s 53.952 s]
+                        change: [−0.1918% +0.4350% +1.0405%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Benchmarking prover_computation/prover_computation/T1024_H256
+                        time:   [101.55 s 102.62 s 103.81 s]
+                        change: [−2.9154% −1.1901% +0.6478%] (p = 0.23 > 0.05)
+                        No change in performance detected.
+
+Benchmarking no_pcs/no_pcs/T2_H2     time:   [13.423 ms 13.631 ms 13.784 ms]
+                        change: [−10.122% −6.1986% −1.7211%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking no_pcs/no_pcs/T2_H4     time:   [17.623 ms 17.765 ms 17.994 ms]
+                        change: [−6.1959% −4.6638% −3.1062%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T2_H8     time:   [24.844 ms 24.998 ms 25.193 ms]
+                        change: [−6.0857% −4.4809% −3.0297%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking no_pcs/no_pcs/T2_H16    time:   [34.949 ms 35.765 ms 36.500 ms]
+                        change: [−3.7834% −1.7997% +0.6725%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T2_H32    time:   [48.627 ms 49.302 ms 49.836 ms]
+                        change: [−7.8706% −6.3014% −4.7509%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T2_H64    time:   [70.181 ms 70.876 ms 71.541 ms]
+                        change: [−9.6874% −7.5531% −5.8085%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking no_pcs/no_pcs/T2_H128   time:   [105.05 ms 106.33 ms 107.66 ms]
+                        change: [−6.9678% −4.8144% −2.7840%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T2_H256   time:   [173.92 ms 174.91 ms 176.49 ms]
+                        change: [−1.6903% −0.5138% +0.7237%] (p = 0.45 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T4_H2     time:   [16.522 ms 16.860 ms 17.144 ms]
+                        change: [−4.0175% −1.7502% +0.6168%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking no_pcs/no_pcs/T4_H4     time:   [23.399 ms 23.546 ms 23.734 ms]
+                        change: [+2.6154% +3.7032% +4.8621%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking no_pcs/no_pcs/T4_H8     time:   [31.113 ms 31.871 ms 32.949 ms]
+                        change: [−2.8672% +0.0275% +3.0160%] (p = 0.99 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T4_H16    time:   [43.868 ms 45.048 ms 45.812 ms]
+                        change: [−2.8477% −0.8551% +1.0980%] (p = 0.43 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T4_H32    time:   [64.643 ms 65.292 ms 65.890 ms]
+                        change: [−5.9068% −4.0168% −2.1451%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T4_H64    time:   [92.147 ms 92.740 ms 93.463 ms]
+                        change: [−7.8685% −6.6135% −5.2421%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T4_H128   time:   [158.03 ms 158.73 ms 159.44 ms]
+                        change: [+2.7879% +3.8143% +4.8923%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T4_H256   time:   [238.18 ms 240.42 ms 242.48 ms]
+                        change: [−1.5499% +0.3687% +2.3183%] (p = 0.73 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T8_H2     time:   [22.586 ms 22.771 ms 23.010 ms]
+                        change: [−3.1591% −1.3701% +0.6824%] (p = 0.21 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T8_H4     time:   [30.761 ms 31.580 ms 32.642 ms]
+                        change: [+1.7619% +4.3672% +7.3771%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Benchmarking no_pcs/no_pcs/T8_H8     time:   [40.746 ms 41.763 ms 43.328 ms]
+                        change: [−1.9409% +1.0925% +4.5158%] (p = 0.53 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T8_H16    time:   [59.905 ms 61.113 ms 62.302 ms]
+                        change: [+0.3013% +2.7256% +5.0641%] (p = 0.05 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T8_H32    time:   [88.440 ms 88.974 ms 89.480 ms]
+                        change: [−0.5595% +0.7484% +2.0901%] (p = 0.31 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T8_H64    time:   [134.20 ms 135.79 ms 137.01 ms]
+                        change: [+1.3898% +2.7695% +4.0837%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking no_pcs/no_pcs/T8_H128   time:   [227.01 ms 227.86 ms 228.75 ms]
+                        change: [+4.1979% +4.8474% +5.4654%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking no_pcs/no_pcs/T8_H256   time:   [382.49 ms 385.94 ms 389.49 ms]
+                        change: [−1.2047% −0.1586% +0.9228%] (p = 0.78 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T16_H2    time:   [29.227 ms 30.175 ms 30.953 ms]
+                        change: [−2.5516% +1.0671% +5.0499%] (p = 0.60 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T16_H4    time:   [41.417 ms 41.914 ms 42.566 ms]
+                        change: [−6.8735% −4.0371% −1.2334%] (p = 0.02 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T16_H8    time:   [58.653 ms 59.122 ms 59.543 ms]
+                        change: [+0.5706% +2.3588% +4.4857%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T16_H16   time:   [85.160 ms 85.938 ms 86.483 ms]
+                        change: [−1.0303% +0.2043% +1.4961%] (p = 0.77 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T16_H32   time:   [129.54 ms 130.08 ms 130.82 ms]
+                        change: [+0.5133% +1.9191% +3.2691%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T16_H64   time:   [208.17 ms 210.74 ms 213.59 ms]
+                        change: [+0.6950% +2.2971% +3.9626%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T16_H128  time:   [358.39 ms 360.61 ms 362.85 ms]
+                        change: [−1.6819% −0.7164% +0.2591%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T16_H256  time:   [628.99 ms 638.03 ms 648.23 ms]
+                        change: [−0.7417% +0.9833% +2.7299%] (p = 0.31 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T32_H2    time:   [43.031 ms 43.791 ms 44.624 ms]
+                        change: [−7.1663% −3.7853% −0.5130%] (p = 0.05 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T32_H4    time:   [61.086 ms 61.598 ms 61.983 ms]
+                        change: [−4.8463% −3.7006% −2.6278%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking no_pcs/no_pcs/T32_H8    time:   [85.096 ms 85.871 ms 86.657 ms]
+                        change: [−6.6640% −4.7881% −3.2801%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T32_H16   time:   [127.74 ms 129.27 ms 130.93 ms]
+                        change: [−1.8846% −0.8719% +0.1887%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T32_H32   time:   [201.46 ms 202.66 ms 203.85 ms]
+                        change: [−3.1486% −2.3340% −1.4653%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T32_H64   time:   [348.78 ms 350.19 ms 351.54 ms]
+                        change: [−3.2601% −2.4174% −1.6950%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T32_H128  time:   [629.57 ms 631.98 ms 634.60 ms]
+                        change: [−2.1928% −1.6783% −1.1374%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T32_H256  time:   [1.1629 s 1.1879 s 1.2127 s]
+                        change: [+0.3076% +2.6176% +4.8877%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T64_H2    time:   [67.893 ms 68.429 ms 68.967 ms]
+                        change: [−0.6002% +0.8341% +2.1852%] (p = 0.27 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T64_H4    time:   [91.432 ms 92.161 ms 92.939 ms]
+                        change: [+0.3794% +1.8320% +3.3835%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T64_H8    time:   [133.25 ms 133.70 ms 134.23 ms]
+                        change: [+0.5471% +1.3977% +2.3545%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking no_pcs/no_pcs/T64_H16   time:   [207.58 ms 208.89 ms 210.23 ms]
+                        change: [−0.5785% +0.3229% +1.2463%] (p = 0.50 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T64_H32   time:   [340.88 ms 343.41 ms 346.04 ms]
+                        change: [−3.2520% −2.1844% −1.1502%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T64_H64   time:   [622.86 ms 626.32 ms 629.93 ms]
+                        change: [+0.3946% +1.3355% +2.2971%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Benchmarking no_pcs/no_pcs/T64_H128  time:   [1.1886 s 1.1980 s 1.2073 s]
+                        change: [+0.1891% +2.5562% +4.7746%] (p = 0.05 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T64_H256  time:   [2.2316 s 2.2629 s 2.2979 s]
+                        change: [−4.5075% −2.3173% +0.1398%] (p = 0.08 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T128_H2   time:   [99.276 ms 100.10 ms 101.40 ms]
+                        change: [−2.5953% −1.2139% +0.2911%] (p = 0.14 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T128_H4   time:   [139.89 ms 141.06 ms 141.97 ms]
+                        change: [−1.4260% −0.2804% +0.8081%] (p = 0.65 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T128_H8   time:   [214.28 ms 215.11 ms 215.89 ms]
+                        change: [−2.6183% −1.2574% −0.2423%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T128_H16  time:   [348.54 ms 351.62 ms 354.37 ms]
+                        change: [−0.6139% +0.3924% +1.3611%] (p = 0.46 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking no_pcs/no_pcs/T128_H32  time:   [613.00 ms 617.44 ms 622.27 ms]
+                        change: [−6.6066% −1.3302% +2.3220%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T128_H64  time:   [1.1528 s 1.1641 s 1.1769 s]
+                        change: [−3.1465% −0.2501% +2.0213%] (p = 0.88 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T128_H128 time:   [2.3134 s 2.3347 s 2.3582 s]
+                        change: [−0.6802% +0.7099% +2.0628%] (p = 0.35 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T128_H256 time:   [4.5558 s 4.6733 s 4.8546 s]
+                        change: [+1.9299% +4.9973% +9.6864%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking no_pcs/no_pcs/T256_H2   time:   [165.26 ms 166.62 ms 167.91 ms]
+                        change: [−3.1689% −2.3082% −1.5252%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T256_H4   time:   [240.62 ms 242.37 ms 244.07 ms]
+                        change: [−0.0372% +0.7469% +1.6009%] (p = 0.10 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T256_H8   time:   [379.62 ms 380.91 ms 382.23 ms]
+                        change: [−0.3827% +0.3534% +1.0588%] (p = 0.37 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T256_H16  time:   [637.68 ms 641.40 ms 645.14 ms]
+                        change: [+0.0018% +1.1947% +2.3231%] (p = 0.07 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T256_H32  time:   [1.1955 s 1.2035 s 1.2113 s]
+                        change: [+4.7966% +5.9187% +6.9711%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking no_pcs/no_pcs/T256_H64  time:   [2.3057 s 2.3188 s 2.3322 s]
+                        change: [−0.2582% +0.4377% +1.1035%] (p = 0.25 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T256_H128 time:   [4.5358 s 4.5486 s 4.5631 s]
+                        change: [+0.6309% +1.0590% +1.4990%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T256_H256 time:   [9.4044 s 9.4282 s 9.4534 s]
+                        change: [−2.0819% −1.0663% −0.0149%] (p = 0.07 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T512_H2   time:   [301.26 ms 303.49 ms 305.65 ms]
+                        change: [−0.6511% +0.4199% +1.4582%] (p = 0.46 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T512_H4   time:   [433.68 ms 436.45 ms 439.41 ms]
+                        change: [+0.4655% +1.3397% +2.1765%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking no_pcs/no_pcs/T512_H8   time:   [680.57 ms 684.50 ms 688.73 ms]
+                        change: [−3.4235% −1.7779% −0.3854%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Benchmarking no_pcs/no_pcs/T512_H16  time:   [1.2250 s 1.2342 s 1.2429 s]
+                        change: [+3.9794% +5.3443% +6.6570%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking no_pcs/no_pcs/T512_H32  time:   [2.2647 s 2.2781 s 2.2898 s]
+                        change: [−0.9685% −0.1609% +0.6551%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T512_H64  time:   [4.4678 s 4.5139 s 4.5595 s]
+                        change: [+0.0143% +1.3913% +2.6913%] (p = 0.08 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T512_H128 time:   [9.4080 s 9.4387 s 9.4740 s]
+                        change: [−2.0357% −0.3832% +1.1306%] (p = 0.67 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T512_H256 time:   [22.651 s 22.760 s 22.860 s]
+                        change: [−4.1394% −1.9108% −0.2043%] (p = 0.09 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking no_pcs/no_pcs/T1024_H2  time:   [557.38 ms 563.32 ms 572.71 ms]
+                        change: [−0.6516% +0.8058% +2.5629%] (p = 0.43 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking no_pcs/no_pcs/T1024_H4  time:   [806.74 ms 811.15 ms 815.61 ms]
+                        change: [−4.3627% −3.2818% −2.2501%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking no_pcs/no_pcs/T1024_H8  time:   [1.3082 s 1.3169 s 1.3253 s]
+                        change: [−1.6785% +0.4167% +2.0930%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T1024_H16 time:   [2.4113 s 2.4235 s 2.4366 s]
+                        change: [−1.8675% −1.0383% −0.0993%] (p = 0.05 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T1024_H32 time:   [4.4928 s 4.5342 s 4.5741 s]
+                        change: [−1.6217% −0.4196% +0.8772%] (p = 0.55 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking no_pcs/no_pcs/T1024_H64 time:   [9.6156 s 9.6861 s 9.7624 s]
+                        change: [+0.6666% +1.5911% +2.5553%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Benchmarking no_pcs/no_pcs/T1024_H128
+                        time:   [22.635 s 22.745 s 22.844 s]
+                        change: [−1.1318% −0.2425% +0.6308%] (p = 0.62 > 0.05)
+                        No change in performance detected.
+Benchmarking no_pcs/no_pcs/T1024_H256
+                        time:   [45.059 s 45.432 s 45.844 s]
+                        change: [−0.1024% +0.9185% +1.9348%] (p = 0.11 > 0.05)
+                        No change in performance detected.
+
+Benchmarking result_decryption/result_decryption/T2_H2
+                        time:   [70.073 µs 70.498 µs 71.223 µs]
+                        change: [+0.4083% +1.2433% +2.5818%] (p = 0.03 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T2_H4
+                        time:   [114.44 µs 116.00 µs 117.03 µs]
+                        change: [−1.4318% +0.3621% +2.2525%] (p = 0.72 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T2_H8
+                        time:   [172.57 µs 174.75 µs 175.74 µs]
+                        change: [+0.8509% +3.1928% +5.5899%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T2_H16
+                        time:   [188.17 µs 189.35 µs 191.50 µs]
+                        change: [+4.7968% +5.8871% +6.8799%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T2_H32
+                        time:   [175.22 µs 176.43 µs 178.01 µs]
+                        change: [+4.9222% +5.9486% +7.2206%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T2_H64
+                        time:   [130.44 µs 131.05 µs 131.58 µs]
+                        change: [−7.5615% −3.8733% −1.3408%] (p = 0.03 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T2_H128
+                        time:   [177.37 µs 184.10 µs 195.54 µs]
+                        change: [−7.0564% −2.9054% +1.6892%] (p = 0.27 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T2_H256
+                        time:   [264.05 µs 264.49 µs 264.92 µs]
+                        change: [−1.9379% −1.5836% −1.2771%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T4_H2
+                        time:   [70.552 µs 70.727 µs 70.861 µs]
+                        change: [−0.4955% +0.5668% +1.3614%] (p = 0.30 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T4_H4
+                        time:   [111.55 µs 112.65 µs 113.67 µs]
+                        change: [+0.3608% +1.1829% +1.9922%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T4_H8
+                        time:   [167.30 µs 167.58 µs 167.82 µs]
+                        change: [+2.9480% +3.3082% +3.6606%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking result_decryption/result_decryption/T4_H16
+                        time:   [190.61 µs 192.51 µs 195.45 µs]
+                        change: [+5.1707% +6.8185% +8.6697%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T4_H32
+                        time:   [171.58 µs 171.99 µs 172.49 µs]
+                        change: [−0.6376% −0.1497% +0.2964%] (p = 0.57 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T4_H64
+                        time:   [130.08 µs 134.32 µs 140.16 µs]
+                        change: [−1.1671% +1.0805% +4.0305%] (p = 0.49 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T4_H128
+                        time:   [174.71 µs 174.84 µs 175.03 µs]
+                        change: [−6.9406% −4.7725% −3.4537%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T4_H256
+                        time:   [262.68 µs 262.92 µs 263.37 µs]
+                        change: [−2.4997% −1.8692% −1.3992%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T8_H2
+                        time:   [70.831 µs 70.918 µs 70.978 µs]
+                        change: [+1.8695% +2.2168% +2.6474%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T8_H4
+                        time:   [112.99 µs 114.71 µs 115.48 µs]
+                        change: [+1.0141% +1.6786% +2.5306%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T8_H8
+                        time:   [165.21 µs 167.89 µs 170.24 µs]
+                        change: [+1.8312% +2.8960% +4.1187%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H16
+                        time:   [187.35 µs 188.81 µs 191.51 µs]
+                        change: [+1.1543% +1.8551% +2.8025%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H32
+                        time:   [171.03 µs 171.63 µs 172.21 µs]
+                        change: [+0.8916% +1.3042% +1.7224%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T8_H64
+                        time:   [129.86 µs 131.11 µs 132.79 µs]
+                        change: [−0.9368% +0.0280% +1.0434%] (p = 0.96 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T8_H128
+                        time:   [176.78 µs 177.58 µs 180.00 µs]
+                        change: [−1.5056% −0.2811% +1.6752%] (p = 0.82 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T8_H256
+                        time:   [262.94 µs 263.20 µs 263.55 µs]
+                        change: [−1.7336% −1.5155% −1.2603%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T16_H2
+                        time:   [70.931 µs 71.207 µs 71.715 µs]
+                        change: [+1.1357% +1.9786% +2.7710%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T16_H4
+                        time:   [110.60 µs 111.38 µs 112.19 µs]
+                        change: [−1.9999% −1.1723% −0.4354%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T16_H8
+                        time:   [164.12 µs 164.49 µs 164.92 µs]
+                        change: [+1.7152% +2.8649% +4.0455%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T16_H16
+                        time:   [185.69 µs 186.42 µs 187.32 µs]
+                        change: [−0.2215% +1.1798% +2.2399%] (p = 0.09 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T16_H32
+                        time:   [172.27 µs 172.62 µs 173.17 µs]
+                        change: [−0.1076% +0.2420% +0.6003%] (p = 0.21 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T16_H64
+                        time:   [129.29 µs 129.60 µs 129.87 µs]
+                        change: [−11.159% −6.8337% −2.6703%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T16_H128
+                        time:   [175.46 µs 175.65 µs 175.93 µs]
+                        change: [−3.1483% −2.9566% −2.7503%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T16_H256
+                        time:   [262.42 µs 262.60 µs 262.81 µs]
+                        change: [−1.9887% −1.7940% −1.5977%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Benchmarking result_decryption/result_decryption/T32_H2
+                        time:   [70.557 µs 70.613 µs 70.650 µs]
+                        change: [−0.2937% +0.3043% +0.7066%] (p = 0.33 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T32_H4
+                        time:   [111.52 µs 111.60 µs 111.74 µs]
+                        change: [−1.0454% +0.3184% +1.7846%] (p = 0.69 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T32_H8
+                        time:   [172.35 µs 173.28 µs 173.98 µs]
+                        change: [+5.3205% +6.5980% +7.6422%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Benchmarking result_decryption/result_decryption/T32_H16
+                        time:   [187.99 µs 188.98 µs 189.99 µs]
+                        change: [+2.0474% +2.6560% +3.3509%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T32_H32
+                        time:   [176.39 µs 178.58 µs 179.85 µs]
+                        change: [+3.2186% +4.3041% +5.1526%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T32_H64
+                        time:   [128.88 µs 129.10 µs 129.53 µs]
+                        change: [−1.4643% −1.0972% −0.7174%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T32_H128
+                        time:   [174.49 µs 175.44 µs 177.48 µs]
+                        change: [−2.1511% −1.5957% −0.9418%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T32_H256
+                        time:   [262.57 µs 262.77 µs 262.94 µs]
+                        change: [−3.5626% −2.3016% −1.5861%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H2
+                        time:   [69.463 µs 69.642 µs 69.750 µs]
+                        change: [−1.5469% −1.3152% −1.0817%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T64_H4
+                        time:   [110.02 µs 110.84 µs 111.54 µs]
+                        change: [−2.5595% −1.4372% −0.4308%] (p = 0.02 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T64_H8
+                        time:   [155.45 µs 155.69 µs 156.00 µs]
+                        change: [−3.6067% −2.9110% −2.3106%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H16
+                        time:   [174.53 µs 175.80 µs 177.55 µs]
+                        change: [−4.7934% −4.1919% −3.5440%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T64_H32
+                        time:   [161.25 µs 161.84 µs 162.35 µs]
+                        change: [−5.4930% −4.9790% −4.4335%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H64
+                        time:   [125.71 µs 125.94 µs 126.20 µs]
+                        change: [−16.792% −12.756% −8.2492%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T64_H128
+                        time:   [173.14 µs 175.42 µs 178.34 µs]
+                        change: [−4.6447% −4.0284% −2.9782%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T64_H256
+                        time:   [262.59 µs 262.76 µs 262.97 µs]
+                        change: [−3.4960% −2.7106% −2.0401%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T128_H2
+                        time:   [69.789 µs 71.145 µs 72.505 µs]
+                        change: [−0.8494% +0.1549% +1.5181%] (p = 0.85 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T128_H4
+                        time:   [110.86 µs 111.42 µs 112.66 µs]
+                        change: [+0.3582% +1.2121% +2.1034%] (p = 0.03 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T128_H8
+                        time:   [157.50 µs 157.99 µs 158.26 µs]
+                        change: [−7.0915% −5.3253% −3.5833%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T128_H16
+                        time:   [177.47 µs 177.85 µs 178.10 µs]
+                        change: [−5.8964% −3.5065% −1.9846%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T128_H32
+                        time:   [164.50 µs 165.08 µs 165.46 µs]
+                        change: [−3.9260% −3.3049% −2.7483%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T128_H64
+                        time:   [128.97 µs 135.90 µs 143.63 µs]
+                        change: [−19.919% −16.116% −12.117%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T128_H128
+                        time:   [174.18 µs 174.44 µs 174.62 µs]
+                        change: [−3.0126% −2.7542% −2.4993%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T128_H256
+                        time:   [263.78 µs 265.17 µs 268.53 µs]
+                        change: [−1.7077% −0.8620% +0.1695%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T256_H2
+                        time:   [69.343 µs 69.936 µs 70.635 µs]
+                        change: [−0.7241% +0.0427% +0.9511%] (p = 0.93 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T256_H4
+                        time:   [108.36 µs 109.59 µs 110.32 µs]
+                        change: [−1.8841% −1.0685% −0.2293%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T256_H8
+                        time:   [155.68 µs 156.01 µs 156.23 µs]
+                        change: [−2.7809% −2.4871% −2.2231%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H16
+                        time:   [176.80 µs 177.37 µs 177.84 µs]
+                        change: [−3.7813% −2.8099% −1.9140%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H32
+                        time:   [165.01 µs 165.12 µs 165.20 µs]
+                        change: [−3.6342% −3.2210% −2.8774%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H64
+                        time:   [128.79 µs 128.90 µs 128.98 µs]
+                        change: [−3.0228% −2.6723% −2.3866%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Benchmarking result_decryption/result_decryption/T256_H128
+                        time:   [173.95 µs 175.53 µs 180.21 µs]
+                        change: [−28.551% −14.239% +3.9087%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T256_H256
+                        time:   [263.70 µs 265.61 µs 269.06 µs]
+                        change: [−2.0378% −1.0227% +0.2377%] (p = 0.12 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T512_H2
+                        time:   [69.299 µs 69.761 µs 70.098 µs]
+                        change: [−1.5847% −1.0150% −0.4214%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Benchmarking result_decryption/result_decryption/T512_H4
+                        time:   [107.53 µs 107.61 µs 107.74 µs]
+                        change: [−6.1009% −5.3950% −4.7236%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Benchmarking result_decryption/result_decryption/T512_H8
+                        time:   [156.97 µs 157.65 µs 158.20 µs]
+                        change: [−3.3918% −2.6463% −1.9714%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T512_H16
+                        time:   [177.29 µs 178.07 µs 179.31 µs]
+                        change: [−2.9083% −2.3561% −1.7247%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 4 outliers among 10 measurements (40.00%)
+  2 (20.00%) low mild
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T512_H32
+                        time:   [164.55 µs 165.17 µs 165.58 µs]
+                        change: [−1.8956% −1.4563% −1.0600%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Benchmarking result_decryption/result_decryption/T512_H64
+                        time:   [147.28 µs 148.55 µs 149.59 µs]
+                        change: [−7.1878% −1.0593% +5.4163%] (p = 0.76 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Benchmarking result_decryption/result_decryption/T512_H128
+                        time:   [174.75 µs 188.25 µs 212.05 µs]
+                        change: [−9.6677% −1.2500% +9.5839%] (p = 0.82 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T512_H256
+                        time:   [264.09 µs 310.26 µs 350.93 µs]
+                        change: [−18.711% −7.2658% +5.4426%] (p = 0.32 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Benchmarking result_decryption/result_decryption/T1024_H2
+                        time:   [69.990 µs 70.762 µs 72.434 µs]
+                        change: [−0.9105% +0.9432% +2.6206%] (p = 0.32 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T1024_H4
+                        time:   [109.55 µs 111.94 µs 113.65 µs]
+                        change: [−1.0808% +0.3459% +1.8391%] (p = 0.66 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T1024_H8
+                        time:   [156.88 µs 157.17 µs 157.37 µs]
+                        change: [−6.0274% −4.6871% −3.3743%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Benchmarking result_decryption/result_decryption/T1024_H16
+                        time:   [176.88 µs 177.51 µs 178.16 µs]
+                        change: [−2.6784% −0.7474% +0.5481%] (p = 0.54 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T1024_H32
+                        time:   [165.41 µs 167.53 µs 171.75 µs]
+                        change: [−0.7416% +1.0688% +3.1031%] (p = 0.34 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T1024_H64
+                        time:   [128.03 µs 137.32 µs 147.05 µs]
+                        change: [−13.282% −8.0387% −1.7980%] (p = 0.03 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Benchmarking result_decryption/result_decryption/T1024_H128
+                        time:   [186.78 µs 205.54 µs 225.62 µs]
+                        change: [−19.290% −8.4017% +3.7488%] (p = 0.24 > 0.05)
+                        No change in performance detected.
+Benchmarking result_decryption/result_decryption/T1024_H256
+                        time:   [270.57 µs 333.41 µs 402.95 µs]
+                        change: [−38.060% −27.249% −12.054%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+
+Benchmarking verifier_computation/verifier_computation/T2_H2
+                        time:   [4.0536 ms 4.1436 ms 4.2296 ms]
+                        change: [−8.9369% −5.4269% −2.0111%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 129644
+Benchmarking verifier_computation/verifier_computation/T2_H4
+                        time:   [4.8344 ms 4.9548 ms 5.0524 ms]
+                        change: [−3.9796% +0.2726% +5.4062%] (p = 0.92 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Proof size (in bytes): 158156
+Benchmarking verifier_computation/verifier_computation/T2_H8
+                        time:   [5.3118 ms 5.3481 ms 5.4183 ms]
+                        change: [−5.2626% −2.2225% +1.0687%] (p = 0.22 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 166540
+Benchmarking verifier_computation/verifier_computation/T2_H16
+                        time:   [6.1319 ms 6.2632 ms 6.4412 ms]
+                        change: [−2.9186% −0.6754% +1.7922%] (p = 0.61 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 176300
+Benchmarking verifier_computation/verifier_computation/T2_H32
+                        time:   [7.9531 ms 8.0242 ms 8.0952 ms]
+                        change: [+0.1725% +1.9097% +3.4340%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 189844
+Benchmarking verifier_computation/verifier_computation/T2_H64
+                        time:   [9.9753 ms 10.106 ms 10.321 ms]
+                        change: [+1.3310% +3.5169% +5.7668%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 206740
+Benchmarking verifier_computation/verifier_computation/T2_H128
+                        time:   [13.443 ms 13.576 ms 13.715 ms]
+                        change: [−10.234% −9.0844% −7.9950%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 214804
+Benchmarking verifier_computation/verifier_computation/T2_H256
+                        time:   [23.661 ms 23.719 ms 23.771 ms]
+                        change: [+23.572% +25.707% +27.603%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 223860
+Benchmarking verifier_computation/verifier_computation/T4_H2
+                        time:   [4.2044 ms 4.2693 ms 4.3743 ms]
+                        change: [−3.6980% +1.3555% +7.0737%] (p = 0.64 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 135388
+Benchmarking verifier_computation/verifier_computation/T4_H4
+                        time:   [4.9388 ms 5.0088 ms 5.0635 ms]
+                        change: [−12.725% −10.522% −8.4786%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) low mild
+Proof size (in bytes): 157324
+Benchmarking verifier_computation/verifier_computation/T4_H8
+                        time:   [5.1378 ms 5.2226 ms 5.3256 ms]
+                        change: [−16.437% −14.062% −11.792%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 171660
+Benchmarking verifier_computation/verifier_computation/T4_H16
+                        time:   [5.9125 ms 6.0331 ms 6.1934 ms]
+                        change: [−21.222% −18.999% −16.400%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 183508
+Benchmarking verifier_computation/verifier_computation/T4_H32
+                        time:   [7.3461 ms 7.3826 ms 7.4560 ms]
+                        change: [−8.8889% −7.1897% −5.4999%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 194916
+Benchmarking verifier_computation/verifier_computation/T4_H64
+                        time:   [9.6171 ms 9.6757 ms 9.7946 ms]
+                        change: [−10.619% −8.6364% −6.6768%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high mild
+Proof size (in bytes): 209620
+Benchmarking verifier_computation/verifier_computation/T4_H128
+                        time:   [12.628 ms 12.676 ms 12.750 ms]
+                        change: [−7.0593% −4.9339% −2.9371%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 219252
+Benchmarking verifier_computation/verifier_computation/T4_H256
+                        time:   [18.324 ms 19.246 ms 19.894 ms]
+                        change: [−1.8391% +0.5137% +3.1825%] (p = 0.74 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 228476
+Benchmarking verifier_computation/verifier_computation/T8_H2
+                        time:   [4.3247 ms 4.5200 ms 4.6502 ms]
+                        change: [−7.4344% −3.3277% +1.1998%] (p = 0.18 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 137500
+Benchmarking verifier_computation/verifier_computation/T8_H4
+                        time:   [4.9300 ms 5.1267 ms 5.3314 ms]
+                        change: [−9.3582% −6.1948% −2.7672%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 162124
+Benchmarking verifier_computation/verifier_computation/T8_H8
+                        time:   [6.0514 ms 6.1342 ms 6.1729 ms]
+                        change: [−4.9238% −1.6131% +1.8176%] (p = 0.40 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 177652
+Benchmarking verifier_computation/verifier_computation/T8_H16
+                        time:   [6.6561 ms 6.8803 ms 6.9837 ms]
+                        change: [+1.0661% +4.3399% +7.7013%] (p = 0.03 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 188548
+Benchmarking verifier_computation/verifier_computation/T8_H32
+                        time:   [7.8990 ms 8.0233 ms 8.2437 ms]
+                        change: [−9.6952% −7.2161% −4.5711%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 197060
+Benchmarking verifier_computation/verifier_computation/T8_H64
+                        time:   [10.224 ms 10.295 ms 10.387 ms]
+                        change: [−0.9818% +0.3877% +1.8072%] (p = 0.61 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 211380
+Benchmarking verifier_computation/verifier_computation/T8_H128
+                        time:   [16.316 ms 16.407 ms 16.498 ms]
+                        change: [+1.3168% +2.3378% +3.6591%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 222972
+Benchmarking verifier_computation/verifier_computation/T8_H256
+                        time:   [21.468 ms 21.534 ms 21.636 ms]
+                        change: [+12.911% +13.621% +14.323%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 230668
+Benchmarking verifier_computation/verifier_computation/T16_H2
+                        time:   [4.6440 ms 4.7031 ms 4.7758 ms]
+                        change: [−7.8229% −6.5563% −5.2278%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 144828
+Benchmarking verifier_computation/verifier_computation/T16_H4
+                        time:   [5.9219 ms 6.0842 ms 6.1753 ms]
+                        change: [−5.9731% −3.0600% −0.1345%] (p = 0.06 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 165972
+Benchmarking verifier_computation/verifier_computation/T16_H8
+                        time:   [6.8423 ms 7.0037 ms 7.1206 ms]
+                        change: [+5.6215% +9.0342% +12.295%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Proof size (in bytes): 182724
+Benchmarking verifier_computation/verifier_computation/T16_H16
+                        time:   [6.7373 ms 6.8570 ms 6.9582 ms]
+                        change: [−8.5292% −6.4808% −4.2874%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 189508
+Benchmarking verifier_computation/verifier_computation/T16_H32
+                        time:   [8.2017 ms 8.2727 ms 8.3274 ms]
+                        change: [−3.7118% −2.9969% −2.2580%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 200164
+Benchmarking verifier_computation/verifier_computation/T16_H64
+                        time:   [11.135 ms 11.242 ms 11.454 ms]
+                        change: [−8.0471% −6.6492% −5.0634%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 218524
+Benchmarking verifier_computation/verifier_computation/T16_H128
+                        time:   [15.072 ms 15.112 ms 15.167 ms]
+                        change: [−7.1176% −5.8423% −4.8272%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 226636
+Benchmarking verifier_computation/verifier_computation/T16_H256
+                        time:   [20.109 ms 20.187 ms 20.256 ms]
+                        change: [−11.941% −11.408% −10.907%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 233452
+Benchmarking verifier_computation/verifier_computation/T32_H2
+                        time:   [5.3944 ms 5.5164 ms 5.6322 ms]
+                        change: [−7.7693% −6.2404% −4.3811%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 148356
+Benchmarking verifier_computation/verifier_computation/T32_H4
+                        time:   [6.1765 ms 6.2365 ms 6.3060 ms]
+                        change: [−7.0993% −5.8178% −4.5359%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 170564
+Benchmarking verifier_computation/verifier_computation/T32_H8
+                        time:   [6.4286 ms 6.6169 ms 6.7879 ms]
+                        change: [−6.6107% −4.7232% −2.9666%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 180804
+Benchmarking verifier_computation/verifier_computation/T32_H16
+                        time:   [7.1841 ms 7.2460 ms 7.2891 ms]
+                        change: [−10.050% −8.1505% −6.3226%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 192100
+Benchmarking verifier_computation/verifier_computation/T32_H32
+                        time:   [8.9609 ms 9.0774 ms 9.1452 ms]
+                        change: [−6.1675% −4.0946% −2.1547%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 205900
+Benchmarking verifier_computation/verifier_computation/T32_H64
+                        time:   [11.430 ms 11.477 ms 11.537 ms]
+                        change: [−6.1678% −5.3732% −4.5774%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 219532
+Benchmarking verifier_computation/verifier_computation/T32_H128
+                        time:   [15.677 ms 15.734 ms 15.828 ms]
+                        change: [−4.0281% −2.9721% −1.9035%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Proof size (in bytes): 228044
+Benchmarking verifier_computation/verifier_computation/T32_H256
+                        time:   [19.418 ms 20.315 ms 20.796 ms]
+                        change: [−16.399% −14.401% −11.787%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 235596
+Benchmarking verifier_computation/verifier_computation/T64_H2
+                        time:   [6.8832 ms 6.9116 ms 6.9425 ms]
+                        change: [+4.1353% +5.1274% +6.3348%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 154004
+Benchmarking verifier_computation/verifier_computation/T64_H4
+                        time:   [7.7241 ms 7.7547 ms 7.7938 ms]
+                        change: [+1.2393% +3.4496% +5.2693%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low severe
+Proof size (in bytes): 175204
+Benchmarking verifier_computation/verifier_computation/T64_H8
+                        time:   [7.7763 ms 7.9687 ms 8.1373 ms]
+                        change: [+0.0484% +2.8010% +5.1135%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 186884
+Benchmarking verifier_computation/verifier_computation/T64_H16
+                        time:   [9.2874 ms 9.3586 ms 9.4034 ms]
+                        change: [+5.2661% +6.6508% +7.9187%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 199404
+Benchmarking verifier_computation/verifier_computation/T64_H32
+                        time:   [10.652 ms 10.738 ms 10.824 ms]
+                        change: [+1.8380% +4.1513% +6.2801%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 207068
+Benchmarking verifier_computation/verifier_computation/T64_H64
+                        time:   [13.106 ms 13.526 ms 13.889 ms]
+                        change: [+3.6610% +5.6991% +7.2078%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low severe
+  2 (20.00%) high mild
+Proof size (in bytes): 222508
+Benchmarking verifier_computation/verifier_computation/T64_H128
+                        time:   [16.114 ms 16.155 ms 16.235 ms]
+                        change: [−5.9876% −4.8583% −3.7074%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Proof size (in bytes): 231660
+Benchmarking verifier_computation/verifier_computation/T64_H256
+                        time:   [24.305 ms 24.354 ms 24.447 ms]
+                        change: [−0.7757% +0.7452% +2.2243%] (p = 0.37 > 0.05)
+                        No change in performance detected.
+Found 3 outliers among 10 measurements (30.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+  1 (10.00%) high severe
+Proof size (in bytes): 240468
+Benchmarking verifier_computation/verifier_computation/T128_H2
+                        time:   [8.8470 ms 8.9178 ms 8.9886 ms]
+                        change: [+4.2563% +5.9972% +7.9028%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 155220
+Benchmarking verifier_computation/verifier_computation/T128_H4
+                        time:   [9.7583 ms 9.8472 ms 9.9840 ms]
+                        change: [+5.0418% +6.6437% +8.0819%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 177636
+Benchmarking verifier_computation/verifier_computation/T128_H8
+                        time:   [9.5411 ms 9.7380 ms 10.180 ms]
+                        change: [+0.7836% +4.5244% +8.5109%] (p = 0.04 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 192460
+Benchmarking verifier_computation/verifier_computation/T128_H16
+                        time:   [11.216 ms 11.259 ms 11.293 ms]
+                        change: [+8.8596% +9.8483% +10.889%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 201468
+Benchmarking verifier_computation/verifier_computation/T128_H32
+                        time:   [11.339 ms 11.401 ms 11.480 ms]
+                        change: [−5.1775% −2.6699% −0.3933%] (p = 0.05 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 210556
+Benchmarking verifier_computation/verifier_computation/T128_H64
+                        time:   [12.485 ms 12.541 ms 12.630 ms]
+                        change: [−12.069% −11.399% −10.578%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 225164
+Benchmarking verifier_computation/verifier_computation/T128_H128
+                        time:   [18.546 ms 18.646 ms 18.731 ms]
+                        change: [−1.2807% −0.1463% +1.0268%] (p = 0.82 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 235220
+Benchmarking verifier_computation/verifier_computation/T128_H256
+                        time:   [25.221 ms 25.523 ms 25.855 ms]
+                        change: [−9.9142% −8.8340% −7.4598%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 241316
+Benchmarking verifier_computation/verifier_computation/T256_H2
+                        time:   [9.9707 ms 10.352 ms 11.131 ms]
+                        change: [−7.9363% −3.4481% +0.6153%] (p = 0.17 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 156180
+Benchmarking verifier_computation/verifier_computation/T256_H4
+                        time:   [12.950 ms 13.371 ms 13.826 ms]
+                        change: [+33.547% +36.543% +39.326%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low severe
+  1 (10.00%) low mild
+Proof size (in bytes): 182732
+Benchmarking verifier_computation/verifier_computation/T256_H8
+                        time:   [14.029 ms 14.106 ms 14.168 ms]
+                        change: [+13.676% +15.226% +16.721%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 194268
+Benchmarking verifier_computation/verifier_computation/T256_H16
+                        time:   [14.634 ms 14.712 ms 14.827 ms]
+                        change: [+0.6314% +2.3839% +3.9451%] (p = 0.01 < 0.05)
+                        Change within noise threshold.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) low mild
+Proof size (in bytes): 204316
+Benchmarking verifier_computation/verifier_computation/T256_H32
+                        time:   [15.495 ms 15.843 ms 15.985 ms]
+                        change: [+2.4468% +6.3267% +10.149%] (p = 0.01 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 212732
+Benchmarking verifier_computation/verifier_computation/T256_H64
+                        time:   [16.837 ms 16.920 ms 16.979 ms]
+                        change: [+0.4941% +1.0237% +1.5409%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) low mild
+  1 (10.00%) high mild
+Proof size (in bytes): 229908
+Benchmarking verifier_computation/verifier_computation/T256_H128
+                        time:   [20.514 ms 20.620 ms 20.753 ms]
+                        change: [−0.9037% −0.0038% +0.8929%] (p = 0.99 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 238852
+Benchmarking verifier_computation/verifier_computation/T256_H256
+                        time:   [27.281 ms 27.872 ms 29.001 ms]
+                        change: [−0.7925% +2.9064% +6.7521%] (p = 0.16 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 243524
+Benchmarking verifier_computation/verifier_computation/T512_H2
+                        time:   [16.317 ms 16.453 ms 16.576 ms]
+                        change: [+1.5147% +2.4207% +3.2853%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 164892
+Benchmarking verifier_computation/verifier_computation/T512_H4
+                        time:   [16.730 ms 16.806 ms 16.899 ms]
+                        change: [+25.461% +26.634% +27.858%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 184380
+Benchmarking verifier_computation/verifier_computation/T512_H8
+                        time:   [19.022 ms 19.216 ms 19.409 ms]
+                        change: [+6.2481% +10.999% +15.051%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 196700
+Benchmarking verifier_computation/verifier_computation/T512_H16
+                        time:   [20.279 ms 20.314 ms 20.361 ms]
+                        change: [−3.0517% −2.2342% −1.4780%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 206460
+Benchmarking verifier_computation/verifier_computation/T512_H32
+                        time:   [19.049 ms 19.461 ms 19.902 ms]
+                        change: [−14.559% −13.400% −11.687%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Proof size (in bytes): 216804
+Benchmarking verifier_computation/verifier_computation/T512_H64
+                        time:   [21.341 ms 21.501 ms 21.692 ms]
+                        change: [−8.4431% −6.7927% −5.3809%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 231172
+Benchmarking verifier_computation/verifier_computation/T512_H128
+                        time:   [26.483 ms 26.563 ms 26.682 ms]
+                        change: [+1.3549% +2.3095% +3.2556%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+Proof size (in bytes): 239236
+Benchmarking verifier_computation/verifier_computation/T512_H256
+                        time:   [31.742 ms 31.912 ms 32.243 ms]
+                        change: [−1.0745% +2.1568% +4.8769%] (p = 0.20 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 246852
+Benchmarking verifier_computation/verifier_computation/T1024_H2
+                        time:   [20.476 ms 21.633 ms 22.508 ms]
+                        change: [−25.723% −21.310% −16.831%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Proof size (in bytes): 161196
+Benchmarking verifier_computation/verifier_computation/T1024_H4
+                        time:   [20.847 ms 20.911 ms 20.995 ms]
+                        change: [+0.0607% +1.6385% +3.3247%] (p = 0.08 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+Proof size (in bytes): 188476
+Benchmarking verifier_computation/verifier_computation/T1024_H8
+                        time:   [26.686 ms 26.790 ms 26.898 ms]
+                        change: [+0.8938% +1.7248% +2.5148%] (p = 0.00 < 0.05)
+                        Change within noise threshold.
+Proof size (in bytes): 197532
+Benchmarking verifier_computation/verifier_computation/T1024_H16
+                        time:   [27.637 ms 27.821 ms 28.014 ms]
+                        change: [+29.553% +31.002% +32.421%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Proof size (in bytes): 209700
+Benchmarking verifier_computation/verifier_computation/T1024_H32
+                        time:   [28.554 ms 30.470 ms 31.702 ms]
+                        change: [−0.7407% +3.2182% +7.7260%] (p = 0.17 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  2 (20.00%) high severe
+Proof size (in bytes): 219924
+Benchmarking verifier_computation/verifier_computation/T1024_H64
+                        time:   [30.638 ms 30.662 ms 30.699 ms]
+                        change: [+4.2454% +6.2321% +8.1782%] (p = 0.00 < 0.05)
+                        Performance has regressed.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+Proof size (in bytes): 233892
+Benchmarking verifier_computation/verifier_computation/T1024_H128
+                        time:   [33.262 ms 33.434 ms 33.703 ms]
+                        change: [−11.943% −11.091% −10.196%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Proof size (in bytes): 242500
+Benchmarking verifier_computation/verifier_computation/T1024_H256
+                        time:   [38.157 ms 38.421 ms 38.664 ms]
+                        change: [−3.0612% −1.5042% −0.0726%] (p = 0.07 > 0.05)
+                        No change in performance detected.
+Proof size (in bytes): 249804
