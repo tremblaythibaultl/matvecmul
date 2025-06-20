@@ -1,4 +1,5 @@
 use crate::arith::cyclotomic_ring::CyclotomicRing;
+use crate::arith::ring::Ring;
 use ark_ff::PrimeField;
 
 // MLWE rank
@@ -6,20 +7,33 @@ const K: usize = 1;
 // Log of message modulus
 const lg_p: usize = 4;
 
-pub struct RLWE<const D: usize, F: PrimeField> {
-    mask: Vec<CyclotomicRing<D, F>>,
-    body: CyclotomicRing<D, F>,
+pub struct RLWE<R> {
+    mask: Vec<R>,
+    body: R,
 }
 
 // Performs encryption
 pub fn encrypt<const D: usize, F: PrimeField>(
     sk: &Vec<CyclotomicRing<D, F>>,
-    msg: &Vec<u64>,
-) -> RLWE<D, F> {
+    msg: &[u64],
+) -> RLWE<CyclotomicRing<D, F>> {
     // ensure message is in message space
     for m in msg {
-        assert!(m >> lg_p == 0);
+        assert!(
+            m >> lg_p == 0,
+            "Message value {} is too large for the given plaintext modulus {}",
+            m,
+            1 << lg_p
+        );
     }
+
+    // ensure the message is of the correct length
+    assert!(
+        msg.len() == D,
+        "Message length {} does not match the cyclotomic ring degree {}",
+        msg.len(),
+        D
+    );
 
     // sample random mask
     let a: Vec<CyclotomicRing<D, F>> = (0..K).map(|_| CyclotomicRing::get_random()).collect();
@@ -44,7 +58,7 @@ pub fn encrypt<const D: usize, F: PrimeField>(
 
 pub fn decrypt<const D: usize, F: PrimeField>(
     sk: &Vec<CyclotomicRing<D, F>>,
-    c: &RLWE<D, F>,
+    c: &RLWE<CyclotomicRing<D, F>>,
 ) -> Vec<F> {
     let b: CyclotomicRing<D, F> = c.mask.iter().zip(sk).map(|(ai, si)| ai.mul(&si)).sum();
 
@@ -63,8 +77,22 @@ pub fn decrypt<const D: usize, F: PrimeField>(
     res
 }
 
-impl<const D: usize, F: PrimeField> RLWE<D, F> {
-    pub fn mul_constant(&self, rhs: &CyclotomicRing<D, F>) -> RLWE<D, F> {
+impl<const D: usize, F: PrimeField> RLWE<CyclotomicRing<D, F>> {
+    pub fn zero() -> Self {
+        RLWE {
+            mask: vec![CyclotomicRing::<D, F>::zero(); K],
+            body: CyclotomicRing::<D, F>::zero(),
+        }
+    }
+
+    pub fn add_assign(&mut self, rhs: &RLWE<CyclotomicRing<D, F>>) {
+        for (p1, p2) in self.mask.iter_mut().zip(&rhs.mask) {
+            p1.add_assign(p2);
+        }
+        self.body.add_assign(&rhs.body);
+    }
+
+    pub fn mul_constant(&self, rhs: &CyclotomicRing<D, F>) -> RLWE<CyclotomicRing<D, F>> {
         let res_mask = self
             .mask
             .iter()

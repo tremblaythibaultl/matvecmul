@@ -1,25 +1,26 @@
 use std::marker::PhantomData;
 
-use ark_ff::PrimeField;
+use ark_ff::{CyclotomicMultSubgroup, PrimeField};
 
-use crate::{arith::linalg::Matrix, protocol::Proof, rlwe::RLWE};
+use crate::{
+    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, ring::Ring},
+    protocol::Proof,
+    rlwe::RLWE,
+};
 
 pub struct Prover<const D: usize, F: PrimeField> {
     _pd: PhantomData<F>,
 }
 
-// TODO: support `x` as a vector of RLWE elements
 impl<const D: usize, F: PrimeField> Prover<D, F> {
-    pub fn prove(m: Matrix<F>, x: RLWE<D, F>) -> Proof<D, F> {
-        let m_pr = m.process();
-
+    pub fn prove(m: &Matrix<F>, x: &Vec<RLWE<CyclotomicRing<D, F>>>) -> Proof<D, F> {
         // interpret each row as a ring elements
-        let relts = m_pr.to_cyclotomic_relts::<D>();
+        let m_rq = m.lift_to_rq::<D>();
 
-        let y = relts
-            .iter()
-            .map(|pi| x.mul_constant(&pi))
-            .collect::<Vec<RLWE<D, F>>>();
+        println!("m_rq: {:#?}", m_rq);
+
+        // mat vec mul
+        let y = m_rq.mat_rlwe_vec_mul(&x);
 
         Proof { y }
     }

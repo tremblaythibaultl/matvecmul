@@ -17,47 +17,46 @@ mod test {
     #[test]
     fn test_functionality() {
         pub const D: usize = 4;
-        pub const WIDTH: usize = D;
+        pub const WIDTH: usize = 2 * D;
+        pub const HEIGHT: usize = D;
         pub type F = Field64;
 
-        // Use a simple, predictable matrix for testing
-        let data = vec![
-            F::from(1),
-            F::from(2),
-            F::from(3),
-            F::from(4),
-            F::from(5),
-            F::from(6),
-            F::from(7),
-            F::from(8),
-            F::from(9),
-            F::from(10),
-            F::from(11),
-            F::from(12),
-            F::from(13),
-            F::from(14),
-            F::from(15),
-            F::from(16),
-        ];
+        // generate matrix data
+        let data = (1..=HEIGHT * WIDTH)
+            .map(|x| F::from(x as u64))
+            .collect::<Vec<_>>();
 
         let m = Matrix::from_vec(data, WIDTH);
+        // println!("m: {:#?}", m);
 
-        let v = vec![1, 2, 3, 4];
+        // generate vector data
+        let v = (1..=WIDTH).map(|x| x as u64).collect::<Vec<_>>();
+        println!("v: {:?}", v);
 
+        // compute plaintext matrix-vector multiplication
+        let m_v = m.mat_vec_mul(&v.iter().map(|&x| F::from(x)).collect::<Vec<F>>());
+        println!("m_v: {:?}", m_v);
+
+        // generate a secret key
         let sk = vec![CyclotomicRing::get_random_bin()];
 
-        let x = encrypt(&sk, &v);
+        // encrypt the vector
+        let x = v
+            .chunks(D)
+            .map(|subvec| encrypt(&sk, &subvec))
+            .collect::<Vec<_>>();
 
-        let proof = Prover::<D, F>::prove(m, x);
+        // ask the prover to compute the encrypted matrix-vector multiplication and return the result
+        let proof = Prover::<D, F>::prove(&m, &x);
 
-        let m0 = decrypt(&sk, &proof.y[0]);
-        let m1 = decrypt(&sk, &proof.y[1]);
-        let m2 = decrypt(&sk, &proof.y[2]);
-        let m3 = decrypt(&sk, &proof.y[3]);
+        let res = &proof
+            .y
+            .iter()
+            .map(|c| decrypt(&sk, c)[0])
+            .collect::<Vec<_>>();
 
-        println!("m0: {:?}", m0);
-        println!("m1: {:?}", m1);
-        println!("m2: {:?}", m2);
-        println!("m3: {:?}", m3);
+        println!("res: {:?}", res);
+
+        assert_eq!(m_v, *res);
     }
 }

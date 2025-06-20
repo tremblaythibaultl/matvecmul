@@ -1,10 +1,10 @@
 use ark_ff::PrimeField;
 
-use crate::rlwe::RLWE;
+use crate::{arith::cyclotomic_ring::CyclotomicRing, rlwe::RLWE};
 
 pub mod prover;
 mod verifier;
 
 pub struct Proof<const D: usize, F: PrimeField> {
-    pub y: Vec<RLWE<D, F>>,
+    pub y: Vec<RLWE<CyclotomicRing<D, F>>>,
 }

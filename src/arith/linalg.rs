@@ -1,17 +1,21 @@
 use ark_ff::PrimeField;
 
-use crate::arith::cyclotomic_ring::CyclotomicRing;
+use crate::{
+    arith::{cyclotomic_ring::CyclotomicRing, ring::Ring},
+    rlwe::RLWE,
+};
 
-/// Row-major matrix
-pub struct Matrix<F: PrimeField> {
-    data: Vec<F>,
+/// Row-major matrix over a ring R
+#[derive(Debug)]
+pub struct Matrix<R: Ring> {
+    data: Vec<R>,
     width: usize,
 }
 
-impl<F: PrimeField> Matrix<F> {
-    /// Create a new row-major matrix from a vector of coefficients and a specified width.
+impl<R: Ring> Matrix<R> {
+    /// Create a new row-major matrix from a vector of ring elements and a specified width.
     /// The length of the vector must be a multiple of the width.
-    pub fn from_vec(data: Vec<F>, width: usize) -> Self {
+    pub fn from_vec(data: Vec<R>, width: usize) -> Self {
         assert!(
             data.len() % width == 0,
             "Row-major representation length must be a multiple of width"
@@ -19,19 +23,20 @@ impl<F: PrimeField> Matrix<F> {
         Matrix { data, width }
     }
 
-    fn mul_vec(&self, rhs: &Vec<F>) -> Self {
+    fn mul_vec(&self, _rhs: &Vec<R>) -> Self {
         todo!()
     }
 
-    /// Create a new matrix from a vector of coefficients and a specified width.
+    /// Rearrange the columns of the matrix such that when rows are interpreted as elements of the cyclotomic ring of degree `d`,
+    /// the constant coefficient of the inner product of ring elements yields the same result as the inner product of the original elements.
     /// The length of the vector must be a multiple of the width.
-    pub fn process(&self) -> Self {
-        let mut data_pr = Vec::<F>::with_capacity(self.data.len());
+    pub fn process(&self, d: usize) -> Self {
+        let mut data_pr = Vec::<R>::with_capacity(self.data.len());
 
-        for row in self.data.chunks(self.width) {
-            data_pr.push(row[0]);
-            for i in (1..self.width).rev() {
-                data_pr.push(-row[i]);
+        for row in self.data.chunks(d) {
+            data_pr.push(row[0].clone());
+            for i in (1..d).rev() {
+                data_pr.push(row[i].neg());
             }
         }
 
@@ -40,34 +45,100 @@ impl<F: PrimeField> Matrix<F> {
             width: self.width,
         }
     }
+}
 
-    /// Convert the matrix to a vector of cyclotomic ring elements.
-    /// Each row of the matrix is interpreted as a cyclotomic ring elements.
-    /// The width of the matrix must match the degree of the cyclotomic polynomial.
-    pub fn to_cyclotomic_relts<const D: usize>(&self) -> Vec<CyclotomicRing<D, F>> {
-        let mut res = Vec::<CyclotomicRing<D, F>>::with_capacity(self.data.len() / self.width);
+impl<F: PrimeField> Matrix<F> {
+    /// Lift the matrix over `F` a prime field to a matrix over `Rq` a cyclotomic ring of degree `D`.
+    pub fn lift_to_rq<const D: usize>(&self) -> Matrix<CyclotomicRing<D, F>> {
+        assert!(
+            self.data.len() % self.width == 0,
+            "Matrix length must be a multiple of width"
+        );
 
-        for row in self.data.chunks(self.width) {
-            res.push(CyclotomicRing::from_coeffs(&row));
+        assert!(
+            self.width % D == 0,
+            "Matrix width must be a multiple of the degree of the cyclotomic ring"
+        );
+
+        let m_pr = self.process(D);
+
+        let data = m_pr
+            .data
+            .chunks(D)
+            .map(|row| CyclotomicRing::<D, F>::from_coeffs(row))
+            .collect();
+
+        Matrix {
+            data,
+            width: self.width / D,
         }
+    }
 
-        res
+    /// Multiplies a matrix over a prime field by a vector over the same field.
+    pub fn mat_vec_mul(&self, rhs: &Vec<F>) -> Vec<F> {
+        assert!(
+            self.width == rhs.len(),
+            "Matrix width must match vector length"
+        );
+        let result = self
+            .data
+            .chunks(self.width)
+            .map(|row| {
+                row.iter()
+                    .zip(rhs.iter())
+                    .fold(F::ZERO, |acc, (elem, rhs_elem)| acc + *elem * *rhs_elem)
+            })
+            .collect::<Vec<_>>();
+        result
+    }
+}
+
+impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
+    /// Multiplies a matrix over a cyclotomic ring by a vector over of RLWE ciphertexts over the same ring.
+    pub fn mat_rlwe_vec_mul(
+        &self,
+        rhs: &Vec<RLWE<CyclotomicRing<D, F>>>,
+    ) -> Vec<RLWE<CyclotomicRing<D, F>>> {
+        assert!(
+            self.width == rhs.len(),
+            "Matrix width must match vector length"
+        );
+
+        let result = self
+            .data
+            .chunks(self.width)
+            .map(|row| {
+                row.iter().zip(rhs.iter()).fold(
+                    RLWE::<CyclotomicRing<D, F>>::zero(),
+                    |mut acc, (elem, rhs_elem)| {
+                        acc.add_assign(&rhs_elem.mul_constant(&elem));
+                        acc
+                    },
+                )
+            })
+            .collect::<Vec<_>>();
+
+        result
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::arith::{field::Field64, linalg::Matrix};
+    use ark_ff::AdditiveGroup;
+
+    use super::Matrix;
+    use crate::arith::{cyclotomic_ring::CyclotomicRing, field::Field64};
 
     type F = Field64;
+    type TestRing = CyclotomicRing<4, F>;
     const HEIGHT: usize = 4;
     const WIDTH: usize = 4;
 
-    fn pp(m: &Matrix<F>) {
+    fn pp(m: &Matrix<TestRing>) {
         let mut iter = m.data.iter();
         for _ in 0..HEIGHT {
             for _ in 0..WIDTH {
-                print!("{} ", iter.next().unwrap());
+                print!("{:?} ", iter.next().unwrap().coeffs);
             }
             print! {"\n"}
         }
@@ -75,52 +146,36 @@ mod test {
 
     #[test]
     fn process() {
-        // Use a simple, predictable matrix for testing
+        // Create test ring elements
         let data = vec![
-            F::from(1),
-            F::from(2),
-            F::from(3),
-            F::from(4), // Row 1: [1, 2, 3, 4]
-            F::from(5),
-            F::from(6),
-            F::from(7),
-            F::from(8), // Row 2: [5, 6, 7, 8]
-            F::from(9),
-            F::from(10),
-            F::from(11),
-            F::from(12), // Row 3: [9, 10, 11, 12]
-            F::from(13),
-            F::from(14),
-            F::from(15),
-            F::from(16), // Row 4: [13, 14, 15, 16]
+            TestRing::from_coeffs(&[F::from(1), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(2), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(3), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(4), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(5), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(6), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(7), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(8), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(9), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(10), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(11), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(12), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(13), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(14), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(15), F::ZERO, F::ZERO, F::ZERO]),
+            TestRing::from_coeffs(&[F::from(16), F::ZERO, F::ZERO, F::ZERO]),
         ];
 
         let m = Matrix { data, width: WIDTH };
+        let m_pr = m.process(4);
 
-        let m_pr = m.process();
+        // Verify that the first element of each row is unchanged
+        // and the remaining elements are negated
+        assert_eq!(m_pr.data[0].coeffs[0], F::from(1));
+        assert_eq!(m_pr.data[1].coeffs[0], -F::from(4));
+        assert_eq!(m_pr.data[4].coeffs[0], F::from(5));
+        assert_eq!(m_pr.data[5].coeffs[0], -F::from(8));
 
-        // Expected result: each row should have first element unchanged,
-        // then remaining elements in reverse order and negated
-        let expected = vec![
-            F::from(1),
-            -F::from(4),
-            -F::from(3),
-            -F::from(2), // Row 1: [1, -4, -3, -2]
-            F::from(5),
-            -F::from(8),
-            -F::from(7),
-            -F::from(6), // Row 2: [5, -8, -7, -6]
-            F::from(9),
-            -F::from(12),
-            -F::from(11),
-            -F::from(10), // Row 3: [9, -12, -11, -10]
-            F::from(13),
-            -F::from(16),
-            -F::from(15),
-            -F::from(14), // Row 4: [13, -16, -15, -14]
-        ];
-
-        assert_eq!(m_pr.data, expected);
         assert_eq!(m_pr.width, WIDTH);
     }
 }

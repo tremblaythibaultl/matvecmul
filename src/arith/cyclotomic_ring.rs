@@ -1,38 +1,25 @@
 use std::iter::Sum;
 
-use ark_ff::PrimeField;
+use ark_ff::{Field, PrimeField};
 use ark_std::rand::Rng;
 
-#[derive(Clone)]
+use super::ring::Ring;
+
+/// Represents an element of F\[X\]/(X^N + 1).
+#[derive(Clone, Debug)]
 pub struct CyclotomicRing<const D: usize, F: PrimeField> {
     pub coeffs: Vec<F>,
 }
 
-/// Represents an element of F\[X\]/(X^N + 1).
 impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
-    pub fn new() -> Self {
-        CyclotomicRing {
-            coeffs: Vec::<F>::with_capacity(D),
-        }
-    }
-
     pub fn from_coeffs(coeffs: &[F]) -> Self {
+        assert!(
+            coeffs.len() == D,
+            "Coefficient vector must have length equal to the degree of the cyclotomic ring"
+        );
+
         CyclotomicRing {
             coeffs: coeffs.to_vec(),
-        }
-    }
-
-    pub fn add(&self, rhs: &CyclotomicRing<D, F>) -> Self {
-        let mut res = Self::default();
-        for i in 0..D {
-            res.coeffs[i] = self.coeffs[i] + rhs.coeffs[i];
-        }
-        res
-    }
-
-    pub fn add_assign(&mut self, rhs: &CyclotomicRing<D, F>) {
-        for i in 0..D {
-            self.coeffs[i] = self.coeffs[i] + rhs.coeffs[i];
         }
     }
 
@@ -44,30 +31,6 @@ impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
 
     pub fn add_constant_assign(&mut self, constant: F) {
         self.coeffs[0] = self.coeffs[0] + constant;
-    }
-
-    pub fn sub(&self, rhs: &CyclotomicRing<D, F>) -> Self {
-        let mut res = Self::default();
-        for i in 0..D {
-            res.coeffs[i] = self.coeffs[i] - rhs.coeffs[i];
-        }
-        res
-    }
-
-    // TODO: use NTT for better performances
-    pub fn mul(&self, rhs: &CyclotomicRing<D, F>) -> Self {
-        let mut coeffs = Vec::<F>::with_capacity(D);
-        for i in 0..D {
-            let mut coeff = F::ZERO;
-            for j in 0..i + 1 {
-                coeff = coeff + (self.coeffs[j] * rhs.coeffs[i - j]);
-            }
-            for j in i + 1..D {
-                coeff = coeff - (self.coeffs[j] * rhs.coeffs[D - j + i]);
-            }
-            coeffs.push(coeff);
-        }
-        CyclotomicRing { coeffs }
     }
 
     /// Multiplies the residue polynomial by X^{exponent} = X^{2N + exponent}.
@@ -130,9 +93,86 @@ impl<const D: usize, F: PrimeField> Sum for CyclotomicRing<D, F> {
     }
 }
 
+impl<const D: usize, F: PrimeField> Ring for CyclotomicRing<D, F> {
+    const DEGREE: usize = D;
+    type BaseField = F;
+
+    fn add(&self, rhs: &CyclotomicRing<D, F>) -> Self {
+        let mut res = Self::default();
+        for i in 0..D {
+            res.coeffs[i] = self.coeffs[i] + rhs.coeffs[i];
+        }
+        res
+    }
+
+    fn add_assign(&mut self, rhs: &CyclotomicRing<D, F>) {
+        for i in 0..D {
+            self.coeffs[i] = self.coeffs[i] + rhs.coeffs[i];
+        }
+    }
+
+    fn sub(&self, rhs: &CyclotomicRing<D, F>) -> Self {
+        let mut res = Self::default();
+        for i in 0..D {
+            res.coeffs[i] = self.coeffs[i] - rhs.coeffs[i];
+        }
+        res
+    }
+
+    fn sub_assign(&mut self, rhs: &CyclotomicRing<D, F>) {
+        for i in 0..D {
+            self.coeffs[i] = self.coeffs[i] - rhs.coeffs[i];
+        }
+    }
+
+    // TODO: use NTT for better performances
+    fn mul(&self, rhs: &CyclotomicRing<D, F>) -> Self {
+        let mut coeffs = Vec::<F>::with_capacity(D);
+        for i in 0..D {
+            let mut coeff = F::ZERO;
+            for j in 0..i + 1 {
+                coeff = coeff + (self.coeffs[j] * rhs.coeffs[i - j]);
+            }
+            for j in i + 1..D {
+                coeff = coeff - (self.coeffs[j] * rhs.coeffs[D - j + i]);
+            }
+            coeffs.push(coeff);
+        }
+        CyclotomicRing { coeffs }
+    }
+
+    fn zero() -> Self {
+        Self::default()
+    }
+
+    fn one() -> Self {
+        let mut coeffs = vec![F::ZERO; D];
+        coeffs[0] = F::ONE;
+        Self { coeffs }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.coeffs.iter().all(|&c| c.is_zero())
+    }
+
+    fn neg(&self) -> Self {
+        let coeffs = self.coeffs.iter().map(|&c| c.neg()).collect();
+        Self { coeffs }
+    }
+
+    fn scalar_mul(&self, scalar: F) -> Self {
+        let coeffs = self.coeffs.iter().map(|&c| c * scalar).collect();
+        Self { coeffs }
+    }
+
+    fn random() -> Self {
+        Self::get_random()
+    }
+}
+
 #[cfg(test)]
 mod test {
-    use crate::arith::{cyclotomic_ring::CyclotomicRing, field::Field64};
+    use crate::arith::{cyclotomic_ring::CyclotomicRing, field::Field64, ring::Ring};
     use ark_ff::{AdditiveGroup, Field};
     use rand::{Rng, rng};
 
