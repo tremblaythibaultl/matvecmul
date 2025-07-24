@@ -4,29 +4,21 @@ use crate::arith::cyclotomic_ring::CyclotomicRing;
 
 use super::ring::Ring;
 
-/// Represents an element of F\[X\] of maximal degree D.
-// We keep a constant degree D for the polynomial ring because the elements of interest are polynomials of degree at most `2*D_cyclo`, where `D_cyclo` is the degree of the cyclotomic ring.
+/// Represents an element of F\[X\] of maximal degree 2*D.
 #[derive(Clone, Debug, Default)]
 pub struct PolynomialRing<const D: usize, F: Field> {
     pub coeffs: Vec<F>,
 }
 
 impl<const D: usize, F: PrimeField> PolynomialRing<D, F> {
-    pub fn long_division_by_cyclotomic<const D_cyclo: usize>(
-        &mut self,
-    ) -> (PolynomialRing<D_cyclo, F>, CyclotomicRing<D_cyclo, F>) {
-        assert!(
-            D_cyclo * 2 == D,
-            "the cyclotomic degree must be half the maximum polynomial degree"
-        );
+    pub fn long_division_by_cyclotomic(&mut self) -> (PolynomialRing<D, F>, CyclotomicRing<D, F>) {
+        let mut quotient = PolynomialRing::<D, F>::zero();
 
-        let mut quotient = PolynomialRing::<D_cyclo, F>::zero();
-
-        // Perform long division of `self` by the cyclotomic polynomial `X^{D_cyclo} + 1`
-        // Only need to iterate through the last `D_cyclo` coefficients of `self` because `self` is of degree at most `2 * D_cyclo`.
-        for i in (D_cyclo..2 * D_cyclo).rev() {
+        // Perform long division of `self` by the cyclotomic polynomial `X^{D} + 1`
+        // Only need to iterate through the last `D` coefficients of `self` because `self` is of degree at most `2 * D`.
+        for i in (D..2 * D).rev() {
             if self.coeffs[i] != F::zero() {
-                let quotient_term_degree = i - D_cyclo;
+                let quotient_term_degree = i - D;
 
                 // The coefficient of `self` that corresponds to `X^{i}`
                 let reduced_coeff = self.coeffs[i];
@@ -40,8 +32,8 @@ impl<const D: usize, F: PrimeField> PolynomialRing<D, F> {
             }
         }
 
-        // Get the cyclotomic ring element (i.e. `self` reduced modulo `X^{D_cyclo} + 1`)
-        let remainder = CyclotomicRing::<D_cyclo, F>::from_coeffs(&self.coeffs[..D_cyclo]);
+        // Get the cyclotomic ring element (i.e. `self` reduced modulo `X^D + 1`)
+        let remainder = CyclotomicRing::<D, F>::from_coeffs(&self.coeffs[..D]);
 
         (quotient, remainder)
     }
@@ -105,7 +97,7 @@ mod test {
 
     #[test]
     fn test_long_division_by_cyclotomic() {
-        const D: usize = 8;
+        const D: usize = 4;
         // let mut poly = PolynomialRing::<D, Field64>::random();
         let mut poly = PolynomialRing::<D, Field64> {
             coeffs: vec![
@@ -119,7 +111,7 @@ mod test {
                 Field64::from(0),
             ],
         };
-        let (quotient, remainder) = poly.long_division_by_cyclotomic::<4>();
+        let (quotient, remainder) = poly.long_division_by_cyclotomic();
         assert_eq!(quotient.coeffs.len(), 4);
         assert_eq!(remainder.coeffs.len(), 4);
 
