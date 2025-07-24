@@ -49,6 +49,7 @@ impl<R: Ring> Matrix<R> {
 
 impl<F: PrimeField> Matrix<F> {
     /// Lift the matrix over `F` a prime field to a matrix over `Rq` a cyclotomic ring of degree `D`.
+    /// The columns are rearranged to satisfy the relevant inner product property.
     pub fn lift_to_rq<const D: usize>(&self) -> Matrix<CyclotomicRing<D, F>> {
         assert!(
             self.data.len() % self.width == 0,
@@ -60,6 +61,7 @@ impl<F: PrimeField> Matrix<F> {
             "Matrix width must be a multiple of the degree of the cyclotomic ring"
         );
 
+        // Rearrange the columns of the matrix
         let m_pr = self.process(D);
 
         let data = m_pr
