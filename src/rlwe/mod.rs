@@ -1,4 +1,5 @@
 use crate::arith::cyclotomic_ring::CyclotomicRing;
+use crate::arith::polynomial_ring::PolynomialRing;
 use crate::arith::ring::Ring;
 use ark_ff::PrimeField;
 
@@ -7,6 +8,7 @@ const K: usize = 1;
 // Log of message modulus
 const lg_p: usize = 4;
 
+#[derive(Debug, Clone)]
 pub struct RLWE<R> {
     mask: Vec<R>,
     body: R,
@@ -78,26 +80,61 @@ pub fn decrypt<const D: usize, F: PrimeField>(
 }
 
 impl<const D: usize, F: PrimeField> RLWE<CyclotomicRing<D, F>> {
+    pub fn lift_to_polynomial_ring(&self) -> RLWE<PolynomialRing<D, F>> {
+        let mask = self
+            .mask
+            .iter()
+            .map(|elem| PolynomialRing::<D, F>::from_cyclotomic(elem))
+            .collect::<Vec<_>>()
+            .into_iter()
+            .collect();
+
+        let body = PolynomialRing::<D, F>::from_cyclotomic(&self.body);
+
+        RLWE { mask, body }
+    }
+}
+
+impl<const D: usize, F: PrimeField> RLWE<PolynomialRing<D, F>> {
+    pub fn long_division_by_cyclotomic(
+        &self,
+    ) -> (Vec<PolynomialRing<D, F>>, Vec<CyclotomicRing<D, F>>) {
+        let cap = self.mask.len() + 1;
+        let mut quotients = Vec::with_capacity(cap);
+        let mut remainders = Vec::with_capacity(cap);
+
+        for elem in &self.mask {
+            let (quotient, remainder) = elem.long_division_by_cyclotomic();
+            quotients.push(quotient);
+            remainders.push(remainder);
+        }
+
+        let (quotient_body, remainder_body) = self.body.long_division_by_cyclotomic();
+
+        quotients.push(quotient_body);
+        remainders.push(remainder_body);
+
+        (quotients, remainders)
+    }
+}
+
+impl<R: Ring> RLWE<R> {
     pub fn zero() -> Self {
         RLWE {
-            mask: vec![CyclotomicRing::<D, F>::zero(); K],
-            body: CyclotomicRing::<D, F>::zero(),
+            mask: vec![R::zero(); K],
+            body: R::zero(),
         }
     }
 
-    pub fn add_assign(&mut self, rhs: &RLWE<CyclotomicRing<D, F>>) {
+    pub fn add_assign(&mut self, rhs: &RLWE<R>) {
         for (p1, p2) in self.mask.iter_mut().zip(&rhs.mask) {
             p1.add_assign(p2);
         }
         self.body.add_assign(&rhs.body);
     }
 
-    pub fn mul_constant(&self, rhs: &CyclotomicRing<D, F>) -> RLWE<CyclotomicRing<D, F>> {
-        let res_mask = self
-            .mask
-            .iter()
-            .map(|p| p.mul(rhs))
-            .collect::<Vec<CyclotomicRing<D, F>>>();
+    pub fn mul_constant(&self, rhs: &R) -> RLWE<R> {
+        let res_mask = self.mask.iter().map(|p| p.mul(rhs)).collect::<Vec<R>>();
         let res_body = self.body.mul(rhs);
 
         RLWE {

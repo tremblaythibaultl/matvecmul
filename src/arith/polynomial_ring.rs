@@ -11,9 +11,25 @@ pub struct PolynomialRing<const D: usize, F: Field> {
 }
 
 impl<const D: usize, F: PrimeField> PolynomialRing<D, F> {
-    pub fn long_division_by_cyclotomic(&mut self) -> (PolynomialRing<D, F>, CyclotomicRing<D, F>) {
-        let mut quotient = PolynomialRing::<D, F>::zero();
+    pub fn from_cyclotomic(cyclotomic: &CyclotomicRing<D, F>) -> Self {
+        assert_eq!(
+            cyclotomic.coeffs.len(),
+            D,
+            "Cyclotomic polynomial must have degree D"
+        );
 
+        // Careful that this clone is not too expensive.
+        let mut coeffs = cyclotomic.coeffs.clone();
+
+        // pad to degree 2*D
+        coeffs.resize(2 * D, F::zero());
+
+        Self { coeffs }
+    }
+
+    pub fn long_division_by_cyclotomic(&self) -> (PolynomialRing<D, F>, CyclotomicRing<D, F>) {
+        let mut quotient = PolynomialRing::<D, F>::zero();
+        let mut coeffs = self.coeffs.clone();
         // Perform long division of `self` by the cyclotomic polynomial `X^{D} + 1`
         // Only need to iterate through the last `D` coefficients of `self` because `self` is of degree at most `2 * D`.
         for i in (D..2 * D).rev() {
@@ -27,13 +43,13 @@ impl<const D: usize, F: PrimeField> PolynomialRing<D, F> {
                 // `quotient_term_degree` is monotonically decreasing, so we can safely assign the coefficient
                 quotient.coeffs[quotient_term_degree] = reduced_coeff;
 
-                self.coeffs[quotient_term_degree] -= reduced_coeff;
-                self.coeffs[i] = F::zero();
+                coeffs[quotient_term_degree] -= reduced_coeff;
+                coeffs[i] = F::zero();
             }
         }
 
         // Get the cyclotomic ring element (i.e. `self` reduced modulo `X^D + 1`)
-        let remainder = CyclotomicRing::<D, F>::from_coeffs(&self.coeffs[..D]);
+        let remainder = CyclotomicRing::<D, F>::from_coeffs(&coeffs[..D]);
 
         (quotient, remainder)
     }
@@ -49,7 +65,10 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
     }
 
     fn add_assign(&mut self, other: &Self) {
-        todo!()
+        self.coeffs
+            .iter_mut()
+            .zip(other.coeffs.iter())
+            .for_each(|(a, b)| *a += *b);
     }
 
     fn sub(&self, other: &Self) -> Self {
@@ -61,12 +80,29 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
     }
 
     fn mul(&self, other: &Self) -> Self {
-        todo!()
+        for i in D..2 * D {
+            assert!(
+                self.coeffs[i] == F::zero() && other.coeffs[i] == F::zero(),
+                "PolynomialRing multiplicands must have degree at most D"
+            );
+        }
+
+        let mut coeffs = vec![F::zero(); 2 * D];
+
+        for i in 0..D {
+            for j in 0..D {
+                if i + j < 2 * D {
+                    coeffs[i + j] += self.coeffs[i] * other.coeffs[j];
+                }
+            }
+        }
+
+        Self { coeffs }
     }
 
     fn zero() -> Self {
         Self {
-            coeffs: vec![F::zero(); D],
+            coeffs: vec![F::zero(); 2 * D],
         }
     }
 
@@ -93,12 +129,14 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
 
 #[cfg(test)]
 mod test {
-    use crate::arith::{field::Field64, polynomial_ring::PolynomialRing};
+    use crate::arith::{
+        cyclotomic_ring::CyclotomicRing, field::Field64, polynomial_ring::PolynomialRing,
+        ring::Ring,
+    };
+    const D: usize = 4;
 
     #[test]
     fn test_long_division_by_cyclotomic() {
-        const D: usize = 4;
-        // let mut poly = PolynomialRing::<D, Field64>::random();
         let mut poly = PolynomialRing::<D, Field64> {
             coeffs: vec![
                 Field64::from(1),
@@ -112,8 +150,6 @@ mod test {
             ],
         };
         let (quotient, remainder) = poly.long_division_by_cyclotomic();
-        assert_eq!(quotient.coeffs.len(), 4);
-        assert_eq!(remainder.coeffs.len(), 4);
 
         assert_eq!(
             quotient.coeffs,
@@ -121,6 +157,10 @@ mod test {
                 Field64::from(0),
                 Field64::from(3),
                 Field64::from(1),
+                Field64::from(0),
+                Field64::from(0),
+                Field64::from(0),
+                Field64::from(0),
                 Field64::from(0)
             ]
         );
@@ -133,5 +173,46 @@ mod test {
                 Field64::from(0)
             ]
         );
+    }
+
+    #[test]
+    fn test_mul_and_long_division() {
+        let mut coeffs1 = vec![
+            Field64::from(1),
+            Field64::from(2),
+            Field64::from(3),
+            Field64::from(4),
+        ];
+
+        let mut coeffs2 = vec![
+            Field64::from(-5),
+            Field64::from(-6),
+            Field64::from(-7),
+            Field64::from(-8),
+        ];
+
+        let cyclo1 = CyclotomicRing::<D, Field64> {
+            coeffs: coeffs1.clone(),
+        };
+
+        coeffs1.resize(2 * D, Field64::from(0));
+
+        let poly1 = PolynomialRing::<D, Field64> { coeffs: coeffs1 };
+
+        let cyclo2 = CyclotomicRing::<D, Field64> {
+            coeffs: coeffs2.clone(),
+        };
+
+        coeffs2.resize(2 * D, Field64::from(0));
+
+        let poly2 = PolynomialRing::<D, Field64> { coeffs: coeffs2 };
+
+        let poly3 = poly1.mul(&poly2);
+
+        let cyclo3 = cyclo1.mul(&cyclo2);
+
+        let (_, remainder) = poly3.long_division_by_cyclotomic();
+
+        assert_eq!(remainder.coeffs, cyclo3.coeffs);
     }
 }

@@ -31,11 +31,9 @@ mod test {
 
         // generate vector data
         let v = (1..=WIDTH).map(|x| x as u64).collect::<Vec<_>>();
-        println!("v: {:?}", v);
 
         // compute plaintext matrix-vector multiplication
         let m_v = m.mat_vec_mul(&v.iter().map(|&x| F::from(x)).collect::<Vec<F>>());
-        println!("m_v: {:?}", m_v);
 
         // generate a secret key
         let sk = vec![CyclotomicRing::get_random_bin()];
@@ -54,8 +52,6 @@ mod test {
             .iter()
             .map(|c| decrypt(&sk, c)[0])
             .collect::<Vec<_>>();
-
-        println!("res: {:?}", res);
 
         assert_eq!(m_v, *res);
     }

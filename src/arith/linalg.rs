@@ -1,7 +1,7 @@
 use ark_ff::PrimeField;
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, ring::Ring},
+    arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing, ring::Ring},
     rlwe::RLWE,
 };
 
@@ -96,11 +96,23 @@ impl<F: PrimeField> Matrix<F> {
 }
 
 impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
-    /// Multiplies a matrix over a cyclotomic ring by a vector over of RLWE ciphertexts over the same ring.
-    pub fn mat_rlwe_vec_mul(
-        &self,
-        rhs: &Vec<RLWE<CyclotomicRing<D, F>>>,
-    ) -> Vec<RLWE<CyclotomicRing<D, F>>> {
+    pub fn lift_to_polynomial_ring(&self) -> Matrix<PolynomialRing<D, F>> {
+        let data = self
+            .data
+            .iter()
+            .map(|elem| PolynomialRing::<D, F>::from_cyclotomic(elem))
+            .collect();
+
+        Matrix {
+            data,
+            width: self.width,
+        }
+    }
+}
+
+impl<R: Ring> Matrix<R> {
+    /// Multiplies a matrix over a ring by a vector over of RLWE ciphertexts over the same ring.
+    pub fn mat_rlwe_vec_mul(&self, rhs: &Vec<RLWE<R>>) -> Vec<RLWE<R>> {
         assert!(
             self.width == rhs.len(),
             "Matrix width must match vector length"
@@ -110,13 +122,12 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
             .data
             .chunks(self.width)
             .map(|row| {
-                row.iter().zip(rhs.iter()).fold(
-                    RLWE::<CyclotomicRing<D, F>>::zero(),
-                    |mut acc, (elem, rhs_elem)| {
+                row.iter()
+                    .zip(rhs.iter())
+                    .fold(RLWE::<R>::zero(), |mut acc, (elem, rhs_elem)| {
                         acc.add_assign(&rhs_elem.mul_constant(&elem));
                         acc
-                    },
-                )
+                    })
             })
             .collect::<Vec<_>>();
 
