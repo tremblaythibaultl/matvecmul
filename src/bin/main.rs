@@ -1,6 +1,4 @@
-mod arith;
-mod protocol;
-mod rlwe;
+use matvec;
 
 fn main() {
     // println!("Hello world!")
@@ -8,7 +6,7 @@ fn main() {
 
 #[cfg(test)]
 mod test {
-    use crate::{
+    use matvec::{
         arith::{cyclotomic_ring::CyclotomicRing, field::Field64, linalg::Matrix},
         protocol::prover::Prover,
         rlwe::{decrypt, encrypt},

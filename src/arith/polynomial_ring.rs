@@ -137,7 +137,7 @@ mod test {
 
     #[test]
     fn test_long_division_by_cyclotomic() {
-        let mut poly = PolynomialRing::<D, Field64> {
+        let poly = PolynomialRing::<D, Field64> {
             coeffs: vec![
                 Field64::from(1),
                 Field64::from(0),
@@ -191,17 +191,13 @@ mod test {
             Field64::from(-8),
         ];
 
-        let cyclo1 = CyclotomicRing::<D, Field64> {
-            coeffs: coeffs1.clone(),
-        };
+        let cyclo1 = CyclotomicRing::<D, Field64>::from_coeffs(&coeffs1);
 
         coeffs1.resize(2 * D, Field64::from(0));
 
         let poly1 = PolynomialRing::<D, Field64> { coeffs: coeffs1 };
 
-        let cyclo2 = CyclotomicRing::<D, Field64> {
-            coeffs: coeffs2.clone(),
-        };
+        let cyclo2 = CyclotomicRing::<D, Field64>::from_coeffs(&coeffs2);
 
         coeffs2.resize(2 * D, Field64::from(0));
 

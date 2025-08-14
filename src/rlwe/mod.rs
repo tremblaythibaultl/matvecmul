@@ -54,7 +54,7 @@ pub fn encrypt<const D: usize, F: PrimeField>(
 
     RLWE {
         mask: a,
-        body: b.add(&CyclotomicRing { coeffs: mu_coeffs }),
+        body: b.add(&CyclotomicRing::from_coeffs(&mu_coeffs)),
     }
 }
 
