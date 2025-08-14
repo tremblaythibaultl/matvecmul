@@ -1,12 +1,9 @@
-use std::{
-    iter::Sum,
-    sync::{Once, OnceLock},
-};
+use std::{iter::Sum, marker::PhantomData};
 
-use ark_ff::{Field, PrimeField};
+use ark_ff::PrimeField;
 use ark_std::rand::Rng;
 
-use tfhe_ntt::prime64::Plan;
+use crate::arith::ntt::{ntt::Ntt, tfhe_based_ntt::TfheBasedNtt};
 
 use super::ring::Ring;
 
@@ -15,24 +12,26 @@ const NTT_CUTOFF: usize = 32;
 
 /// Represents an element of F\[X\]/(X^N + 1).
 #[derive(Clone, Debug)]
-pub struct CyclotomicRing<const D: usize, F: PrimeField> {
+pub struct CyclotomicRing<const D: usize, F: PrimeField, N: Ntt + Clone + Default = TfheBasedNtt> {
     pub coeffs: Vec<F>,
+    _ntt: PhantomData<N>,
 }
 
-impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
+impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> CyclotomicRing<D, F, N> {
     pub fn from_coeffs(coeffs: &[F]) -> Self {
         assert!(
             coeffs.len() == D,
             "Coefficient vector must have length equal to the degree of the cyclotomic ring"
         );
 
-        CyclotomicRing {
+        Self {
             coeffs: coeffs.to_vec(),
+            _ntt: PhantomData,
         }
     }
 
     pub fn add_constant(&self, constant: F) -> Self {
-        let mut res: CyclotomicRing<D, F> = self.clone();
+        let mut res: Self = self.clone();
         res.coeffs[0] = res.coeffs[0] + constant;
         res
     }
@@ -65,8 +64,9 @@ impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
             })
         }
 
-        CyclotomicRing {
+        Self {
             coeffs: rotated_coeffs,
+            _ntt: PhantomData,
         }
     }
 
@@ -75,7 +75,10 @@ impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
 
         let coeffs = (0..D).map(|_| F::rand(&mut rng)).collect();
 
-        Self { coeffs }
+        Self {
+            coeffs,
+            _ntt: PhantomData,
+        }
     }
 
     pub fn get_random_bin() -> Self {
@@ -83,7 +86,10 @@ impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
 
         let coeffs = (0..D).map(|_| F::from(rng.gen_range(0..=1))).collect();
 
-        Self { coeffs }
+        Self {
+            coeffs,
+            _ntt: PhantomData,
+        }
     }
 
     pub fn basic_mul(&self, rhs: &Self) -> Self {
@@ -98,59 +104,25 @@ impl<const D: usize, F: PrimeField> CyclotomicRing<D, F> {
             }
             coeffs.push(coeff);
         }
-        CyclotomicRing { coeffs }
-    }
-
-    // If the plan is valid for 64 bit NTT based on D and F, we use NTT. Else we use basic multiplication.
-    fn try_ntt_mul(&self, rhs: &Self) -> Self {
-        if let Some(plan) = Self::ntt_plan_64() {
-            self.ntt_mul(rhs, plan)
-        } else {
-            self.basic_mul(rhs)
+        Self {
+            coeffs,
+            _ntt: PhantomData,
         }
     }
 
-    fn ntt_mul(&self, rhs: &Self, plan: &Plan) -> Self {
-        // From https://github.com/zama-ai/tfhe-rs/blob/main/tfhe-ntt/examples/mul_poly_prime.rs
-        // Converting to u64 should be safe as we assume that the modulus fits in 64 bits and that's checked at NTT plan creation.
-        let mut lhs_u64 = self
-            .coeffs
-            .iter()
-            .map(|c| c.into_bigint().as_ref()[0])
-            .collect::<Vec<_>>();
-        let mut rhs_u64 = rhs
-            .coeffs
-            .iter()
-            .map(|c| c.into_bigint().as_ref()[0])
-            .collect::<Vec<_>>();
-        plan.fwd(&mut lhs_u64);
-        plan.fwd(&mut rhs_u64);
-        plan.mul_assign_normalize(&mut lhs_u64, &rhs_u64);
-        plan.inv(&mut lhs_u64);
-        let coeffs = lhs_u64.iter().map(|&x| F::from(x)).collect::<Vec<_>>();
-        CyclotomicRing { coeffs }
-    }
-
-    // Gets a static plan for the 64 bit NTT. If the polynomial size or the prime modulus are not suitable,
-    // returns None.
-    fn ntt_plan_64() -> Option<&'static Plan> {
-        static PLAN: OnceLock<Option<Plan>> = OnceLock::new();
-        PLAN.get_or_init(|| {
-            if F::MODULUS.as_ref().len() != 1 {
-                // Modulus must fit in 64 bits.
-                return None;
-            }
-            let modulus = F::MODULUS.as_ref()[0];
-            Plan::try_new(D, modulus)
-        })
-        .as_ref()
+    pub fn ntt_mul(&self, rhs: &Self) -> Self {
+        Self {
+            coeffs: N::mul::<D, F>(&self.coeffs, &rhs.coeffs),
+            _ntt: PhantomData,
+        }
     }
 }
 
-impl<const D: usize, F: PrimeField> Default for CyclotomicRing<D, F> {
+impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> Default for CyclotomicRing<D, F, N> {
     fn default() -> Self {
-        CyclotomicRing {
+        Self {
             coeffs: vec![F::ZERO; D],
+            _ntt: PhantomData,
         }
     }
 }
@@ -197,7 +169,7 @@ impl<const D: usize, F: PrimeField> Ring for CyclotomicRing<D, F> {
         if D <= NTT_CUTOFF {
             return self.basic_mul(rhs);
         }
-        self.try_ntt_mul(rhs)
+        self.ntt_mul(rhs)
     }
 
     fn zero() -> Self {
@@ -207,7 +179,10 @@ impl<const D: usize, F: PrimeField> Ring for CyclotomicRing<D, F> {
     fn one() -> Self {
         let mut coeffs = vec![F::ZERO; D];
         coeffs[0] = F::ONE;
-        Self { coeffs }
+        Self {
+            coeffs,
+            _ntt: PhantomData,
+        }
     }
 
     fn is_zero(&self) -> bool {
@@ -216,12 +191,18 @@ impl<const D: usize, F: PrimeField> Ring for CyclotomicRing<D, F> {
 
     fn neg(&self) -> Self {
         let coeffs = self.coeffs.iter().map(|&c| c.neg()).collect();
-        Self { coeffs }
+        Self {
+            coeffs,
+            _ntt: PhantomData,
+        }
     }
 
     fn scalar_mul(&self, scalar: F) -> Self {
         let coeffs = self.coeffs.iter().map(|&c| c * scalar).collect();
-        Self { coeffs }
+        Self {
+            coeffs,
+            _ntt: PhantomData,
+        }
     }
 
     fn random() -> Self {
@@ -231,6 +212,8 @@ impl<const D: usize, F: PrimeField> Ring for CyclotomicRing<D, F> {
 
 #[cfg(test)]
 mod test {
+    use std::marker::PhantomData;
+
     use crate::arith::{
         cyclotomic_ring::{CyclotomicRing, NTT_CUTOFF},
         field::Field64,
@@ -255,6 +238,7 @@ mod test {
 
             let monomial = CyclotomicRing::<D, Field64> {
                 coeffs: monomial_coeffs,
+                _ntt: PhantomData,
             };
 
             let polynomial = CyclotomicRing::get_random();
@@ -302,7 +286,7 @@ mod test {
         let rhs = CyclotomicRing::<D, Field64>::get_random();
 
         let basic_res = lhs.basic_mul(&rhs);
-        let ntt_res = lhs.try_ntt_mul(&rhs);
+        let ntt_res = lhs.ntt_mul(&rhs);
         assert_eq!(basic_res.coeffs, ntt_res.coeffs);
     }
 
