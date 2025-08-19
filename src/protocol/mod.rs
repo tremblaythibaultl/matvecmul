@@ -6,6 +6,7 @@ use crate::{
 };
 
 pub mod prover;
+pub mod sumcheck;
 mod verifier;
 
 pub struct Proof<const D: usize, F: Field> {

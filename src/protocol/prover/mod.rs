@@ -4,7 +4,7 @@ use ark_ff::{Field, PrimeField};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
-    protocol::{Proof, sample_random_challenge},
+    protocol::{Proof, sample_random_challenge, sumcheck::multilinear::MultilinearPolynomial},
     rlwe::RLWE,
 };
 
@@ -52,6 +52,19 @@ impl<const D: usize, F: Field> Prover<D, F> {
 
         let alpha = sample_random_challenge::<F>(true);
         let tau = sample_random_challenge::<F>(true);
+
+        // println!("vec_remainders: {:#?}", vec_remainders);
+        // println!("vec_quotients: {:#?}", vec_quotients);
+
+        // (At least one of) the sumcheck polynomial(s) will be of degree 2 - so not multilinear.
+        // I think it might be best to store several MLES and then perform the sumcheck for a product of MLES. Look at JolT implementation for more details.
+
+        // this also clones the coefficients. should look into optimizing.
+        let m_mle: MultilinearPolynomial<F::BasePrimeField> = m_rq.to_mle();
+
+        // maybe there are better ways of computing this
+        let powers_of_alpha = (0..D).map(|i| alpha.pow([i as u64])).collect::<Vec<_>>();
+        let alpha_mle = MultilinearPolynomial::new(powers_of_alpha, D.ilog2() as usize);
 
         Proof {
             y,
