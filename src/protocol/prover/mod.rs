@@ -1,19 +1,22 @@
 use std::marker::PhantomData;
 
-use ark_ff::PrimeField;
+use ark_ff::{Field, PrimeField};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
-    protocol::Proof,
+    protocol::{Proof, sample_random_challenge},
     rlwe::RLWE,
 };
 
-pub struct Prover<const D: usize, F: PrimeField> {
+pub struct Prover<const D: usize, F: Field> {
     _pd: PhantomData<F>,
 }
 
-impl<const D: usize, F: PrimeField> Prover<D, F> {
-    pub fn prove(m: &Matrix<F>, x: &Vec<RLWE<CyclotomicRing<D, F>>>) -> Proof<D, F> {
+impl<const D: usize, F: Field> Prover<D, F> {
+    pub fn prove(
+        m: &Matrix<F::BasePrimeField>,
+        x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+    ) -> Proof<D, F::BasePrimeField> {
         // interpret each row as a ring elements and rearrange columns
         let m_rq = m.lift_to_rq::<D>();
 
@@ -30,8 +33,10 @@ impl<const D: usize, F: PrimeField> Prover<D, F> {
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
 
         //reduce each polynomial ring element to cyclotomic ring using long division
-        let mut vec_quotients = Vec::<Vec<PolynomialRing<D, F>>>::with_capacity(y_polyring.len());
-        let mut vec_remainders = Vec::<Vec<CyclotomicRing<D, F>>>::with_capacity(y_polyring.len());
+        let mut vec_quotients =
+            Vec::<Vec<PolynomialRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
+        let mut vec_remainders =
+            Vec::<Vec<CyclotomicRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
 
         for elem in y_polyring {
             let (quotients, remainders) = elem.long_division_by_cyclotomic();
@@ -44,6 +49,9 @@ impl<const D: usize, F: PrimeField> Prover<D, F> {
 
         println!("y: {:#?}", y);
         println!("vec_remainders: {:#?}", vec_remainders);
+
+        let alpha = sample_random_challenge::<F>(true);
+        let tau = sample_random_challenge::<F>(true);
 
         Proof {
             y,
