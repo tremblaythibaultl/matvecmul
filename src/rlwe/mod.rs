@@ -4,7 +4,7 @@ use crate::arith::ring::Ring;
 use ark_ff::PrimeField;
 
 // MLWE rank
-const K: usize = 1;
+pub const K: usize = 1;
 // Log of message modulus
 const lg_p: usize = 4;
 
@@ -141,6 +141,12 @@ impl<R: Ring> RLWE<R> {
             mask: res_mask,
             body: res_body,
         }
+    }
+
+    pub fn get_ring_elements(&self) -> Vec<R> {
+        let mut elements = self.mask.clone();
+        elements.push(self.body.clone());
+        elements
     }
 }
 

@@ -118,7 +118,7 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
             .flatten()
             .collect::<Vec<_>>();
 
-        let num_variables = self.data.len() * D;
+        let num_variables = (self.data.len() * D).next_power_of_two().ilog2() as usize;
 
         MultilinearPolynomial::new(evals, num_variables)
     }
