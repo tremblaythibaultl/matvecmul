@@ -8,6 +8,8 @@ pub struct MultilinearPolynomial<F> {
 
 impl<F: Field> MultilinearPolynomial<F> {
     pub fn new(evals: Vec<F>, num_variables: usize) -> Self {
+        assert_eq!(evals.len(), 1 << num_variables);
+
         Self {
             num_variables,
             evals,

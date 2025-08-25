@@ -77,7 +77,6 @@ impl<const D: usize, F: Field> Prover<D, F> {
                     .into_iter()
                     .map(|poly| {
                         poly.coeffs
-                            .clone()
                             .iter()
                             .zip(powers_of_alpha.iter())
                             .map(|(c, a)| a.mul_by_base_prime_field(c))
@@ -99,7 +98,6 @@ impl<const D: usize, F: Field> Prover<D, F> {
                 elem.iter()
                     .map(|poly| {
                         poly.coeffs
-                            .clone()
                             .iter()
                             .zip(powers_of_alpha.iter())
                             .map(|(c, a)| a.mul_by_base_prime_field(c))
