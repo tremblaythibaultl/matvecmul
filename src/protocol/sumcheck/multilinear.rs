@@ -20,9 +20,23 @@ impl<F: Field> MultilinearPolynomial<F> {
         &self.evals
     }
 
+    pub fn evals_mut(&mut self) -> &mut [F] {
+        &mut self.evals
+    }
+
     pub fn sum_over_boolean_hypercube(&self) -> F {
-        (0..(1 << self.num_variables))
-            .map(|point| self.evals[point])
-            .sum()
+        self.evals.iter().sum()
+    }
+
+    pub fn bind_to_challenge(&mut self, challenge: &F) {
+        let mle_half = self.evals().len() / 2;
+        let (left, right) = self.evals_mut().split_at_mut(mle_half);
+
+        left.iter_mut().zip(right.iter()).for_each(|(a, b)| {
+            *a += *challenge * (*b - *a);
+        });
+
+        self.num_variables -= 1;
+        self.evals.truncate(mle_half);
     }
 }

@@ -10,6 +10,8 @@ pub struct Verifier<const D: usize, F: Field> {
 
 impl<const D: usize, F: Field> Verifier<D, F> {
     fn verify(pr: Proof<D, F>) -> bool {
+        // verify the sum-check, then verify the final evaluation with the oracle.
+
         todo!()
     }
 }
