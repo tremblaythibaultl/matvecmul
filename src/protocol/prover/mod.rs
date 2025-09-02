@@ -4,8 +4,8 @@ use ark_ff::{Field, PrimeField};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
-    protocol::{Proof, sample_random_challenge},
-    rlwe::RLWE,
+    protocol::{Proof, sample_random_challenge, sumcheck::multilinear::MultilinearPolynomial},
+    rlwe::{K, RLWE},
 };
 
 pub struct Prover<const D: usize, F: Field> {
@@ -52,6 +52,68 @@ impl<const D: usize, F: Field> Prover<D, F> {
 
         let alpha = sample_random_challenge::<F>(true);
         let tau = sample_random_challenge::<F>(true);
+
+        // println!("vec_remainders: {:#?}", vec_remainders);
+        // println!("vec_quotients: {:#?}", vec_quotients);
+
+        // (At least one of) the sumcheck polynomial(s) will be of degree 2 - so not multilinear.
+        // I think it might be best to store several MLES and then perform the sumcheck for a product of MLES. Look at JolT implementation for more details.
+
+        // this also clones the coefficients. should look into optimizing.
+        let m_mle: MultilinearPolynomial<F::BasePrimeField> = m_rq.to_mle();
+
+        // maybe there are better ways of computing this
+        // or maybe we do not need to construct the polynomial and we can evaluate it on the fly
+        let powers_of_alpha = (0..D).map(|i| alpha.pow([i as u64])).collect::<Vec<_>>();
+        let alpha_mle = MultilinearPolynomial::new(
+            powers_of_alpha.clone(),
+            D.next_power_of_two().ilog2() as usize,
+        );
+
+        let x_alpha_mle_evals = x
+            .iter()
+            .map(|elem| {
+                elem.get_ring_elements()
+                    .into_iter()
+                    .map(|poly| {
+                        poly.coeffs
+                            .iter()
+                            .zip(powers_of_alpha.iter())
+                            .map(|(c, a)| a.mul_by_base_prime_field(c))
+                            .sum::<F>()
+                    })
+                    .collect::<Vec<F>>()
+            })
+            .flatten()
+            .collect::<Vec<F>>();
+
+        let x_alpha_mle: MultilinearPolynomial<F> = MultilinearPolynomial::new(
+            x_alpha_mle_evals,
+            (x.len() * (K + 1)).next_power_of_two().ilog2() as usize,
+        );
+
+        let r_alpha_mle_evals = vec_quotients
+            .iter()
+            .map(|elem| {
+                elem.iter()
+                    .map(|poly| {
+                        poly.coeffs
+                            .iter()
+                            .zip(powers_of_alpha.iter())
+                            .map(|(c, a)| a.mul_by_base_prime_field(c))
+                            .sum::<F>()
+                    })
+                    .collect::<Vec<F>>()
+            })
+            .flatten()
+            .collect::<Vec<F>>();
+
+        let r_alpha_mle: MultilinearPolynomial<F> = MultilinearPolynomial::new(
+            r_alpha_mle_evals,
+            (vec_quotients.len() * vec_quotients[0].len())
+                .next_power_of_two()
+                .ilog2() as usize,
+        );
 
         Proof {
             y,
