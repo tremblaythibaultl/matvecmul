@@ -26,8 +26,8 @@ impl<F: Field> SumCheckProof<F> {
             // TODO: implement fiat-shamir logic
             let challenge = sample_random_challenge::<F>(true);
 
-            let mut zero_one_eval = self.polys[i].coeffs().iter().sum::<F>();
-            zero_one_eval += self.polys[i].coeffs()[0];
+            let zero_one_eval =
+                self.polys[i].coeffs()[0] + self.polys[i].coeffs().iter().sum::<F>();
 
             let bound_poly = self.polys[i].eval(&challenge);
 
@@ -119,7 +119,7 @@ pub fn prove<F: Field>(
 
     (
         SumCheckProof {
-            claim: claim,
+            claim,
             polys: round_polys,
         },
         challenges,
