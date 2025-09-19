@@ -1,6 +1,7 @@
 use ark_ff::Field;
 
 /// Represents a multilinear polynomial stored in evaluation form over {0, 1}^num_variables according to lexicographic ordering.
+#[derive(Clone)]
 pub struct MultilinearPolynomial<F> {
     num_variables: usize,
     evals: Vec<F>,
@@ -18,6 +19,10 @@ impl<F: Field> MultilinearPolynomial<F> {
 
     pub fn evals(&self) -> &[F] {
         &self.evals
+    }
+
+    pub fn num_variables(&self) -> usize {
+        self.num_variables
     }
 
     pub fn evals_mut(&mut self) -> &mut [F] {

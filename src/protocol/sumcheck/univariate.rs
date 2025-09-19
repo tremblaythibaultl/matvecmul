@@ -4,6 +4,7 @@ use crate::arith::linalg::gaussian_elimination;
 
 /// Represents a univariate polynomial stored in coefficient form.
 /// TODO: Check if coefficient form is the best way to encode the message polynomials
+#[derive(Debug)]
 pub struct UnivariatePolynomial<F> {
     coeffs: Vec<F>,
 }
@@ -42,7 +43,7 @@ impl<F: Field> UnivariatePolynomial<F> {
 
     pub fn eval(&self, evaluation_point: &F) -> F {
         let eval = (0..self.coeffs.len())
-            .scan(F::one(), |state, i| {
+            .scan(F::ONE, |state, i| {
                 let current = *state;
                 *state *= evaluation_point;
                 Some(current * self.coeffs[i])

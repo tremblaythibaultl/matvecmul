@@ -14,7 +14,7 @@ pub struct SumCheckProof<F: Field> {
 }
 
 impl<F: Field> SumCheckProof<F> {
-    pub fn verify(&self, num_vars: usize, max_degree: usize) -> Result<F, ()> {
+    pub fn verify(&self, num_vars: usize, max_degree: usize) -> Result<F, usize> {
         assert_eq!(self.polys.len(), num_vars);
 
         let mut claim = self.claim;
@@ -32,7 +32,7 @@ impl<F: Field> SumCheckProof<F> {
             let bound_poly = self.polys[i].eval(&challenge);
 
             if !(claim == zero_one_eval) {
-                return Err(());
+                return Err(i);
             }
 
             claim = bound_poly;
@@ -42,7 +42,6 @@ impl<F: Field> SumCheckProof<F> {
     }
 }
 
-// We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 // Method to generate prover messages for sumcheck protocol for arbitrary-degree product of MLEs
 // Inspired from Libra's sum-check for product of multilinear polynomials (ia.cr/2019/317).
 pub fn prove<F: Field>(
@@ -59,8 +58,6 @@ pub fn prove<F: Field>(
         // we assume all MLEs have the same size
         let mle_half = mles[0].evals().len() / 2;
 
-        let two = F::one() + F::one();
-
         // TODO: this can be parallelized
         let evals_to_sum: Vec<Vec<F>> = (0..mle_half)
             .map(|poly_term_i| {
@@ -71,7 +68,7 @@ pub fn prove<F: Field>(
                     .iter()
                     .map(|poly| poly.evals()[poly_term_i])
                     .collect::<Vec<_>>();
-                evals.push(t_zero_evals.iter().product::<F>());
+                evals.push(t_zero_evals.iter().product());
 
                 // term for t=1
                 let t_one_evals = mles
@@ -87,7 +84,8 @@ pub fn prove<F: Field>(
                     let mut poly_evals = vec![F::zero(); mles.len()];
 
                     mles.iter().enumerate().for_each(|(i, mle)| {
-                        poly_evals[i] = two * t_i_evals[i] - mle.evals()[poly_term_i];
+                        poly_evals[i] = t_i_evals[i] + mle.evals()[mle_half + poly_term_i]
+                            - mle.evals()[poly_term_i];
                     });
 
                     evals.push(poly_evals.iter().product::<F>());

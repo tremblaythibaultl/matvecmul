@@ -2,6 +2,7 @@ use ark_ff::Field;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing},
+    protocol::sumcheck::SumCheckProof,
     rlwe::RLWE,
 };
 
@@ -12,6 +13,7 @@ mod verifier;
 pub struct Proof<const D: usize, F: Field> {
     pub y: Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     pub r: Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>, // should be a commitment to `r`
+    pub z1_sumcheck_proof: SumCheckProof<F>,
 }
 
 pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {
@@ -23,7 +25,7 @@ pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {
         //     .collect::<Vec<_>>();
 
         // return F::from_base_prime_field_elems(coeffs).unwrap(); // Should be safe to unwrap as the slice length matches the extension degree
-        return F::from(2);
+        return F::from(11);
     } else {
         // TODO: implement a proper random challenge sampling
         // Should basically hash everything that is known to the verifier, i.e. `M`, `x`, `y`, and `r`.

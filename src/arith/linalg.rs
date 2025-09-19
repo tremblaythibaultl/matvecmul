@@ -46,6 +46,14 @@ impl<R: Ring> Matrix<R> {
             width: self.width,
         }
     }
+
+    pub fn width(&self) -> usize {
+        self.width
+    }
+
+    pub fn height(&self) -> usize {
+        self.data.len() / self.width
+    }
 }
 
 impl<F: PrimeField> Matrix<F> {
@@ -110,7 +118,7 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
         }
     }
 
-    pub fn to_mle(&self) -> MultilinearPolynomial<F> {
+    pub fn to_mle_evals(&self) -> (Vec<F>, usize) {
         let evals = self
             .data
             .iter()
@@ -120,7 +128,7 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
 
         let num_variables = (self.data.len() * D).next_power_of_two().ilog2() as usize;
 
-        MultilinearPolynomial::new(evals, num_variables)
+        (evals, num_variables)
     }
 }
 
