@@ -7,17 +7,18 @@ use crate::protocol::{
 
 pub mod multilinear;
 pub mod univariate;
-
+#[derive(Clone)]
 pub struct SumCheckProof<F: Field> {
     claim: F,
     polys: Vec<UnivariatePolynomial<F>>,
 }
 
 impl<F: Field> SumCheckProof<F> {
-    pub fn verify(&self, num_vars: usize, max_degree: usize) -> Result<F, usize> {
+    pub fn verify(&self, num_vars: usize, max_degree: usize) -> Result<(F, F, Vec<F>), usize> {
         assert_eq!(self.polys.len(), num_vars);
 
         let mut claim = self.claim;
+        let mut challenges = Vec::<F>::with_capacity(num_vars);
 
         for i in 0..self.polys.len() {
             // verify degree
@@ -36,9 +37,10 @@ impl<F: Field> SumCheckProof<F> {
             }
 
             claim = bound_poly;
+            challenges.push(challenge);
         }
 
-        return Ok(claim);
+        return Ok((self.claim, claim, challenges));
     }
 }
 

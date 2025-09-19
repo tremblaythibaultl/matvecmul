@@ -9,6 +9,7 @@ mod test {
     use matvec::{
         arith::{cyclotomic_ring::CyclotomicRing, field::Field64, linalg::Matrix},
         protocol::prover::Prover,
+        protocol::verifier::Verifier,
         rlwe::{decrypt, encrypt},
     };
 
@@ -44,6 +45,10 @@ mod test {
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
         let proof = Prover::<D, F>::prove(&m, &x);
+
+        let verifier_res = Verifier::<D, F>::verify(&m, &x, proof.clone());
+
+        assert!(verifier_res.is_ok());
 
         let res = &proof
             .y

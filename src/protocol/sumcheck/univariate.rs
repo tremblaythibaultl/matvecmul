@@ -4,7 +4,7 @@ use crate::arith::linalg::gaussian_elimination;
 
 /// Represents a univariate polynomial stored in coefficient form.
 /// TODO: Check if coefficient form is the best way to encode the message polynomials
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct UnivariatePolynomial<F> {
     coeffs: Vec<F>,
 }
