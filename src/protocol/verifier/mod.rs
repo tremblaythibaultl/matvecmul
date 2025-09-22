@@ -3,9 +3,10 @@ use std::marker::PhantomData;
 use ark_ff::Field;
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix},
+    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
     protocol::{
-        Proof, compute_mles, preprocess, sample_random_challenge,
+        Proof, sample_random_challenge,
+        sumcheck::multilinear::MultilinearPolynomial,
         utils::{build_eq_poly, eq_eval},
     },
     rlwe::RLWE,
@@ -21,8 +22,7 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F::BasePrimeField>, ()> {
-        // TODO: separate preprocessing for prover and verifier
-        let (m_rq, m_polyring, x_polyring, m_mle, num_vars) = preprocess::<D, F>(m, x);
+        let (m_rq, m_mle, num_vars) = preprocess::<D, F>(m, x);
 
         // TODO: implement fiat shamir
         let alpha = sample_random_challenge::<F>(true);
@@ -41,14 +41,14 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(num_vars);
         build_eq_poly(&challenges, &mut eq_x_challenges_mle_evals);
 
-        let x_alpha_eval = mles[2]
+        let x_alpha_eval = mles[0]
             .evals()
             .iter()
             .zip(eq_x_challenges_mle_evals.iter())
             .map(|(a, b)| *a * *b)
             .sum::<F>();
 
-        let ell_eval = mles[3]
+        let ell_eval = mles[1]
             .evals()
             .iter()
             .zip(eq_x_challenges_mle_evals.iter())
@@ -74,4 +74,83 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         }
         Ok(original_claim.to_base_prime_field_elements().collect())
     }
+}
+
+pub fn preprocess<const D: usize, F: Field>(
+    m: &Matrix<F::BasePrimeField>,
+    x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+) -> (
+    Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+    MultilinearPolynomial<F>,
+    usize,
+) {
+    // interpret each row as a ring elements and rearrange columns
+    let m_rq = m.lift_to_rq::<D>();
+
+    // this clones the coefficients. should look into optimizing.
+    let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
+
+    let m_mle = MultilinearPolynomial::new(
+        m_mle_evals
+            .into_iter()
+            .map(|e| F::from_base_prime_field(e))
+            .collect(),
+        num_vars,
+    );
+
+    (m_rq, m_mle, num_vars)
+}
+
+pub fn compute_mles<const D: usize, F: Field>(
+    m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+    m_mle: &MultilinearPolynomial<F>,
+    x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+    num_vars: usize,
+    alpha: &F,
+    tau: &F,
+) -> Vec<MultilinearPolynomial<F>> {
+    let powers_of_alpha: Vec<F> = (0..D)
+        .scan(F::one(), |state, _| {
+            let result = *state;
+            *state *= alpha;
+            Some(result)
+        })
+        .collect();
+
+    // this might not be very efficient memory-wise, but we need it to keep genericity in the sumcheck prover.
+    // TODO: send minimal information to the sumcheck prover and a function describing how to pad the MLEs
+    let padded_alpha_mle_evals = (0..m_rq.width() * m_rq.height())
+        .flat_map(|_| powers_of_alpha.clone())
+        .collect::<Vec<_>>();
+
+    let alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, num_vars);
+
+    // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
+    let x_alpha_mle_evals = x
+        .iter()
+        .map(|ct| {
+            ct.get_ring_elements()[0]
+                .coeffs
+                .iter()
+                .zip(powers_of_alpha.iter())
+                .map(|(c, a)| a.mul_by_base_prime_field(c))
+                .sum::<F>()
+        })
+        .collect::<Vec<F>>();
+
+    // pad x_alpha_mle_evals
+    let padded_x_alpha_mle_evals = (0..m_rq.height() as usize)
+        .flat_map(|_| {
+            x_alpha_mle_evals
+                .iter()
+                .map(|e| vec![*e; D])
+                .flatten()
+                .collect::<Vec<F>>()
+        })
+        .collect::<Vec<F>>();
+
+    let x_alpha_mle: MultilinearPolynomial<F> =
+        MultilinearPolynomial::new(padded_x_alpha_mle_evals, num_vars);
+
+    vec![x_alpha_mle.clone(), alpha_mle.clone()]
 }
