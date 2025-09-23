@@ -22,40 +22,38 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F::BasePrimeField>, ()> {
-        let (m_rq, m_mle, num_vars) = preprocess::<D, F>(m, x);
+        let (m_rq, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
 
         // TODO: implement fiat shamir
         let alpha = sample_random_challenge::<F>(true);
         let tau = sample_random_challenge::<F>(true);
-        let vec_tau = vec![tau; num_vars];
+        let vec_tau = vec![tau; z1_num_vars];
 
-        // compute padded MLEs
+        // compute unpadded MLEs
+        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha);
 
-        let unpadded_mles = compute_z1_mles(&m_rq, x, num_vars, &alpha);
+        let (z1_original_claim, z1_final_claim, z1_challenges) =
+            proof.z1_sumcheck_proof.verify(z1_num_vars, 4).unwrap();
 
-        let (original_claim, final_claim, challenges) =
-            proof.z1_sumcheck_proof.verify(num_vars, 4).unwrap();
-
-        let eq_eval = eq_eval(&vec_tau, &challenges);
+        let eq_eval = eq_eval(&vec_tau, &z1_challenges);
 
         let x_alpha_eval = evaluate_x_alpha_at_challenges(
-            &unpadded_mles[0],
-            &challenges[m_rq.height().ilog2() as usize
+            &unpadded_z1_mles[0],
+            &z1_challenges[m_rq.height().ilog2() as usize
                 ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
                 .to_vec(),
         );
 
-        let ell_eval = evaluate_ell_at_challenges(
-            &unpadded_mles[1],
-            &challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
+        let z1_ell_eval = evaluate_ell_at_challenges(
+            &unpadded_z1_mles[1],
+            &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
 
         // This does NOT need to be computed by the verifier
         // The value should come from the PCS.
         // Included for test purposes
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << num_vars);
-        build_eq_poly(&challenges, &mut eq_x_challenges_mle_evals);
-
+        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z1_num_vars);
+        build_eq_poly(&z1_challenges, &mut eq_x_challenges_mle_evals);
         let m_eval = m_mle
             .evals()
             .iter()
@@ -63,14 +61,50 @@ impl<const D: usize, F: Field> Verifier<D, F> {
             .map(|(a, b)| *a * *b)
             .sum::<F>();
 
-        let eval_at_random_point = eq_eval * m_eval * x_alpha_eval * ell_eval;
+        let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
-        if eval_at_random_point != final_claim {
+        if z1_eval_at_random_point != z1_final_claim {
             return Err(());
         } else {
-            println!("Verification successful");
+            println!("z1 Verification successful");
         }
-        Ok(original_claim.to_base_prime_field_elements().collect())
+
+        // z_3 verification
+        let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
+
+        let (z3_original_claim, z3_final_claim, z3_challenges) =
+            proof.z3_sumcheck_proof.verify(z3_num_vars, 2).unwrap();
+
+        let z3_ell_eval = evaluate_ell_at_challenges(
+            &unpadded_z1_mles[1],
+            &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
+        );
+
+        // This does NOT need to be computed by the verifier
+        // The value should come from the PCS.
+        // Included for test purposes
+        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z3_num_vars);
+        build_eq_poly(&z3_challenges, &mut eq_x_challenges_mle_evals);
+        let r_eval = proof
+            .r_mle
+            .evals()
+            .iter()
+            .zip(eq_x_challenges_mle_evals.iter())
+            .map(|(a, b)| *a * *b)
+            .sum::<F>();
+
+        let z3_eval_at_random_point = r_eval * z3_ell_eval;
+
+        if z3_eval_at_random_point != z3_final_claim {
+            return Err(());
+        } else {
+            println!("z3 Verification successful");
+        }
+
+        Ok(z1_original_claim
+            .to_base_prime_field_elements()
+            .chain(z3_original_claim.to_base_prime_field_elements())
+            .collect())
     }
 }
 

@@ -20,6 +20,9 @@ pub struct Proof<const D: usize, F: Field> {
     pub y: Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     pub r: Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>, // should be a commitment to `r`
     pub z1_sumcheck_proof: SumCheckProof<F>,
+    pub z3_sumcheck_proof: SumCheckProof<F>,
+    // Included for test purposes only. In the real protocol, this should be a commitment to `r_mle`
+    pub r_mle: MultilinearPolynomial<F>,
 }
 
 pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {
