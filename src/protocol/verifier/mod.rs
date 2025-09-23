@@ -31,33 +31,31 @@ impl<const D: usize, F: Field> Verifier<D, F> {
 
         // compute padded MLEs
 
-        let mles = compute_mles(&m_rq, &m_mle, x, num_vars, &alpha, &tau);
+        let unpadded_mles = compute_z1_mles(&m_rq, x, num_vars, &alpha);
 
         let (original_claim, final_claim, challenges) =
             proof.z1_sumcheck_proof.verify(num_vars, 4).unwrap();
 
         let eq_eval = eq_eval(&vec_tau, &challenges);
 
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(num_vars);
-        build_eq_poly(&challenges, &mut eq_x_challenges_mle_evals);
+        let x_alpha_eval = evaluate_x_alpha_at_challenges(
+            &unpadded_mles[0],
+            &challenges[m_rq.height().ilog2() as usize
+                ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
+                .to_vec(),
+        );
 
-        let x_alpha_eval = mles[0]
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
-
-        let ell_eval = mles[1]
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
+        let ell_eval = evaluate_ell_at_challenges(
+            &unpadded_mles[1],
+            &challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
+        );
 
         // This does NOT need to be computed by the verifier
         // The value should come from the PCS.
         // Included for test purposes
+        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << num_vars);
+        build_eq_poly(&challenges, &mut eq_x_challenges_mle_evals);
+
         let m_eval = m_mle
             .evals()
             .iter()
@@ -101,13 +99,11 @@ pub fn preprocess<const D: usize, F: Field>(
     (m_rq, m_mle, num_vars)
 }
 
-pub fn compute_mles<const D: usize, F: Field>(
+pub fn compute_z1_mles<const D: usize, F: Field>(
     m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-    m_mle: &MultilinearPolynomial<F>,
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     num_vars: usize,
     alpha: &F,
-    tau: &F,
 ) -> Vec<MultilinearPolynomial<F>> {
     let powers_of_alpha: Vec<F> = (0..D)
         .scan(F::one(), |state, _| {
@@ -117,13 +113,9 @@ pub fn compute_mles<const D: usize, F: Field>(
         })
         .collect();
 
-    // this might not be very efficient memory-wise, but we need it to keep genericity in the sumcheck prover.
-    // TODO: send minimal information to the sumcheck prover and a function describing how to pad the MLEs
-    let padded_alpha_mle_evals = (0..m_rq.width() * m_rq.height())
-        .flat_map(|_| powers_of_alpha.clone())
-        .collect::<Vec<_>>();
-
-    let alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, num_vars);
+    let powers_of_alpha_num_vars = powers_of_alpha.len().ilog2() as usize;
+    let unpadded_alpha_mle =
+        MultilinearPolynomial::new(powers_of_alpha.clone(), powers_of_alpha_num_vars);
 
     // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
     let x_alpha_mle_evals = x
@@ -138,19 +130,43 @@ pub fn compute_mles<const D: usize, F: Field>(
         })
         .collect::<Vec<F>>();
 
-    // pad x_alpha_mle_evals
-    let padded_x_alpha_mle_evals = (0..m_rq.height() as usize)
-        .flat_map(|_| {
-            x_alpha_mle_evals
-                .iter()
-                .map(|e| vec![*e; D])
-                .flatten()
-                .collect::<Vec<F>>()
-        })
-        .collect::<Vec<F>>();
+    let x_alpha_mle_num_vars = x_alpha_mle_evals.len().ilog2() as usize;
+    let unpadded_x_alpha_mle = MultilinearPolynomial::new(x_alpha_mle_evals, x_alpha_mle_num_vars);
 
-    let x_alpha_mle: MultilinearPolynomial<F> =
-        MultilinearPolynomial::new(padded_x_alpha_mle_evals, num_vars);
+    vec![unpadded_x_alpha_mle, unpadded_alpha_mle]
+}
 
-    vec![x_alpha_mle.clone(), alpha_mle.clone()]
+// The padded x_alpha MLE has `num_vars` variables.
+// Its evaluations `evals` are the `D` repetitions of each evaluation of the unpadded x_alpha MLE, concatenated `m` times.
+// In other words, `evals[0] = evals[1] = ... = evals[D-1], evals[D] = evals[D+1] = ... = evals[2D-1]` up to `evals [t*D-1]`, then
+// `evals[0] = evals[t*D]` and so on and so forth
+fn evaluate_x_alpha_at_challenges<F: Field>(
+    unpadded_x_alpha_mle: &MultilinearPolynomial<F>,
+    challenges_subvec: &[F],
+) -> F {
+    let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
+    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
+
+    unpadded_x_alpha_mle
+        .evals()
+        .iter()
+        .zip(eq_x_challenges_mle_evals.iter())
+        .map(|(a, b)| *a * *b)
+        .sum::<F>()
+}
+
+// Similar reasoning as `evaluate_x_alpha_at_challenges`
+fn evaluate_ell_at_challenges<F: Field>(
+    unpadded_ell_mle: &MultilinearPolynomial<F>,
+    challenges_subvec: &[F],
+) -> F {
+    let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
+    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
+
+    unpadded_ell_mle
+        .evals()
+        .iter()
+        .zip(eq_x_challenges_mle_evals.iter())
+        .map(|(a, b)| *a * *b)
+        .sum::<F>()
 }
