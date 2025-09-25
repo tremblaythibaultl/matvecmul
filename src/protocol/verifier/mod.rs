@@ -21,31 +21,35 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         m: &Matrix<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
-    ) -> Result<Vec<F::BasePrimeField>, ()> {
+    ) -> Result<Vec<F>, ()> {
         let (m_rq, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
 
         // TODO: implement fiat shamir
         let alpha = sample_random_challenge::<F>(true);
         let tau = sample_random_challenge::<F>(true);
-        let vec_tau = vec![tau; z1_num_vars];
+
+        let m = m_rq.height().ilog2() as usize;
+        let vec_tau = vec![tau; m];
 
         // compute unpadded MLEs
-        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha);
+        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &tau);
+
+        let powers_of_alpha = unpadded_z1_mles[2].evals();
 
         let (z1_original_claim, z1_final_claim, z1_challenges) =
             proof.z1_sumcheck_proof.verify(z1_num_vars, 4).unwrap();
 
-        let eq_eval = eq_eval(&vec_tau, &z1_challenges);
+        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
 
         let x_alpha_eval = evaluate_x_alpha_at_challenges(
-            &unpadded_z1_mles[0],
+            &unpadded_z1_mles[1],
             &z1_challenges[m_rq.height().ilog2() as usize
                 ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
                 .to_vec(),
         );
 
         let z1_ell_eval = evaluate_ell_at_challenges(
-            &unpadded_z1_mles[1],
+            &unpadded_z1_mles[2],
             &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
 
@@ -73,10 +77,10 @@ impl<const D: usize, F: Field> Verifier<D, F> {
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
         let (z3_original_claim, z3_final_claim, z3_challenges) =
-            proof.z3_sumcheck_proof.verify(z3_num_vars, 2).unwrap();
+            proof.z3_sumcheck_proof.verify(z3_num_vars, 3).unwrap();
 
         let z3_ell_eval = evaluate_ell_at_challenges(
-            &unpadded_z1_mles[1],
+            &unpadded_z1_mles[2],
             &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
         );
 
@@ -93,7 +97,10 @@ impl<const D: usize, F: Field> Verifier<D, F> {
             .map(|(a, b)| *a * *b)
             .sum::<F>();
 
-        let z3_eval_at_random_point = r_eval * z3_ell_eval;
+        // eq_tau eval
+        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
+
+        let z3_eval_at_random_point = eq_eval * r_eval * z3_ell_eval;
 
         if z3_eval_at_random_point != z3_final_claim {
             return Err(());
@@ -101,10 +108,47 @@ impl<const D: usize, F: Field> Verifier<D, F> {
             println!("z3 Verification successful");
         }
 
-        Ok(z1_original_claim
-            .to_base_prime_field_elements()
-            .chain(z3_original_claim.to_base_prime_field_elements())
-            .collect())
+        // z_2
+        let z2_num_vars = m_rq.height().ilog2() as usize;
+
+        let alpha_n_plus_one = (alpha * powers_of_alpha[D - 1]) + F::ONE;
+        let alpha_factor = alpha_n_plus_one; //.pow([1 << z2_num_vars as u64]);
+
+        let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
+        build_eq_poly(&vec_tau[0..z2_num_vars], &mut eq_tau_mle_evals);
+
+        // focus on the first component of the ciphertext only for now.
+        let y_alpha_mle_evals = proof
+            .y
+            .iter()
+            .map(|ct| {
+                ct.get_ring_elements()[1]
+                    .coeffs
+                    .iter()
+                    .zip(powers_of_alpha.iter())
+                    .map(|(c, a)| a.mul_by_base_prime_field(c))
+                    .sum::<F>()
+            })
+            .collect::<Vec<F>>();
+
+        assert_eq!(y_alpha_mle_evals.len(), eq_tau_mle_evals.len());
+
+        let z_2 = y_alpha_mle_evals
+            .iter()
+            .zip(eq_tau_mle_evals.iter())
+            .map(|(a, b)| *a * *b)
+            .sum::<F>();
+
+        assert_eq!(
+            z1_original_claim - z_2 - (alpha_factor * z3_original_claim),
+            F::ZERO
+        );
+
+        Ok(vec![
+            z1_original_claim,
+            z_2,
+            alpha_factor * z3_original_claim,
+        ])
     }
 }
 
@@ -138,6 +182,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     num_vars: usize,
     alpha: &F,
+    tau: &F,
 ) -> Vec<MultilinearPolynomial<F>> {
     let powers_of_alpha: Vec<F> = (0..D)
         .scan(F::one(), |state, _| {
@@ -155,7 +200,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     let x_alpha_mle_evals = x
         .iter()
         .map(|ct| {
-            ct.get_ring_elements()[0]
+            ct.get_ring_elements()[1]
                 .coeffs
                 .iter()
                 .zip(powers_of_alpha.iter())
@@ -167,7 +212,17 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     let x_alpha_mle_num_vars = x_alpha_mle_evals.len().ilog2() as usize;
     let unpadded_x_alpha_mle = MultilinearPolynomial::new(x_alpha_mle_evals, x_alpha_mle_num_vars);
 
-    vec![unpadded_x_alpha_mle, unpadded_alpha_mle]
+    let m = m_rq.height().ilog2() as usize;
+    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
+    let vec_tau = vec![*tau; m];
+    build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+    let unpadded_eq_tau_mle = MultilinearPolynomial::new(eq_tau_mle_evals, m);
+
+    vec![
+        unpadded_eq_tau_mle,
+        unpadded_x_alpha_mle,
+        unpadded_alpha_mle,
+    ]
 }
 
 // The padded x_alpha MLE has `num_vars` variables.
@@ -198,6 +253,21 @@ fn evaluate_ell_at_challenges<F: Field>(
     build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
 
     unpadded_ell_mle
+        .evals()
+        .iter()
+        .zip(eq_x_challenges_mle_evals.iter())
+        .map(|(a, b)| *a * *b)
+        .sum::<F>()
+}
+
+fn evaluate_eq_tau_at_challenges<F: Field>(
+    unpadded_eq_tau_mle: &MultilinearPolynomial<F>,
+    challenges_subvec: &[F],
+) -> F {
+    let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
+    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
+
+    unpadded_eq_tau_mle
         .evals()
         .iter()
         .zip(eq_x_challenges_mle_evals.iter())

@@ -67,14 +67,39 @@ impl<const D: usize, F: Field> Prover<D, F> {
         // z_3
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
-        let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars);
+        let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &tau);
 
         // included for test purposes only. The real protocol should commit to this using a PCS
-        let r_mle = z3_mles[0].clone();
+        let r_mle = z3_mles[1].clone();
 
         let z3_claim = sum_over_boolean_hypercube(&z3_mles);
 
         let (z3_sumcheck_proof, z3_challenges) = prove(z3_claim, &mut z3_mles, z3_num_vars);
+
+        // sanity check with z_2
+
+        // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
+        let y_alpha_mle_evals = y
+            .iter()
+            .map(|ct| {
+                ct.get_ring_elements()[1]
+                    .coeffs
+                    .iter()
+                    .zip(powers_of_alpha.iter())
+                    .map(|(c, a)| a.mul_by_base_prime_field(c))
+                    .sum::<F>()
+            })
+            .collect::<Vec<F>>();
+
+        let z2_num_vars = m_rq.height().ilog2() as usize;
+        let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
+        let vec_tau = vec![tau; z2_num_vars];
+        build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+
+        let z_2 = sum_over_boolean_hypercube(&[
+            MultilinearPolynomial::new(y_alpha_mle_evals, z2_num_vars),
+            MultilinearPolynomial::new(eq_tau_mle_evals, z2_num_vars),
+        ]);
 
         Proof {
             y,
@@ -139,11 +164,11 @@ fn compute_z1_mles<const D: usize, F: Field>(
 
     let alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, num_vars);
 
-    // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
+    // only consider the body for now. will probably need to run the protocol K+1 times where K is the RLWE rank
     let x_alpha_mle_evals = x
         .iter()
         .map(|ct| {
-            ct.get_ring_elements()[0]
+            ct.get_ring_elements()[1]
                 .coeffs
                 .iter()
                 .zip(powers_of_alpha.iter())
@@ -167,11 +192,18 @@ fn compute_z1_mles<const D: usize, F: Field>(
         MultilinearPolynomial::new(padded_x_alpha_mle_evals, num_vars);
 
     // compute eq polynomial
-    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << num_vars);
-    let vec_tau = vec![*tau; num_vars];
+    let m = m_rq.height().ilog2() as usize;
+    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
+    let vec_tau = vec![*tau; m];
     build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
-    let eq_tau_mle = MultilinearPolynomial::new(eq_tau_mle_evals, num_vars);
+    let padded_eq_tau_mle_evals = eq_tau_mle_evals
+        .iter()
+        .map(|e| vec![*e; m_rq.width() as usize * D])
+        .flatten()
+        .collect::<Vec<F>>();
+
+    let eq_tau_mle = MultilinearPolynomial::new(padded_eq_tau_mle_evals, num_vars);
 
     vec![
         eq_tau_mle,
@@ -185,13 +217,14 @@ fn compute_z3_mles<const D: usize, F: Field>(
     vec_quotients: &Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>,
     powers_of_alpha: &Vec<F>,
     z3_num_vars: usize,
+    tau: &F,
 ) -> Vec<MultilinearPolynomial<F>> {
     // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
 
     let r_mle_evals = vec_quotients
         .iter()
         .map(|quotients| {
-            quotients[0].coeffs[0..D] // only consider the lower order coefficients
+            quotients[1].coeffs[0..D] // only consider the lower order coefficients
                 .iter()
                 .map(|c| F::from_base_prime_field(*c))
                 .collect::<Vec<F>>()
@@ -207,5 +240,19 @@ fn compute_z3_mles<const D: usize, F: Field>(
         .collect::<Vec<_>>();
     let alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, z3_num_vars);
 
-    vec![r_mle, alpha_mle]
+    // compute eq polynomial
+    let m = (r_mle_evals_len / D).ilog2() as usize;
+    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
+    let vec_tau = vec![*tau; m];
+    build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+
+    let padded_eq_tau_mle_evals = eq_tau_mle_evals
+        .iter()
+        .map(|e| vec![*e; D])
+        .flatten()
+        .collect::<Vec<F>>();
+
+    let eq_tau_mle = MultilinearPolynomial::new(padded_eq_tau_mle_evals, z3_num_vars);
+
+    vec![eq_tau_mle, r_mle, alpha_mle]
 }

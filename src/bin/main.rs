@@ -13,9 +13,9 @@ mod test {
 
     #[test]
     fn test_functionality() {
-        pub const D: usize = 2;
+        pub const D: usize = 4;
         pub const INTEGER_WIDTH: usize = 2 * D;
-        pub const INTEGER_HEIGHT: usize = D;
+        pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
 
         // generate matrix data
@@ -44,10 +44,6 @@ mod test {
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
         let proof = Prover::<D, F>::prove(&m, &x);
 
-        let verifier_res = Verifier::<D, F>::verify(&m, &x, proof.clone());
-
-        assert!(verifier_res.is_ok());
-
         let res = &proof
             .y
             .iter()
@@ -55,5 +51,9 @@ mod test {
             .collect::<Vec<_>>();
 
         assert_eq!(m_v, *res);
+
+        let verifier_res = Verifier::<D, F>::verify(&m, &x, proof.clone());
+
+        assert!(verifier_res.is_ok());
     }
 }

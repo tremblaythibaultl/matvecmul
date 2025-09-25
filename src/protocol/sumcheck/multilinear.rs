@@ -1,7 +1,7 @@
 use ark_ff::Field;
 
 /// Represents a multilinear polynomial stored in evaluation form over {0, 1}^num_variables according to lexicographic ordering.
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct MultilinearPolynomial<F> {
     num_variables: usize,
     evals: Vec<F>,
