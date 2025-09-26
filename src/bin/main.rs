@@ -1,5 +1,3 @@
-use matvec;
-
 fn main() {
     // println!("Hello world!")
 }
@@ -9,26 +7,27 @@ mod test {
     use matvec::{
         arith::{cyclotomic_ring::CyclotomicRing, field::Field64, linalg::Matrix},
         protocol::prover::Prover,
+        protocol::verifier::Verifier,
         rlwe::{decrypt, encrypt},
     };
 
     #[test]
     fn test_functionality() {
         pub const D: usize = 4;
-        pub const WIDTH: usize = 2 * D;
-        pub const HEIGHT: usize = D;
+        pub const INTEGER_WIDTH: usize = 2 * D;
+        pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
 
         // generate matrix data
-        let data = (1..=HEIGHT * WIDTH)
+        let data = (1..=INTEGER_HEIGHT * INTEGER_WIDTH)
             .map(|x| F::from(x as u64))
             .collect::<Vec<_>>();
 
-        let m = Matrix::from_vec(data, WIDTH);
+        let m = Matrix::from_vec(data, INTEGER_WIDTH);
         // println!("m: {:#?}", m);
 
         // generate vector data
-        let v = (1..=WIDTH).map(|x| x as u64).collect::<Vec<_>>();
+        let v = (1..=INTEGER_WIDTH).map(|x| x as u64).collect::<Vec<_>>();
 
         // compute plaintext matrix-vector multiplication
         let m_v = m.mat_vec_mul(&v.iter().map(|&x| F::from(x)).collect::<Vec<F>>());
@@ -52,5 +51,9 @@ mod test {
             .collect::<Vec<_>>();
 
         assert_eq!(m_v, *res);
+
+        let verifier_res = Verifier::<D, F>::verify(&m, &x, proof.clone());
+
+        assert!(verifier_res.is_ok());
     }
 }
