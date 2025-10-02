@@ -1,4 +1,5 @@
 use ark_ff::Field;
+use rayon::prelude::*;
 
 use crate::protocol::{
     sample_random_challenge,
@@ -60,8 +61,8 @@ pub fn prove<F: Field>(
         // we assume all MLEs have the same size
         let mle_half = mles[0].evals().len() / 2;
 
-        // TODO: this can be parallelized
         let evals_to_sum: Vec<Vec<F>> = (0..mle_half)
+            .into_par_iter()
             .map(|poly_term_i| {
                 let mut evals = Vec::<F>::with_capacity(max_degree + 1);
 
@@ -84,12 +85,10 @@ pub fn prove<F: Field>(
                 // terms for t=(2..=max_degree)
                 for _ in 2..=max_degree {
                     let mut poly_evals = vec![F::zero(); mles.len()];
-
                     mles.iter().enumerate().for_each(|(i, mle)| {
                         poly_evals[i] = t_i_evals[i] + mle.evals()[mle_half + poly_term_i]
                             - mle.evals()[poly_term_i];
                     });
-
                     evals.push(poly_evals.iter().product::<F>());
                     t_i_evals = poly_evals;
                 }
@@ -97,13 +96,15 @@ pub fn prove<F: Field>(
             })
             .collect();
 
-        let mut round_poly_evaluations = vec![F::zero(); max_degree + 1];
-
-        for evals in evals_to_sum.iter() {
-            for (i, eval) in evals.iter().enumerate() {
-                round_poly_evaluations[i] += *eval;
-            }
-        }
+        let round_poly_evaluations = evals_to_sum.into_par_iter().reduce(
+            || vec![F::zero(); max_degree + 1],
+            |mut acc, evals| {
+                for (i, &eval) in evals.iter().enumerate() {
+                    acc[i] += eval;
+                }
+                acc
+            },
+        );
 
         round_polys.push(UnivariatePolynomial::new_from_eval_points(
             round_poly_evaluations,
@@ -172,7 +173,7 @@ mod tests {
         let mle_1 = MultilinearPolynomial::new(evals_1, num_vars);
         let mle_2 = MultilinearPolynomial::new(evals_2, num_vars);
 
-        let (proof, challenges) = prove(claim, &mut vec![mle_1, mle_2], num_vars);
+        let (proof, _challenges) = prove(claim, &mut vec![mle_1, mle_2], num_vars);
 
         let v = proof.verify(num_vars, max_degree);
 
