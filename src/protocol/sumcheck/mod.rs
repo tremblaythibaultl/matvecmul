@@ -68,14 +68,14 @@ pub fn prove<F: Field>(
 
                 // term for t=0
                 let t_zero_evals = mles
-                    .iter()
+                    .par_iter()
                     .map(|poly| poly.evals()[poly_term_i])
                     .collect::<Vec<_>>();
                 evals.push(t_zero_evals.iter().product());
 
                 // term for t=1
                 let t_one_evals = mles
-                    .iter()
+                    .par_iter()
                     .map(|poly| poly.evals()[mle_half + poly_term_i])
                     .collect::<Vec<_>>();
                 evals.push(t_one_evals.iter().product());
@@ -84,11 +84,14 @@ pub fn prove<F: Field>(
 
                 // terms for t=(2..=max_degree)
                 for _ in 2..=max_degree {
-                    let mut poly_evals = vec![F::zero(); mles.len()];
-                    mles.iter().enumerate().for_each(|(i, mle)| {
-                        poly_evals[i] = t_i_evals[i] + mle.evals()[mle_half + poly_term_i]
-                            - mle.evals()[poly_term_i];
-                    });
+                    let poly_evals = mles
+                        .par_iter()
+                        .enumerate()
+                        .map(|(i, mle)| {
+                            t_i_evals[i] + mle.evals()[mle_half + poly_term_i]
+                                - mle.evals()[poly_term_i]
+                        })
+                        .collect::<Vec<F>>();
                     evals.push(poly_evals.iter().product::<F>());
                     t_i_evals = poly_evals;
                 }
@@ -114,7 +117,7 @@ pub fn prove<F: Field>(
         challenges.push(random_challenge); // TODO: Implement Fiat-Shamir logic
 
         // bind to verifier's challenge
-        mles.iter_mut()
+        mles.par_iter_mut()
             .for_each(|mle| mle.bind_to_challenge(&random_challenge));
     }
 
