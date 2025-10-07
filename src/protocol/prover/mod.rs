@@ -1,22 +1,26 @@
 use std::marker::PhantomData;
 
-use ark_ff::Field;
+use ark_ff::{FftField, Field};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
     protocol::{
-        Proof, sample_random_challenge,
+        Proof,
+        prover::whir::Whir,
+        sample_random_challenge,
         sumcheck::{multilinear::MultilinearPolynomial, prove},
         utils::{build_eq_poly, sum_over_boolean_hypercube},
     },
     rlwe::RLWE,
 };
 
-pub struct Prover<const D: usize, F: Field> {
+pub mod whir;
+
+pub struct Prover<const D: usize, F: FftField> {
     _pd: PhantomData<F>,
 }
 
-impl<const D: usize, F: Field> Prover<D, F> {
+impl<const D: usize, F: FftField> Prover<D, F> {
     pub fn prove(
         m: &Matrix<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
@@ -69,12 +73,17 @@ impl<const D: usize, F: Field> Prover<D, F> {
 
         let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &tau);
 
+        let z3_claim = sum_over_boolean_hypercube(&z3_mles);
+
         // included for test purposes only. The real protocol should commit to this using a PCS
         let r_mle = z3_mles[1].clone();
 
-        let z3_claim = sum_over_boolean_hypercube(&z3_mles);
-
         let (z3_sumcheck_proof, z3_challenges) = prove(z3_claim, &mut z3_mles, z3_num_vars);
+
+        // Whir proof for r_mle.
+        let mut rng = ark_std::test_rng();
+        let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
+        let r_mle_proof = whir.prove(&r_mle, &z3_challenges);
 
         // sanity check with z_2
 
@@ -107,6 +116,7 @@ impl<const D: usize, F: Field> Prover<D, F> {
             z1_sumcheck_proof,
             z3_sumcheck_proof,
             r_mle,
+            r_mle_proof,
         }
     }
 }

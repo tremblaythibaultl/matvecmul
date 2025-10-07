@@ -1,13 +1,8 @@
-use core::num;
-
 use ark_ff::Field;
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
-    protocol::{
-        sumcheck::{SumCheckProof, multilinear::MultilinearPolynomial},
-        utils::build_eq_poly,
-    },
+    arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing},
+    protocol::{prover::whir::WhirProof, sumcheck::{multilinear::MultilinearPolynomial, SumCheckProof}},
     rlwe::RLWE,
 };
 
@@ -23,6 +18,8 @@ pub struct Proof<const D: usize, F: Field> {
     pub z3_sumcheck_proof: SumCheckProof<F>,
     // Included for test purposes only. In the real protocol, this should be a commitment to `r_mle`
     pub r_mle: MultilinearPolynomial<F>,
+
+    pub r_mle_proof: WhirProof<F>,
 }
 
 pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {
