@@ -1,11 +1,13 @@
 use std::marker::PhantomData;
 
-use ark_ff::Field;
+use ark_ff::{FftField, Field};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
     protocol::{
-        Proof, sample_random_challenge,
+        Proof,
+        prover::whir::Whir,
+        sample_random_challenge,
         sumcheck::multilinear::MultilinearPolynomial,
         utils::{build_eq_poly, eq_eval},
     },
@@ -16,7 +18,7 @@ pub struct Verifier<const D: usize, F: Field> {
     _pd: PhantomData<F>,
 }
 
-impl<const D: usize, F: Field> Verifier<D, F> {
+impl<const D: usize, F: FftField> Verifier<D, F> {
     pub fn verify(
         m: &Matrix<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
@@ -96,6 +98,12 @@ impl<const D: usize, F: Field> Verifier<D, F> {
             .zip(eq_x_challenges_mle_evals.iter())
             .map(|(a, b)| *a * *b)
             .sum::<F>();
+
+        let mut rng = ark_std::test_rng();
+        let whir = Whir::<F>::new(z3_num_vars, &mut rng);
+        whir.verify(&proof.r_mle_proof, &z3_challenges)
+            .expect("r_mle proof does not verify");
+        assert_eq!(r_eval, proof.r_mle_proof.claim);
 
         // eq_tau eval
         let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
