@@ -3,12 +3,15 @@ use std::marker::PhantomData;
 use ark_ff::{FftField, Field};
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
+    arith::{
+        cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
+        polynomial_ring::PolynomialRing,
+    },
     protocol::{
         Proof,
         prover::whir::Whir,
-        sample_random_challenge,
         sumcheck::{multilinear::MultilinearPolynomial, prove},
+        transcript::PoseidonTranscript,
         utils::{build_eq_poly, sum_over_boolean_hypercube},
     },
     rlwe::RLWE,
@@ -20,11 +23,19 @@ pub struct Prover<const D: usize, F: FftField> {
     _pd: PhantomData<F>,
 }
 
-impl<const D: usize, F: FftField> Prover<D, F> {
+impl<const D: usize, F> Prover<D, F>
+where
+    F: FftField,
+    F::BasePrimeField: GetPoseidonConfig<F::BasePrimeField> + ark_crypto_primitives::sponge::Absorb,
+{
     pub fn prove(
         m: &Matrix<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     ) -> Proof<D, F> {
+        let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
+        let mut transcript: PoseidonTranscript<F::BasePrimeField> =
+            PoseidonTranscript::new(poseidon_config);
+
         let (m_rq, m_polyring, x_polyring, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
 
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
@@ -44,13 +55,44 @@ impl<const D: usize, F: FftField> Prover<D, F> {
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
 
+        for elem in m.data.iter() {
+            transcript.absorb(elem);
+        }
+
+        for ct in x.iter() {
+            for ring_elem in ct.get_ring_elements().iter() {
+                for coeff in ring_elem.coeffs.iter() {
+                    transcript.absorb(coeff);
+                }
+            }
+        }
+
+        for ct in y.iter() {
+            for ring_elem in ct.get_ring_elements().iter() {
+                for coeff in ring_elem.coeffs.iter() {
+                    transcript.absorb(coeff);
+                }
+            }
+        }
+
         println!("y: {:#?}", y);
         println!("vec_remainders: {:#?}", vec_remainders);
         println!("vec_quotients: {:#?}", vec_quotients);
 
-        // TODO: implement fiat shamir
-        let alpha = sample_random_challenge::<F>(true);
-        let tau = sample_random_challenge::<F>(true);
+        // TODO: absorb the commitment to r too
+        let alpha =
+            F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
+        let mut vec_tau = Vec::<F>::with_capacity(m_rq.height().ilog2() as usize);
+
+        for i in 0..m_rq.height().ilog2() as usize {
+            vec_tau.push(
+                F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
+                    .unwrap(),
+            );
+        }
+
+        println!("alpha: {:?}", alpha);
+        println!("tau: {:?}", vec_tau);
 
         let powers_of_alpha: Vec<F> = (0..D)
             .scan(F::one(), |state, _| {
@@ -60,7 +102,8 @@ impl<const D: usize, F: FftField> Prover<D, F> {
             })
             .collect();
 
-        let mut z1_mles = compute_z1_mles(&m_rq, &m_mle, x, z1_num_vars, &powers_of_alpha, &tau);
+        let mut z1_mles =
+            compute_z1_mles(&m_rq, &m_mle, x, z1_num_vars, &powers_of_alpha, &vec_tau);
 
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
 
@@ -71,7 +114,7 @@ impl<const D: usize, F: FftField> Prover<D, F> {
         // z_3
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
-        let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &tau);
+        let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &vec_tau);
 
         let z3_claim = sum_over_boolean_hypercube(&z3_mles);
 
@@ -84,6 +127,8 @@ impl<const D: usize, F: FftField> Prover<D, F> {
         let mut rng = ark_std::test_rng();
         let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
         let r_mle_proof = whir.prove(&r_mle, &z3_challenges);
+
+        println!("r_mle_proof_size: {}", r_mle_proof.proof.len());
 
         // sanity check with z_2
 
@@ -102,7 +147,6 @@ impl<const D: usize, F: FftField> Prover<D, F> {
 
         let z2_num_vars = m_rq.height().ilog2() as usize;
         let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
-        let vec_tau = vec![tau; z2_num_vars];
         build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
         let z_2 = sum_over_boolean_hypercube(&[
@@ -164,7 +208,7 @@ fn compute_z1_mles<const D: usize, F: Field>(
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     num_vars: usize,
     powers_of_alpha: &Vec<F>,
-    tau: &F,
+    vec_tau: &Vec<F>,
 ) -> Vec<MultilinearPolynomial<F>> {
     // this might not be very efficient memory-wise, but we need it to keep genericity in the sumcheck prover.
     // TODO: send minimal information to the sumcheck prover and a function describing how to pad the MLEs
@@ -204,7 +248,6 @@ fn compute_z1_mles<const D: usize, F: Field>(
     // compute eq polynomial
     let m = m_rq.height().ilog2() as usize;
     let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
-    let vec_tau = vec![*tau; m];
     build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
     let padded_eq_tau_mle_evals = eq_tau_mle_evals
@@ -227,7 +270,7 @@ fn compute_z3_mles<const D: usize, F: Field>(
     vec_quotients: &Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>,
     powers_of_alpha: &Vec<F>,
     z3_num_vars: usize,
-    tau: &F,
+    vec_tau: &Vec<F>,
 ) -> Vec<MultilinearPolynomial<F>> {
     // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
 
@@ -253,7 +296,6 @@ fn compute_z3_mles<const D: usize, F: Field>(
     // compute eq polynomial
     let m = (r_mle_evals_len / D).ilog2() as usize;
     let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
-    let vec_tau = vec![*tau; m];
     build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
     let padded_eq_tau_mle_evals = eq_tau_mle_evals

@@ -3,12 +3,16 @@ use std::marker::PhantomData;
 use ark_ff::{FftField, Field};
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
+    arith::{
+        cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
+        polynomial_ring::PolynomialRing,
+    },
     protocol::{
         Proof,
         prover::whir::Whir,
         sample_random_challenge,
         sumcheck::multilinear::MultilinearPolynomial,
+        transcript::PoseidonTranscript,
         utils::{build_eq_poly, eq_eval},
     },
     rlwe::RLWE,
@@ -18,23 +22,59 @@ pub struct Verifier<const D: usize, F: Field> {
     _pd: PhantomData<F>,
 }
 
-impl<const D: usize, F: FftField> Verifier<D, F> {
+impl<const D: usize, F> Verifier<D, F>
+where
+    F: FftField,
+    F::BasePrimeField: GetPoseidonConfig<F::BasePrimeField> + ark_crypto_primitives::sponge::Absorb,
+{
     pub fn verify(
         m: &Matrix<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
+        let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
+        let mut transcript: PoseidonTranscript<F::BasePrimeField> =
+            PoseidonTranscript::new(poseidon_config);
+
         let (m_rq, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
 
+        for elem in m.data.iter() {
+            transcript.absorb(elem);
+        }
+
+        for ct in x.iter() {
+            for ring_elem in ct.get_ring_elements().iter() {
+                for coeff in ring_elem.coeffs.iter() {
+                    transcript.absorb(coeff);
+                }
+            }
+        }
+
+        for ct in proof.y.iter() {
+            for ring_elem in ct.get_ring_elements().iter() {
+                for coeff in ring_elem.coeffs.iter() {
+                    transcript.absorb(coeff);
+                }
+            }
+        }
+
         // TODO: implement fiat shamir
-        let alpha = sample_random_challenge::<F>(true);
-        let tau = sample_random_challenge::<F>(true);
+        let alpha =
+            F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
 
         let m = m_rq.height().ilog2() as usize;
-        let vec_tau = vec![tau; m];
+        let mut vec_tau = Vec::<F>::with_capacity(m);
+        for i in 0..m {
+            vec_tau.push(
+                F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
+                    .unwrap(),
+            );
+        }
+        println!("alpha: {:?}", alpha);
+        println!("tau: {:?}", vec_tau);
 
         // compute unpadded MLEs
-        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &tau);
+        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &vec_tau);
 
         let powers_of_alpha = unpadded_z1_mles[2].evals();
 
@@ -190,7 +230,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     num_vars: usize,
     alpha: &F,
-    tau: &F,
+    vec_tau: &Vec<F>,
 ) -> Vec<MultilinearPolynomial<F>> {
     let powers_of_alpha: Vec<F> = (0..D)
         .scan(F::one(), |state, _| {
@@ -222,7 +262,6 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
 
     let m = m_rq.height().ilog2() as usize;
     let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
-    let vec_tau = vec![*tau; m];
     build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
     let unpadded_eq_tau_mle = MultilinearPolynomial::new(eq_tau_mle_evals, m);
 

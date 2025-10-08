@@ -9,7 +9,7 @@ use crate::{
 /// Row-major matrix over a ring R
 #[derive(Debug)]
 pub struct Matrix<R: Ring> {
-    data: Vec<R>,
+    pub data: Vec<R>,
     width: usize,
 }
 
