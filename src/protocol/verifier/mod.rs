@@ -3,19 +3,9 @@ use std::marker::PhantomData;
 use ark_ff::{FftField, Field};
 
 use crate::{
-    arith::{
-        cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
-        polynomial_ring::PolynomialRing,
-    },
-    protocol::{
-        Proof,
-        prover::whir::Whir,
-        sample_random_challenge,
-        sumcheck::multilinear::MultilinearPolynomial,
-        transcript::PoseidonTranscript,
-        utils::{build_eq_poly, eq_eval},
-    },
-    rlwe::RLWE,
+    arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix}, protocol::{
+        pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial, transcript::PoseidonTranscript, utils::build_eq_poly, Proof
+    }, rand::get_rng, rlwe::RLWE
 };
 
 pub struct Verifier<const D: usize, F: Field> {
@@ -64,7 +54,7 @@ where
 
         let m = m_rq.height().ilog2() as usize;
         let mut vec_tau = Vec::<F>::with_capacity(m);
-        for i in 0..m {
+        for _ in 0..m {
             vec_tau.push(
                 F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
                     .unwrap(),
@@ -139,7 +129,7 @@ where
             .map(|(a, b)| *a * *b)
             .sum::<F>();
 
-        let mut rng = ark_std::test_rng();
+        let mut rng = get_rng();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
         whir.verify(&proof.r_mle_proof, &z3_challenges)
             .expect("r_mle proof does not verify");
@@ -202,7 +192,7 @@ where
 
 pub fn preprocess<const D: usize, F: Field>(
     m: &Matrix<F::BasePrimeField>,
-    x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+    _x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
 ) -> (
     Matrix<CyclotomicRing<D, F::BasePrimeField>>,
     MultilinearPolynomial<F>,
@@ -228,7 +218,7 @@ pub fn preprocess<const D: usize, F: Field>(
 pub fn compute_z1_mles<const D: usize, F: Field>(
     m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-    num_vars: usize,
+    _num_vars: usize,
     alpha: &F,
     vec_tau: &Vec<F>,
 ) -> Vec<MultilinearPolynomial<F>> {

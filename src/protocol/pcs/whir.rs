@@ -4,7 +4,7 @@ use ark_crypto_primitives::{
     crh::{CRHScheme, TwoToOneCRHScheme},
     merkle_tree::Config,
 };
-use ark_ff::{AdditiveGroup, FftField, Field};
+use ark_ff::{FftField, Field};
 use ark_serialize::CanonicalSerialize;
 use ark_std::rand::RngCore;
 use spongefish::{DomainSeparator, ProverState, VerifierState};
@@ -59,8 +59,7 @@ where
     ProverState: DigestToUnitSerialize<MerkleConfig>,
     for<'a> VerifierState<'a>: DigestToUnitDeserialize<MerkleConfig>,
 {
-    // TODO: Parameters need to be revised for performance/security.
-    pub const SECURITY_LEVEL: usize = 80;
+    pub const SECURITY_LEVEL: usize = 128;
     pub const RATE: usize = 1;
     pub const FIRST_ROUND_FOLDING_FACTOR: usize = 4;
     pub const FOLDING_FACTOR: usize = 4;
@@ -107,21 +106,13 @@ where
     }
 
     // Proves that `poly` evaluates to a particular value at `point`.
-    pub fn prove(&self, poly: &MultilinearPolynomial<F>, point: &[F]) -> WhirProof<F> {
+    pub fn prove(
+        &self,
+        poly: &MultilinearPolynomial<F::BasePrimeField>,
+        point: &[F],
+    ) -> WhirProof<F> {
         let mut prover_state = self.domainsep.to_prover_state();
-        // We assume that the polynomial is defined over the base prime field (e.g. for r_mle in compute_z3_mles()).
-        // Otherwise, we could define a MultilinearPolynomial<F::BasePrimeField> type for this purpose and refactor code a bit.
-        let base_prime_evals: Vec<F::BasePrimeField> = poly
-            .evals()
-            .iter()
-            .map(|e| {
-                let mut components = e.to_base_prime_field_elements();
-                let first = components.next().unwrap();
-                assert_eq!(components.next(), Some(F::BasePrimeField::ZERO)); // ensure it's indeed in the base field
-                first
-            })
-            .collect();
-        let evals = EvaluationsList::new(base_prime_evals);
+        let evals = EvaluationsList::new(poly.evals().to_vec());
         let coeffs = evals.to_coeffs();
         let committer = CommitmentWriter::new(self.params.clone());
         let witness = committer.commit(&mut prover_state, &coeffs).unwrap();

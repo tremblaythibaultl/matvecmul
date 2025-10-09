@@ -6,18 +6,15 @@ use crate::{
     arith::{
         cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
         polynomial_ring::PolynomialRing,
-    },
-    protocol::{
-        Proof,
-        prover::whir::Whir,
-        sumcheck::{multilinear::MultilinearPolynomial, prove},
-        transcript::PoseidonTranscript,
-        utils::{build_eq_poly, sum_over_boolean_hypercube},
-    },
-    rlwe::RLWE,
+    }, protocol::{
+        pcs::whir::Whir, sumcheck::{multilinear::MultilinearPolynomial, prove}, transcript::PoseidonTranscript, utils::{build_eq_poly, sum_over_boolean_hypercube}, Proof
+    }, rand::get_rng, rlwe::RLWE
 };
 
-pub mod whir;
+pub struct Z3Mles<F: Field> {
+    pub mles_over_f: Vec<MultilinearPolynomial<F>>,
+    pub r_mle_over_base_prime_f: MultilinearPolynomial<F::BasePrimeField>,
+}
 
 pub struct Prover<const D: usize, F: FftField> {
     _pd: PhantomData<F>,
@@ -84,7 +81,7 @@ where
             F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
         let mut vec_tau = Vec::<F>::with_capacity(m_rq.height().ilog2() as usize);
 
-        for i in 0..m_rq.height().ilog2() as usize {
+        for _ in 0..m_rq.height().ilog2() as usize {
             vec_tau.push(
                 F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
                     .unwrap(),
@@ -107,7 +104,7 @@ where
 
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
 
-        let (z1_sumcheck_proof, z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
+        let (z1_sumcheck_proof, _z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
 
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
@@ -116,17 +113,18 @@ where
 
         let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &vec_tau);
 
-        let z3_claim = sum_over_boolean_hypercube(&z3_mles);
+        let z3_claim = sum_over_boolean_hypercube(&z3_mles.mles_over_f);
 
         // included for test purposes only. The real protocol should commit to this using a PCS
-        let r_mle = z3_mles[1].clone();
+        let r_mle = z3_mles.mles_over_f[1].clone();
 
-        let (z3_sumcheck_proof, z3_challenges) = prove(z3_claim, &mut z3_mles, z3_num_vars);
+        let (z3_sumcheck_proof, z3_challenges) =
+            prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars);
 
         // Whir proof for r_mle.
-        let mut rng = ark_std::test_rng();
+        let mut rng = get_rng();
         let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
-        let r_mle_proof = whir.prove(&r_mle, &z3_challenges);
+        let r_mle_proof = whir.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
 
         println!("r_mle_proof_size: {}", r_mle_proof.proof.len());
 
@@ -149,7 +147,7 @@ where
         let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
         build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
-        let z_2 = sum_over_boolean_hypercube(&[
+        let _z_2 = sum_over_boolean_hypercube(&[
             MultilinearPolynomial::new(y_alpha_mle_evals, z2_num_vars),
             MultilinearPolynomial::new(eq_tau_mle_evals, z2_num_vars),
         ]);
@@ -271,21 +269,22 @@ fn compute_z3_mles<const D: usize, F: Field>(
     powers_of_alpha: &Vec<F>,
     z3_num_vars: usize,
     vec_tau: &Vec<F>,
-) -> Vec<MultilinearPolynomial<F>> {
+) -> Z3Mles<F> {
     // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
 
-    let r_mle_evals = vec_quotients
+    let r_mle_base_prime_f_evals = vec_quotients
         .iter()
-        .map(|quotients| {
-            quotients[1].coeffs[0..D] // only consider the lower order coefficients
-                .iter()
-                .map(|c| F::from_base_prime_field(*c))
-                .collect::<Vec<F>>()
-        })
-        .flatten()
+        .flat_map(|quotients| &quotients[1].coeffs[0..D]) // only consider the lower order coefficients
+        .copied()
+        .collect::<Vec<F::BasePrimeField>>();
+
+    let r_mle_evals = r_mle_base_prime_f_evals
+        .iter()
+        .map(|e| F::from_base_prime_field(*e))
         .collect::<Vec<F>>();
     let r_mle_evals_len = r_mle_evals.len();
 
+    let r_mle_over_base_prime_f = MultilinearPolynomial::new(r_mle_base_prime_f_evals, z3_num_vars);
     let r_mle = MultilinearPolynomial::new(r_mle_evals, z3_num_vars);
 
     let padded_alpha_mle_evals = (0..r_mle_evals_len / D)
@@ -306,5 +305,8 @@ fn compute_z3_mles<const D: usize, F: Field>(
 
     let eq_tau_mle = MultilinearPolynomial::new(padded_eq_tau_mle_evals, z3_num_vars);
 
-    vec![eq_tau_mle, r_mle, alpha_mle]
+    Z3Mles {
+        mles_over_f: vec![eq_tau_mle, r_mle, alpha_mle],
+        r_mle_over_base_prime_f,
+    }
 }

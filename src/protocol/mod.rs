@@ -2,15 +2,17 @@ use ark_ff::Field;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing},
-    protocol::{prover::whir::WhirProof, sumcheck::{multilinear::MultilinearPolynomial, SumCheckProof}},
+    protocol::{pcs::whir::WhirProof, sumcheck::{multilinear::MultilinearPolynomial, SumCheckProof}},
     rlwe::RLWE,
 };
 
+pub mod pcs;
 pub mod prover;
 pub mod sumcheck;
 pub mod transcript;
 mod utils;
 pub mod verifier;
+
 #[derive(Clone)]
 pub struct Proof<const D: usize, F: Field> {
     pub y: Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
