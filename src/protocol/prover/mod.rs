@@ -38,6 +38,7 @@ where
         Matrix<CyclotomicRing<D, F::BasePrimeField>>,
         Matrix<PolynomialRing<D, F::BasePrimeField>>,
         MultilinearPolynomial<F>,
+        MultilinearPolynomial<F::BasePrimeField>,
         usize,
         PoseidonTranscript<F::BasePrimeField>,
     ) {
@@ -52,10 +53,11 @@ where
         // this also clones the coefficients. should look into optimizing.
         let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
 
+        let m_mle_over_base_f = MultilinearPolynomial::new(m_mle_evals.clone(), num_vars);
         let m_mle = MultilinearPolynomial::new(
             m_mle_evals
-                .into_iter()
-                .map(|e| F::from_base_prime_field(e))
+                .iter()
+                .map(|e| F::from_base_prime_field(*e))
                 .collect(),
             num_vars,
         );
@@ -68,13 +70,21 @@ where
             transcript.absorb(elem);
         }
 
-        (m_rq, m_polyring, m_mle, num_vars, transcript)
+        (
+            m_rq,
+            m_polyring,
+            m_mle,
+            m_mle_over_base_f,
+            num_vars,
+            transcript,
+        )
     }
 
     pub fn prove(
         m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
         m_polyring: &Matrix<PolynomialRing<D, F::BasePrimeField>>,
         m_mle: &MultilinearPolynomial<F>,
+        m_mle_over_base_f: &MultilinearPolynomial<F::BasePrimeField>,
         z1_num_vars: usize,
         transcript: &mut PoseidonTranscript<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
@@ -141,7 +151,7 @@ where
 
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
 
-        let (z1_sumcheck_proof, _z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
+        let (z1_sumcheck_proof, z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
 
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
@@ -152,16 +162,16 @@ where
 
         let z3_claim = sum_over_boolean_hypercube(&z3_mles.mles_over_f);
 
-        // included for test purposes only. The real protocol should commit to this using a PCS
-        let r_mle = z3_mles.mles_over_f[1].clone();
-
         let (z3_sumcheck_proof, z3_challenges) =
             prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars);
 
-        // Whir proof for r_mle.
+        // Whir proofs for r_mle and m_mle.
         let mut rng = get_rng();
-        let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
-        let r_mle_proof = whir.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+        let whir_r_mle = Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
+        let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+
+        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
 
         // sanity check with z_2
 
@@ -192,8 +202,8 @@ where
             r: vec_quotients,
             z1_sumcheck_proof,
             z3_sumcheck_proof,
-            r_mle,
             r_mle_proof,
+            m_mle_proof,
         }
     }
 }

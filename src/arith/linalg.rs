@@ -2,7 +2,6 @@ use ark_ff::{Field, PrimeField};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing, ring::Ring},
-    protocol::sumcheck::multilinear::MultilinearPolynomial,
     rlwe::RLWE,
 };
 
@@ -114,6 +113,10 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
         }
     }
 
+    pub fn mle_evals_num_vars(&self) -> usize {
+        (self.data.len() * D).next_power_of_two().ilog2() as usize
+    }
+
     pub fn to_mle_evals(&self) -> (Vec<F>, usize) {
         let evals = self
             .data
@@ -122,7 +125,7 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
             .flatten()
             .collect::<Vec<_>>();
 
-        let num_variables = (self.data.len() * D).next_power_of_two().ilog2() as usize;
+        let num_variables = self.mle_evals_num_vars();
 
         (evals, num_variables)
     }

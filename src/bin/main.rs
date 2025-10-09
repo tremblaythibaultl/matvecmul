@@ -16,7 +16,7 @@ mod test {
 
     #[test]
     fn test_functionality() {
-        pub const D: usize = 1024;
+        pub const D: usize = 4;
         pub const INTEGER_WIDTH: usize = 2 * D;
         pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
@@ -49,11 +49,18 @@ mod test {
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
 
-        let (m_rq, m_polyring, m_mle, z1_num_vars, mut transcript) =
+        let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
             Prover::<D, F2>::preprocess(&m);
 
-        let proof =
-            Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x);
+        let proof = Prover::<D, F2>::prove(
+            &m_rq,
+            &m_polyring,
+            &m_mle,
+            &m_mle_over_base_f,
+            z1_num_vars,
+            &mut transcript,
+            &x,
+        );
 
         let res = &proof
             .y
@@ -63,16 +70,10 @@ mod test {
 
         assert_eq!(m_v, *res);
 
-        let (m_rq, m_mle, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
+        let (m_rq, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
 
-        let verifier_res = Verifier::<D, F2>::verify(
-            &m_rq,
-            &m_mle,
-            z1_num_vars,
-            &mut transcript,
-            &x,
-            proof.clone(),
-        );
+        let verifier_res =
+            Verifier::<D, F2>::verify(&m_rq, z1_num_vars, &mut transcript, &x, proof.clone());
 
         assert!(verifier_res.is_ok());
     }

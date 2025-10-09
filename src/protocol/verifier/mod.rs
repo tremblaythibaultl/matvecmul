@@ -26,7 +26,6 @@ where
         m: &Matrix<F::BasePrimeField>,
     ) -> (
         Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-        MultilinearPolynomial<F>,
         usize,
         PoseidonTranscript<F::BasePrimeField>,
     ) {
@@ -52,12 +51,11 @@ where
             transcript.absorb(elem);
         }
 
-        (m_rq, m_mle, num_vars, transcript)
+        (m_rq, num_vars, transcript)
     }
 
     pub fn verify(
         m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-        m_mle: &MultilinearPolynomial<F>,
         z1_num_vars: usize,
         transcript: &mut PoseidonTranscript<F::BasePrimeField>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
@@ -143,24 +141,15 @@ where
         let after_ell_eval = start.elapsed();
         println!("Evaluating ell took: {:?}", after_ell_eval);
 
-        // This does NOT need to be computed by the verifier
-        // The value should come from the PCS.
-        // Included for test purposes
-        let start = std::time::Instant::now();
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z1_num_vars);
-        build_eq_poly(&z1_challenges, &mut eq_x_challenges_mle_evals);
-        let m_eval = m_mle
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
+        let mut rng = get_rng();
 
-        let after_m_eval = start.elapsed();
-        println!(
-            "Evaluating m took: {:?} ~~~ This one should be deducted from total time",
-            after_m_eval
-        );
+        let whir = Whir::<F>::new(z1_num_vars, &mut rng);
+        let start = std::time::Instant::now();
+        whir.verify(&proof.m_mle_proof, &z1_challenges)
+            .expect("m_mle proof does not verify");
+        let after_whir_verify = start.elapsed();
+        println!("WHIR Verifying m took: {:?}", after_whir_verify);
+        let m_eval = proof.m_mle_proof.claim;
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
@@ -187,28 +176,8 @@ where
         let after_ell_eval_z3 = start.elapsed();
         println!("Evaluating ell for Z3 took: {:?}", after_ell_eval_z3);
 
-        // This does NOT need to be computed by the verifier
-        // The value should come from the PCS.
-        // Included for test purposes
-        // let start = std::time::Instant::now();
-        // let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z3_num_vars);
-        // build_eq_poly(&z3_challenges, &mut eq_x_challenges_mle_evals);
-        // let r_eval = proof
-        //     .r_mle
-        //     .evals()
-        //     .iter()
-        //     .zip(eq_x_challenges_mle_evals.iter())
-        //     .map(|(a, b)| *a * *b)
-        //     .sum::<F>();
-        // let after_r_eval = start.elapsed();
-        // println!(
-        //     "Evaluating r took: {:?} ~~~ This one should also be removed from total time",
-        //     after_r_eval
-        // );
-
         let r_eval = proof.r_mle_proof.claim;
 
-        let mut rng = get_rng();
         let start = std::time::Instant::now();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
         let after_whir_setup = start.elapsed();
