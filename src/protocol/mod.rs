@@ -8,6 +8,7 @@ use crate::{
 
 pub mod prover;
 pub mod sumcheck;
+pub mod transcript;
 mod utils;
 pub mod verifier;
 #[derive(Clone)]

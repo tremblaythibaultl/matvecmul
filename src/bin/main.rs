@@ -5,7 +5,9 @@ fn main() {
 #[cfg(test)]
 mod test {
     use matvec::{
-        arith::{cyclotomic_ring::CyclotomicRing, field::Field64, linalg::Matrix},
+        arith::{
+            cyclotomic_ring::CyclotomicRing, field::Field64, field::Field64_2, linalg::Matrix,
+        },
         protocol::prover::Prover,
         protocol::verifier::Verifier,
         rlwe::{decrypt, encrypt},
@@ -17,6 +19,7 @@ mod test {
         pub const INTEGER_WIDTH: usize = 2 * D;
         pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
+        pub type F2 = Field64_2;
 
         // generate matrix data
         let data = (1..=INTEGER_HEIGHT * INTEGER_WIDTH)
@@ -42,7 +45,7 @@ mod test {
             .collect::<Vec<_>>();
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
-        let proof = Prover::<D, F>::prove(&m, &x);
+        let proof = Prover::<D, F2>::prove(&m, &x);
 
         let res = &proof
             .y
@@ -52,7 +55,7 @@ mod test {
 
         assert_eq!(m_v, *res);
 
-        let verifier_res = Verifier::<D, F>::verify(&m, &x, proof.clone());
+        let verifier_res = Verifier::<D, F2>::verify(&m, &x, proof.clone());
 
         assert!(verifier_res.is_ok());
     }

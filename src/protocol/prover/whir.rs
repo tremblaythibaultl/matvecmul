@@ -4,7 +4,7 @@ use ark_crypto_primitives::{
     crh::{CRHScheme, TwoToOneCRHScheme},
     merkle_tree::Config,
 };
-use ark_ff::{FftField, Field};
+use ark_ff::{AdditiveGroup, FftField, Field};
 use ark_serialize::CanonicalSerialize;
 use ark_std::rand::RngCore;
 use spongefish::{DomainSeparator, ProverState, VerifierState};
@@ -117,7 +117,7 @@ where
             .map(|e| {
                 let mut components = e.to_base_prime_field_elements();
                 let first = components.next().unwrap();
-                assert_eq!(components.next(), None);
+                assert_eq!(components.next(), Some(F::BasePrimeField::ZERO)); // ensure it's indeed in the base field
                 first
             })
             .collect();
