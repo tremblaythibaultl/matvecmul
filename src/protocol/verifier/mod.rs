@@ -21,21 +21,47 @@ where
     F: FftField,
     F::BasePrimeField: GetPoseidonConfig<F::BasePrimeField> + ark_crypto_primitives::sponge::Absorb,
 {
-    pub fn verify(
+    pub fn preprocess(
         m: &Matrix<F::BasePrimeField>,
-        x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-        proof: Proof<D, F>,
-    ) -> Result<Vec<F>, ()> {
+    ) -> (
+        Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+        MultilinearPolynomial<F>,
+        usize,
+        PoseidonTranscript<F::BasePrimeField>,
+    ) {
+        // interpret each row as a ring elements and rearrange columns
+        let m_rq = m.lift_to_rq::<D>();
+
+        // this clones the coefficients. should look into optimizing.
+        let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
+
+        let m_mle = MultilinearPolynomial::new(
+            m_mle_evals
+                .into_iter()
+                .map(|e| F::from_base_prime_field(e))
+                .collect(),
+            num_vars,
+        );
+
         let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
         let mut transcript: PoseidonTranscript<F::BasePrimeField> =
             PoseidonTranscript::new(poseidon_config);
-
-        let (m_rq, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
 
         for elem in m.data.iter() {
             transcript.absorb(elem);
         }
 
+        (m_rq, m_mle, num_vars, transcript)
+    }
+
+    pub fn verify(
+        m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+        m_mle: &MultilinearPolynomial<F>,
+        z1_num_vars: usize,
+        transcript: &mut PoseidonTranscript<F::BasePrimeField>,
+        x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+        proof: Proof<D, F>,
+    ) -> Result<Vec<F>, ()> {
         // only consider mask for now
         for ct in x.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
@@ -187,31 +213,6 @@ where
             alpha_factor * z3_original_claim,
         ])
     }
-}
-
-pub fn preprocess<const D: usize, F: Field>(
-    m: &Matrix<F::BasePrimeField>,
-    _x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-) -> (
-    Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-    MultilinearPolynomial<F>,
-    usize,
-) {
-    // interpret each row as a ring elements and rearrange columns
-    let m_rq = m.lift_to_rq::<D>();
-
-    // this clones the coefficients. should look into optimizing.
-    let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
-
-    let m_mle = MultilinearPolynomial::new(
-        m_mle_evals
-            .into_iter()
-            .map(|e| F::from_base_prime_field(e))
-            .collect(),
-        num_vars,
-    );
-
-    (m_rq, m_mle, num_vars)
 }
 
 pub fn compute_z1_mles<const D: usize, F: Field>(

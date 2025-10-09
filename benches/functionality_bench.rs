@@ -138,8 +138,19 @@ fn bench_verifier_computation(c: &mut Criterion) {
     let proof =
         Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x);
 
+    let (m_rq, m_mle, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
+
     c.bench_function("verifier_computation", |b| {
-        b.iter(|| Verifier::<D, F2>::verify(&m, &x, proof.clone()));
+        b.iter(|| {
+            Verifier::<D, F2>::verify(
+                &m_rq,
+                &m_mle,
+                z1_num_vars,
+                &mut transcript,
+                &x,
+                proof.clone(),
+            )
+        });
     });
 }
 

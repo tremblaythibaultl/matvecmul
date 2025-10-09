@@ -61,7 +61,16 @@ mod test {
 
         assert_eq!(m_v, *res);
 
-        let verifier_res = Verifier::<D, F2>::verify(&m, &x, proof.clone());
+        let (m_rq, m_mle, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
+
+        let verifier_res = Verifier::<D, F2>::verify(
+            &m_rq,
+            &m_mle,
+            z1_num_vars,
+            &mut transcript,
+            &x,
+            proof.clone(),
+        );
 
         assert!(verifier_res.is_ok());
     }

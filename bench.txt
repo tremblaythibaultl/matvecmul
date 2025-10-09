@@ -1,0 +1,112 @@
+warning: unused imports: `Field`, `One`, and `Zero`
+ --> src/arith/field.rs:2:14
+  |
+2 | use ark_ff::{Field, Fp2, Fp2Config, Fp64, MontBackend, MontConfig, MontFp, One, PrimeField, Zero};
+  |              ^^^^^                                                         ^^^              ^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `protocol::sumcheck::multilinear::MultilinearPolynomial`
+ --> src/arith/linalg.rs:5:5
+  |
+5 |     protocol::sumcheck::multilinear::MultilinearPolynomial,
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `PrimeField`
+ --> src/arith/ring.rs:1:21
+  |
+1 | use ark_ff::{Field, PrimeField};
+  |                     ^^^^^^^^^^
+
+warning: constant `lg_p` should have an upper case name
+ --> src/rlwe/mod.rs:9:7
+  |
+9 | const lg_p: usize = 4;
+  |       ^^^^
+  |
+  = note: `#[warn(non_upper_case_globals)]` on by default
+help: convert the identifier to upper case
+  |
+9 - const lg_p: usize = 4;
+9 + const LG_P: usize = 4;
+  |
+
+warning: `matvec` (lib) generated 4 warnings (run `cargo fix --lib -p matvec` to apply 4 suggestions)
+    Finished `bench` profile [optimized] target(s) in 0.13s
+     Running benches/functionality_bench.rs (target/release/deps/functionality_bench-740b9ef08a392db1)
+Benchmarking matrix_creation
+Benchmarking matrix_creation: Warming up for 3.0000 s
+Benchmarking matrix_creation: Collecting 10 samples in estimated 5.2636 s (990 iterations)
+Benchmarking matrix_creation: Analyzing
+matrix_creation         time:   [5.3691 ms 5.4562 ms 5.5807 ms]
+                        change: [−2.0560% +0.7016% +3.1585%] (p = 0.64 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+
+Benchmarking plaintext_matvec
+Benchmarking plaintext_matvec: Warming up for 3.0000 s
+Benchmarking plaintext_matvec: Collecting 10 samples in estimated 5.1990 s (935 iterations)
+Benchmarking plaintext_matvec: Analyzing
+plaintext_matvec        time:   [5.5416 ms 5.5779 ms 5.6476 ms]
+                        change: [−11.057% −6.5787% −3.3794%] (p = 0.01 < 0.05)
+                        Performance has improved.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+
+Benchmarking vector_encryption
+Benchmarking vector_encryption: Warming up for 3.0000 s
+Benchmarking vector_encryption: Collecting 10 samples in estimated 5.0028 s (82k iterations)
+Benchmarking vector_encryption: Analyzing
+vector_encryption       time:   [60.702 µs 61.335 µs 62.583 µs]
+                        change: [−3.6110% −1.5277% +0.2503%] (p = 0.14 > 0.05)
+                        No change in performance detected.
+Found 2 outliers among 10 measurements (20.00%)
+  1 (10.00%) high mild
+  1 (10.00%) high severe
+
+Benchmarking prover_computation
+Benchmarking prover_computation: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 174.1s.
+Benchmarking prover_computation: Collecting 10 samples in estimated 174.09 s (10 iterations)
+Benchmarking prover_computation: Analyzing
+prover_computation      time:   [17.347 s 17.387 s 17.432 s]
+                        change: [−2.9639% −2.3065% −1.5803%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking result_decryption
+Benchmarking result_decryption: Warming up for 3.0000 s
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 7.7s or enable flat sampling.
+Benchmarking result_decryption: Collecting 10 samples in estimated 7.7481 s (55 iterations)
+Benchmarking result_decryption: Analyzing
+result_decryption       time:   [139.04 ms 139.44 ms 139.73 ms]
+                        change: [−2.7923% −2.2566% −1.6528%] (p = 0.00 < 0.05)
+                        Performance has improved.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high mild
+
+Benchmarking verifier_computation
+Benchmarking verifier_computation: Warming up for 3.0000 s
+z1 Verification successful
+z3 Verification successful
+
+Warning: Unable to complete 10 samples in 5.0s. You may wish to increase target time to 42.5s.
+Benchmarking verifier_computation: Collecting 10 samples in estimated 42.515 s (10 iterations)
+Benchmarking verifier_computation: Analyzing
+verifier_computation    time:   [4.0908 s 4.1129 s 4.1364 s]
+                        change: [−66.816% −66.470% −66.121%] (p = 0.00 < 0.05)
+                        Performance has improved.
+
+Benchmarking whir_prover
+Benchmarking whir_prover: Warming up for 3.0000 s
+Benchmarking whir_prover: Collecting 10 samples in estimated 6.8517 s (20 iterations)
+Benchmarking whir_prover: Analyzing
+whir_prover             time:   [320.74 ms 324.25 ms 328.88 ms]
+                        change: [−1.0762% +0.4673% +2.0774%] (p = 0.61 > 0.05)
+                        No change in performance detected.
+Found 1 outliers among 10 measurements (10.00%)
+  1 (10.00%) high severe
+
