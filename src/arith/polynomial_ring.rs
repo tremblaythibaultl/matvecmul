@@ -60,7 +60,7 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
 
     type BaseField = F;
 
-    fn add(&self, other: &Self) -> Self {
+    fn add(&self, _other: &Self) -> Self {
         todo!()
     }
 
@@ -71,11 +71,11 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
             .for_each(|(a, b)| *a += *b);
     }
 
-    fn sub(&self, other: &Self) -> Self {
+    fn sub(&self, _other: &Self) -> Self {
         todo!()
     }
 
-    fn sub_assign(&mut self, other: &Self) {
+    fn sub_assign(&mut self, _other: &Self) {
         todo!()
     }
 
@@ -118,7 +118,7 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
         todo!()
     }
 
-    fn scalar_mul(&self, scalar: Self::BaseField) -> Self {
+    fn scalar_mul(&self, _scalar: Self::BaseField) -> Self {
         todo!()
     }
 

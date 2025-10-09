@@ -6,10 +6,11 @@ fn main() {
 mod test {
     use matvec::{
         arith::{
-            cyclotomic_ring::CyclotomicRing, field::Field64, field::Field64_2, linalg::Matrix,
+            cyclotomic_ring::CyclotomicRing,
+            field::{Field64, Field64_2},
+            linalg::Matrix,
         },
-        protocol::prover::Prover,
-        protocol::verifier::Verifier,
+        protocol::{prover::Prover, verifier::Verifier},
         rlwe::{decrypt, encrypt},
     };
 
@@ -45,7 +46,12 @@ mod test {
             .collect::<Vec<_>>();
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
-        let proof = Prover::<D, F2>::prove(&m, &x);
+
+        let (m_rq, m_polyring, m_mle, z1_num_vars, mut transcript) =
+            Prover::<D, F2>::preprocess(&m);
+
+        let proof =
+            Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x);
 
         let res = &proof
             .y

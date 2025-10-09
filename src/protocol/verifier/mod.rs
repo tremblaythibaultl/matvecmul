@@ -3,9 +3,13 @@ use std::marker::PhantomData;
 use ark_ff::{FftField, Field};
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix}, protocol::{
-        pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial, transcript::PoseidonTranscript, utils::build_eq_poly, Proof
-    }, rand::get_rng, rlwe::RLWE
+    arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
+    protocol::{
+        Proof, pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial,
+        transcript::PoseidonTranscript, utils::build_eq_poly,
+    },
+    rand::get_rng,
+    rlwe::RLWE,
 };
 
 pub struct Verifier<const D: usize, F: Field> {
@@ -32,23 +36,20 @@ where
             transcript.absorb(elem);
         }
 
+        // only consider mask for now
         for ct in x.iter() {
-            for ring_elem in ct.get_ring_elements().iter() {
-                for coeff in ring_elem.coeffs.iter() {
-                    transcript.absorb(coeff);
-                }
+            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
+                transcript.absorb(coeff);
             }
         }
 
+        // only consider mask for now
         for ct in proof.y.iter() {
-            for ring_elem in ct.get_ring_elements().iter() {
-                for coeff in ring_elem.coeffs.iter() {
-                    transcript.absorb(coeff);
-                }
+            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
+                transcript.absorb(coeff);
             }
         }
 
-        // TODO: implement fiat shamir
         let alpha =
             F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
 
@@ -60,8 +61,6 @@ where
                     .unwrap(),
             );
         }
-        println!("alpha: {:?}", alpha);
-        println!("tau: {:?}", vec_tau);
 
         // compute unpadded MLEs
         let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &vec_tau);

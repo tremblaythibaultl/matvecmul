@@ -27,3 +27,7 @@ path = "src/bin/main.rs"
 [[bench]]
 name = "cyclotomic_ring_bench"
 harness = false
+
+[[bench]]
+name = "functionality_bench"
+harness = false

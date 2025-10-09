@@ -6,9 +6,16 @@ use crate::{
     arith::{
         cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
         polynomial_ring::PolynomialRing,
-    }, protocol::{
-        pcs::whir::Whir, sumcheck::{multilinear::MultilinearPolynomial, prove}, transcript::PoseidonTranscript, utils::{build_eq_poly, sum_over_boolean_hypercube}, Proof
-    }, rand::get_rng, rlwe::RLWE
+    },
+    protocol::{
+        Proof,
+        pcs::whir::Whir,
+        sumcheck::{multilinear::MultilinearPolynomial, prove},
+        transcript::PoseidonTranscript,
+        utils::{build_eq_poly, sum_over_boolean_hypercube},
+    },
+    rand::get_rng,
+    rlwe::RLWE,
 };
 
 pub struct Z3Mles<F: Field> {
@@ -25,24 +32,67 @@ where
     F: FftField,
     F::BasePrimeField: GetPoseidonConfig<F::BasePrimeField> + ark_crypto_primitives::sponge::Absorb,
 {
-    pub fn prove(
+    pub fn preprocess(
         m: &Matrix<F::BasePrimeField>,
-        x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-    ) -> Proof<D, F> {
+    ) -> (
+        Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+        Matrix<PolynomialRing<D, F::BasePrimeField>>,
+        MultilinearPolynomial<F>,
+        usize,
+        PoseidonTranscript<F::BasePrimeField>,
+    ) {
+        // interpret each row as a ring elements and rearrange columns
+        let m_rq = m.lift_to_rq::<D>();
+
+        // lift matrix entries to polynomial ring elements of max degree 2*D
+        // this performs a clone of the coefficients
+        // should look into optimizing
+        let m_polyring = m_rq.lift_to_polynomial_ring();
+
+        // this also clones the coefficients. should look into optimizing.
+        let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
+
+        let m_mle = MultilinearPolynomial::new(
+            m_mle_evals
+                .into_iter()
+                .map(|e| F::from_base_prime_field(e))
+                .collect(),
+            num_vars,
+        );
+
         let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
         let mut transcript: PoseidonTranscript<F::BasePrimeField> =
             PoseidonTranscript::new(poseidon_config);
 
-        let (m_rq, m_polyring, x_polyring, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
+        for elem in m.data.iter() {
+            transcript.absorb(elem);
+        }
+
+        (m_rq, m_polyring, m_mle, num_vars, transcript)
+    }
+
+    pub fn prove(
+        m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+        m_polyring: &Matrix<PolynomialRing<D, F::BasePrimeField>>,
+        m_mle: &MultilinearPolynomial<F>,
+        z1_num_vars: usize,
+        transcript: &mut PoseidonTranscript<F::BasePrimeField>,
+        x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+    ) -> Proof<D, F> {
+        let x_polyring = x
+            .iter()
+            .map(|elem| elem.lift_to_polynomial_ring())
+            .collect::<Vec<_>>();
 
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
 
-        //reduce each polynomial ring element to cyclotomic ring using long division
+        // reduce each polynomial ring element to cyclotomic ring using long division
         let mut vec_quotients =
             Vec::<Vec<PolynomialRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
         let mut vec_remainders =
             Vec::<Vec<CyclotomicRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
 
+        // TODO: parallelize this??
         for elem in y_polyring {
             let (quotients, remainders) = elem.long_division_by_cyclotomic();
             vec_quotients.push(quotients);
@@ -52,29 +102,19 @@ where
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
 
-        for elem in m.data.iter() {
-            transcript.absorb(elem);
-        }
-
+        // only consider mask for now
         for ct in x.iter() {
-            for ring_elem in ct.get_ring_elements().iter() {
-                for coeff in ring_elem.coeffs.iter() {
-                    transcript.absorb(coeff);
-                }
+            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
+                transcript.absorb(coeff);
             }
         }
 
+        // only consider mask for now
         for ct in y.iter() {
-            for ring_elem in ct.get_ring_elements().iter() {
-                for coeff in ring_elem.coeffs.iter() {
-                    transcript.absorb(coeff);
-                }
+            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
+                transcript.absorb(coeff);
             }
         }
-
-        println!("y: {:#?}", y);
-        println!("vec_remainders: {:#?}", vec_remainders);
-        println!("vec_quotients: {:#?}", vec_quotients);
 
         // TODO: absorb the commitment to r too
         let alpha =
@@ -87,9 +127,6 @@ where
                     .unwrap(),
             );
         }
-
-        println!("alpha: {:?}", alpha);
-        println!("tau: {:?}", vec_tau);
 
         let powers_of_alpha: Vec<F> = (0..D)
             .scan(F::one(), |state, _| {
@@ -126,31 +163,29 @@ where
         let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
         let r_mle_proof = whir.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
 
-        println!("r_mle_proof_size: {}", r_mle_proof.proof.len());
-
         // sanity check with z_2
 
         // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
-        let y_alpha_mle_evals = y
-            .iter()
-            .map(|ct| {
-                ct.get_ring_elements()[1]
-                    .coeffs
-                    .iter()
-                    .zip(powers_of_alpha.iter())
-                    .map(|(c, a)| a.mul_by_base_prime_field(c))
-                    .sum::<F>()
-            })
-            .collect::<Vec<F>>();
+        // let y_alpha_mle_evals = y
+        //     .iter()
+        //     .map(|ct| {
+        //         ct.get_ring_elements()[1]
+        //             .coeffs
+        //             .iter()
+        //             .zip(powers_of_alpha.iter())
+        //             .map(|(c, a)| a.mul_by_base_prime_field(c))
+        //             .sum::<F>()
+        //     })
+        //     .collect::<Vec<F>>();
 
-        let z2_num_vars = m_rq.height().ilog2() as usize;
-        let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
-        build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+        // let z2_num_vars = m_rq.height().ilog2() as usize;
+        // let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
+        // build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
 
-        let _z_2 = sum_over_boolean_hypercube(&[
-            MultilinearPolynomial::new(y_alpha_mle_evals, z2_num_vars),
-            MultilinearPolynomial::new(eq_tau_mle_evals, z2_num_vars),
-        ]);
+        // let _z_2 = sum_over_boolean_hypercube(&[
+        //     MultilinearPolynomial::new(y_alpha_mle_evals, z2_num_vars),
+        //     MultilinearPolynomial::new(eq_tau_mle_evals, z2_num_vars),
+        // ]);
 
         Proof {
             y,
@@ -161,43 +196,6 @@ where
             r_mle_proof,
         }
     }
-}
-
-pub fn preprocess<const D: usize, F: Field>(
-    m: &Matrix<F::BasePrimeField>,
-    x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-) -> (
-    Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-    Matrix<PolynomialRing<D, F::BasePrimeField>>,
-    Vec<RLWE<PolynomialRing<D, F::BasePrimeField>>>,
-    MultilinearPolynomial<F>,
-    usize,
-) {
-    // interpret each row as a ring elements and rearrange columns
-    let m_rq = m.lift_to_rq::<D>();
-
-    // lift matrix entries to polynomial ring elements of max degree 2*D
-    // this performs a clone of the coefficients
-    // should look into optimizing
-    let m_polyring = m_rq.lift_to_polynomial_ring();
-
-    let x_polyring = x
-        .iter()
-        .map(|elem| elem.lift_to_polynomial_ring())
-        .collect::<Vec<_>>();
-
-    // this also clones the coefficients. should look into optimizing.
-    let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
-
-    let m_mle = MultilinearPolynomial::new(
-        m_mle_evals
-            .into_iter()
-            .map(|e| F::from_base_prime_field(e))
-            .collect(),
-        num_vars,
-    );
-
-    (m_rq, m_polyring, x_polyring, m_mle, num_vars)
 }
 
 fn compute_z1_mles<const D: usize, F: Field>(

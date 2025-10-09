@@ -24,10 +24,6 @@ impl<R: Ring> Matrix<R> {
         Matrix { data, width }
     }
 
-    fn mul_vec(&self, _rhs: &Vec<R>) -> Self {
-        todo!()
-    }
-
     /// Rearrange the columns of the matrix such that when rows are interpreted as elements of the cyclotomic ring of degree `d`,
     /// the constant coefficient of the inner product of ring elements yields the same result as the inner product of the original elements.
     /// The length of the vector must be a multiple of the width.
