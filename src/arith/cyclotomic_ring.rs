@@ -3,7 +3,10 @@ use std::{iter::Sum, marker::PhantomData};
 use ark_ff::PrimeField;
 use ark_std::rand::Rng;
 
-use crate::arith::ntt::{ntt::Ntt, tfhe_based_ntt::TfheBasedNtt};
+use crate::{
+    arith::ntt::{ntt::Ntt, tfhe_based_ntt::TfheBasedNtt},
+    rand::get_rng,
+};
 
 use super::ring::Ring;
 
@@ -71,7 +74,7 @@ impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> CyclotomicRing<D, 
     }
 
     pub fn get_random() -> Self {
-        let mut rng = ark_std::test_rng();
+        let mut rng = get_rng();
 
         let coeffs = (0..D).map(|_| F::rand(&mut rng)).collect();
 
@@ -82,7 +85,7 @@ impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> CyclotomicRing<D, 
     }
 
     pub fn get_random_bin() -> Self {
-        let mut rng = ark_std::test_rng();
+        let mut rng = get_rng();
 
         let coeffs = (0..D).map(|_| F::from(rng.gen_range(0..=1))).collect();
 

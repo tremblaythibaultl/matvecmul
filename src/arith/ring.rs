@@ -1,5 +1,7 @@
 use ark_ff::{Field, PrimeField};
 
+use crate::rand::get_rng;
+
 pub trait Ring: Clone + Default {
     /// The degree of the ring extension over the base field
     const DEGREE: usize;
@@ -78,6 +80,6 @@ impl<F: Field> Ring for F {
     }
 
     fn random() -> Self {
-        F::rand(&mut ark_std::test_rng())
+        F::rand(&mut get_rng())
     }
 }
