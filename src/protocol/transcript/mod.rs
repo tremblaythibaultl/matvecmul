@@ -19,15 +19,14 @@ where
     }
 
     pub fn absorb(&mut self, e: &F) {
-        self.sponge
-            .absorb(&e.to_base_prime_field_elements().collect::<Vec<_>>());
+        self.sponge.absorb(&e);
     }
 
     pub fn squeeze(&mut self) -> F {
-        let challenge: Vec<F::BasePrimeField> = self.sponge.squeeze_field_elements(1);
+        let challenge = self.sponge.squeeze_field_elements(1);
 
         self.sponge.absorb(&challenge);
 
-        F::from_base_prime_field_elems(challenge).unwrap()
+        challenge[0]
     }
 }
