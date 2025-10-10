@@ -16,7 +16,7 @@ mod test {
 
     #[test]
     fn test_functionality() {
-        pub const D: usize = 4;
+        pub const D: usize = 1024;
         pub const INTEGER_WIDTH: usize = 2 * D;
         pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
@@ -31,7 +31,9 @@ mod test {
         // println!("m: {:#?}", m);
 
         // generate vector data
-        let v = (1..=INTEGER_WIDTH).map(|x| x as u64).collect::<Vec<_>>();
+        let v = (1..=INTEGER_WIDTH)
+            .map(|x| (x % 16) as u64)
+            .collect::<Vec<_>>();
 
         // compute plaintext matrix-vector multiplication
         let m_v = m.mat_vec_mul(&v.iter().map(|&x| F::from(x)).collect::<Vec<F>>());

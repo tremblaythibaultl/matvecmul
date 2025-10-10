@@ -1,6 +1,7 @@
 use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
@@ -62,24 +63,36 @@ where
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
+        let start = std::time::Instant::now();
         // only consider mask for now
         for ct in x.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
                 transcript.absorb(coeff);
             }
         }
-
+        let after_absorb_x = start.elapsed();
+        println!("Absorbing x took: {:?}", after_absorb_x);
+        println!("x len: {}", x.len());
+        println!("y len: {}", proof.y.len());
+        let start = std::time::Instant::now();
         // only consider mask for now
         for ct in proof.y.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
                 transcript.absorb(coeff);
             }
         }
+        let after_absorb_y = start.elapsed();
+        println!("Absorbing y took: {:?}", after_absorb_y);
 
+        let start = std::time::Instant::now();
         let alpha =
             F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
+        let after_squeeze = start.elapsed();
+        println!("Squeezing alpha took: {:?}", after_squeeze);
 
         let m = m_rq.height().ilog2() as usize;
+
+        let start = std::time::Instant::now();
         let mut vec_tau = Vec::<F>::with_capacity(m);
         for _ in 0..m {
             vec_tau.push(
@@ -87,32 +100,53 @@ where
                     .unwrap(),
             );
         }
+        let after_squeeze_tau = start.elapsed();
+        println!("Squeezing tau took: {:?}", after_squeeze_tau);
 
+        let start = std::time::Instant::now();
         // compute unpadded MLEs
         let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &vec_tau);
+        let after_compute_z1_mles = start.elapsed();
+        println!(
+            "Computing unpadded Z1 MLEs took: {:?}",
+            after_compute_z1_mles
+        );
 
         let powers_of_alpha = unpadded_z1_mles[2].evals();
 
+        let start = std::time::Instant::now();
         let (z1_original_claim, z1_final_claim, z1_challenges) =
             proof.z1_sumcheck_proof.verify(z1_num_vars, 4).unwrap();
+        let after_verify_z1 = start.elapsed();
+        println!("Verifying Z1 took: {:?}", after_verify_z1);
 
+        let start = std::time::Instant::now();
         let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
+        let after_eq_eval = start.elapsed();
+        println!("Evaluating eq_tau took: {:?}", after_eq_eval);
 
+        let start = std::time::Instant::now();
         let x_alpha_eval = evaluate_x_alpha_at_challenges(
             &unpadded_z1_mles[1],
             &z1_challenges[m_rq.height().ilog2() as usize
                 ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
                 .to_vec(),
         );
+        let after_x_alpha_eval = start.elapsed();
+        println!("Evaluating x_alpha took: {:?}", after_x_alpha_eval);
 
+        let start = std::time::Instant::now();
         let z1_ell_eval = evaluate_ell_at_challenges(
             &unpadded_z1_mles[2],
             &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
+        let after_ell_eval = start.elapsed();
+        println!("Evaluating ell took: {:?}", after_ell_eval);
 
         // This does NOT need to be computed by the verifier
         // The value should come from the PCS.
         // Included for test purposes
+        let start = std::time::Instant::now();
         let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z1_num_vars);
         build_eq_poly(&z1_challenges, &mut eq_x_challenges_mle_evals);
         let m_eval = m_mle
@@ -121,6 +155,12 @@ where
             .zip(eq_x_challenges_mle_evals.iter())
             .map(|(a, b)| *a * *b)
             .sum::<F>();
+
+        let after_m_eval = start.elapsed();
+        println!(
+            "Evaluating m took: {:?} ~~~ This one should be deducted from total time",
+            after_m_eval
+        );
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
@@ -133,35 +173,58 @@ where
         // z_3 verification
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
+        let start = std::time::Instant::now();
         let (z3_original_claim, z3_final_claim, z3_challenges) =
             proof.z3_sumcheck_proof.verify(z3_num_vars, 3).unwrap();
+        let after_verify_z3 = start.elapsed();
+        println!("Verifying Z3 took: {:?}", after_verify_z3);
 
+        let start = std::time::Instant::now();
         let z3_ell_eval = evaluate_ell_at_challenges(
             &unpadded_z1_mles[2],
             &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
         );
+        let after_ell_eval_z3 = start.elapsed();
+        println!("Evaluating ell for Z3 took: {:?}", after_ell_eval_z3);
 
         // This does NOT need to be computed by the verifier
         // The value should come from the PCS.
         // Included for test purposes
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z3_num_vars);
-        build_eq_poly(&z3_challenges, &mut eq_x_challenges_mle_evals);
-        let r_eval = proof
-            .r_mle
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
+        // let start = std::time::Instant::now();
+        // let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z3_num_vars);
+        // build_eq_poly(&z3_challenges, &mut eq_x_challenges_mle_evals);
+        // let r_eval = proof
+        //     .r_mle
+        //     .evals()
+        //     .iter()
+        //     .zip(eq_x_challenges_mle_evals.iter())
+        //     .map(|(a, b)| *a * *b)
+        //     .sum::<F>();
+        // let after_r_eval = start.elapsed();
+        // println!(
+        //     "Evaluating r took: {:?} ~~~ This one should also be removed from total time",
+        //     after_r_eval
+        // );
+
+        let r_eval = proof.r_mle_proof.claim;
 
         let mut rng = get_rng();
+        let start = std::time::Instant::now();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
+        let after_whir_setup = start.elapsed();
+        println!("Setting up Whir took: {:?}", after_whir_setup);
+        let start = std::time::Instant::now();
         whir.verify(&proof.r_mle_proof, &z3_challenges)
             .expect("r_mle proof does not verify");
+        let after_whir_verify = start.elapsed();
+        println!("WHIR Verifying r took: {:?}", after_whir_verify);
         assert_eq!(r_eval, proof.r_mle_proof.claim);
 
         // eq_tau eval
+        let start = std::time::Instant::now();
         let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
+        let after_eq_eval_z3 = start.elapsed();
+        println!("Evaluating eq_tau for Z3 took: {:?}", after_eq_eval_z3);
 
         let z3_eval_at_random_point = eq_eval * r_eval * z3_ell_eval;
 
@@ -177,13 +240,17 @@ where
         let alpha_n_plus_one = (alpha * powers_of_alpha[D - 1]) + F::ONE;
         let alpha_factor = alpha_n_plus_one; //.pow([1 << z2_num_vars as u64]);
 
+        let start = std::time::Instant::now();
         let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << z2_num_vars);
         build_eq_poly(&vec_tau[0..z2_num_vars], &mut eq_tau_mle_evals);
+        let after_build_eq = start.elapsed();
+        println!("Building eq_tau for Z2 took: {:?}", after_build_eq);
 
         // focus on the first component of the ciphertext only for now.
+        let start = std::time::Instant::now();
         let y_alpha_mle_evals = proof
             .y
-            .iter()
+            .par_iter()
             .map(|ct| {
                 ct.get_ring_elements()[1]
                     .coeffs
@@ -193,14 +260,19 @@ where
                     .sum::<F>()
             })
             .collect::<Vec<F>>();
+        let after_y_alpha = start.elapsed();
+        println!("Computing y_alpha evaluations took: {:?}", after_y_alpha);
 
         assert_eq!(y_alpha_mle_evals.len(), eq_tau_mle_evals.len());
 
+        let start = std::time::Instant::now();
         let z_2 = y_alpha_mle_evals
             .iter()
             .zip(eq_tau_mle_evals.iter())
             .map(|(a, b)| *a * *b)
             .sum::<F>();
+        let after_z2 = start.elapsed();
+        println!("Evaluating Z2 took: {:?}", after_z2);
 
         assert_eq!(
             z1_original_claim - z_2 - (alpha_factor * z3_original_claim),
