@@ -2,7 +2,6 @@ use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
-use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
