@@ -3,9 +3,13 @@ use std::marker::PhantomData;
 use ark_ff::{FftField, Field};
 
 use crate::{
-    arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix}, protocol::{
-        pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial, transcript::PoseidonTranscript, utils::build_eq_poly, Proof
-    }, rand::get_rng, rlwe::RLWE
+    arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
+    protocol::{
+        Proof, pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial,
+        transcript::PoseidonTranscript, utils::build_eq_poly,
+    },
+    rand::get_rng,
+    rlwe::RLWE,
 };
 
 pub struct Verifier<const D: usize, F: Field> {
@@ -26,7 +30,7 @@ where
         let mut transcript: PoseidonTranscript<F::BasePrimeField> =
             PoseidonTranscript::new(poseidon_config);
 
-        let (m_rq, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
+        let (m_rq, z1_num_vars) = preprocess::<D, F>(m, x);
 
         for elem in m.data.iter() {
             transcript.absorb(elem);
@@ -85,17 +89,12 @@ where
             &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
 
-        // This does NOT need to be computed by the verifier
-        // The value should come from the PCS.
-        // Included for test purposes
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z1_num_vars);
-        build_eq_poly(&z1_challenges, &mut eq_x_challenges_mle_evals);
-        let m_eval = m_mle
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
+        let mut rng = get_rng();
+
+        let whir = Whir::<F>::new(z1_num_vars, &mut rng);
+        whir.verify(&proof.m_mle_proof, &z1_challenges)
+            .expect("m_mle proof does not verify");
+        let m_eval = proof.m_mle_proof.claim;
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
@@ -116,24 +115,10 @@ where
             &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
         );
 
-        // This does NOT need to be computed by the verifier
-        // The value should come from the PCS.
-        // Included for test purposes
-        let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << z3_num_vars);
-        build_eq_poly(&z3_challenges, &mut eq_x_challenges_mle_evals);
-        let r_eval = proof
-            .r_mle
-            .evals()
-            .iter()
-            .zip(eq_x_challenges_mle_evals.iter())
-            .map(|(a, b)| *a * *b)
-            .sum::<F>();
-
-        let mut rng = get_rng();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
         whir.verify(&proof.r_mle_proof, &z3_challenges)
             .expect("r_mle proof does not verify");
-        assert_eq!(r_eval, proof.r_mle_proof.claim);
+        let r_eval = proof.r_mle_proof.claim;
 
         // eq_tau eval
         let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
@@ -193,26 +178,13 @@ where
 pub fn preprocess<const D: usize, F: Field>(
     m: &Matrix<F::BasePrimeField>,
     _x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-) -> (
-    Matrix<CyclotomicRing<D, F::BasePrimeField>>,
-    MultilinearPolynomial<F>,
-    usize,
-) {
+) -> (Matrix<CyclotomicRing<D, F::BasePrimeField>>, usize) {
     // interpret each row as a ring elements and rearrange columns
     let m_rq = m.lift_to_rq::<D>();
 
-    // this clones the coefficients. should look into optimizing.
-    let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
+    let num_vars = m_rq.mle_evals_num_vars();
 
-    let m_mle = MultilinearPolynomial::new(
-        m_mle_evals
-            .into_iter()
-            .map(|e| F::from_base_prime_field(e))
-            .collect(),
-        num_vars,
-    );
-
-    (m_rq, m_mle, num_vars)
+    (m_rq, num_vars)
 }
 
 pub fn compute_z1_mles<const D: usize, F: Field>(

@@ -64,6 +64,7 @@ where
     pub const FIRST_ROUND_FOLDING_FACTOR: usize = 4;
     pub const FOLDING_FACTOR: usize = 4;
     pub const SOUNDNESS_TYPE: SoundnessType = SoundnessType::UniqueDecoding;
+    pub const BATCH_SIZE: usize = 1;
 
     pub fn new<R: RngCore>(num_variables: usize, rng: &mut R) -> Self
     where
@@ -87,7 +88,7 @@ where
             soundness_type: Self::SOUNDNESS_TYPE,
             _pow_parameters: Default::default(),
             starting_log_inv_rate: Self::RATE,
-            batch_size: 1,
+            batch_size: Self::BATCH_SIZE,
             deduplication_strategy: DeduplicationStrategy::Enabled,
             merkle_proof_strategy: MerkleProofStrategy::Compressed,
         };
