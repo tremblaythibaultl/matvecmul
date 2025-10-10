@@ -6,9 +6,16 @@ use crate::{
     arith::{
         cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
         polynomial_ring::PolynomialRing,
-    }, protocol::{
-        pcs::whir::Whir, sumcheck::{multilinear::MultilinearPolynomial, prove}, transcript::PoseidonTranscript, utils::{build_eq_poly, sum_over_boolean_hypercube}, Proof
-    }, rand::get_rng, rlwe::RLWE
+    },
+    protocol::{
+        Proof,
+        pcs::whir::Whir,
+        sumcheck::{multilinear::MultilinearPolynomial, prove},
+        transcript::PoseidonTranscript,
+        utils::{build_eq_poly, sum_over_boolean_hypercube},
+    },
+    rand::get_rng,
+    rlwe::RLWE,
 };
 
 pub struct Z3Mles<F: Field> {
@@ -33,7 +40,8 @@ where
         let mut transcript: PoseidonTranscript<F::BasePrimeField> =
             PoseidonTranscript::new(poseidon_config);
 
-        let (m_rq, m_polyring, x_polyring, m_mle, z1_num_vars) = preprocess::<D, F>(m, x);
+        let (m_rq, m_polyring, x_polyring, m_mle_over_base_f, m_mle, z1_num_vars) =
+            preprocess::<D, F>(m, x);
 
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
 
@@ -104,7 +112,7 @@ where
 
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
 
-        let (z1_sumcheck_proof, _z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
+        let (z1_sumcheck_proof, z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
 
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
@@ -115,18 +123,20 @@ where
 
         let z3_claim = sum_over_boolean_hypercube(&z3_mles.mles_over_f);
 
-        // included for test purposes only. The real protocol should commit to this using a PCS
-        let r_mle = z3_mles.mles_over_f[1].clone();
-
         let (z3_sumcheck_proof, z3_challenges) =
             prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars);
 
-        // Whir proof for r_mle.
+        // Whir proofs for r_mle and m_mle.
         let mut rng = get_rng();
-        let whir = Whir::<F>::new(r_mle.num_variables(), &mut rng);
-        let r_mle_proof = whir.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+        let whir_r_mle = Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
+        let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
 
         println!("r_mle_proof_size: {}", r_mle_proof.proof.len());
+
+        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
+
+        println!("m_mle_proof_size: {}", m_mle_proof.proof.len());
 
         // sanity check with z_2
 
@@ -157,8 +167,8 @@ where
             r: vec_quotients,
             z1_sumcheck_proof,
             z3_sumcheck_proof,
-            r_mle,
             r_mle_proof,
+            m_mle_proof,
         }
     }
 }
@@ -170,6 +180,7 @@ pub fn preprocess<const D: usize, F: Field>(
     Matrix<CyclotomicRing<D, F::BasePrimeField>>,
     Matrix<PolynomialRing<D, F::BasePrimeField>>,
     Vec<RLWE<PolynomialRing<D, F::BasePrimeField>>>,
+    MultilinearPolynomial<F::BasePrimeField>,
     MultilinearPolynomial<F>,
     usize,
 ) {
@@ -191,13 +202,22 @@ pub fn preprocess<const D: usize, F: Field>(
 
     let m_mle = MultilinearPolynomial::new(
         m_mle_evals
-            .into_iter()
-            .map(|e| F::from_base_prime_field(e))
+            .iter()
+            .map(|e| F::from_base_prime_field(*e))
             .collect(),
         num_vars,
     );
 
-    (m_rq, m_polyring, x_polyring, m_mle, num_vars)
+    let m_mle_base_prime_f = MultilinearPolynomial::new(m_mle_evals, num_vars);
+
+    (
+        m_rq,
+        m_polyring,
+        x_polyring,
+        m_mle_base_prime_f,
+        m_mle,
+        num_vars,
+    )
 }
 
 fn compute_z1_mles<const D: usize, F: Field>(

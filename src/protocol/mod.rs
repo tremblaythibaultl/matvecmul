@@ -2,7 +2,7 @@ use ark_ff::Field;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing},
-    protocol::{pcs::whir::WhirProof, sumcheck::{multilinear::MultilinearPolynomial, SumCheckProof}},
+    protocol::{pcs::whir::WhirProof, sumcheck::SumCheckProof},
     rlwe::RLWE,
 };
 
@@ -19,10 +19,8 @@ pub struct Proof<const D: usize, F: Field> {
     pub r: Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>, // should be a commitment to `r`
     pub z1_sumcheck_proof: SumCheckProof<F>,
     pub z3_sumcheck_proof: SumCheckProof<F>,
-    // Included for test purposes only. In the real protocol, this should be a commitment to `r_mle`
-    pub r_mle: MultilinearPolynomial<F>,
-
     pub r_mle_proof: WhirProof<F>,
+    pub m_mle_proof: WhirProof<F>,
 }
 
 pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {
