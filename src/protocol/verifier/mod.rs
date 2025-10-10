@@ -2,6 +2,7 @@ use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
@@ -150,6 +151,12 @@ where
         let after_whir_verify = start.elapsed();
         println!("WHIR Verifying m took: {:?}", after_whir_verify);
         let m_eval = proof.m_mle_proof.claim;
+
+        let after_m_eval = start.elapsed();
+        println!(
+            "Evaluating m took: {:?} ~~~ This one should be deducted from total time",
+            after_m_eval
+        );
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 

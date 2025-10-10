@@ -16,7 +16,7 @@ mod test {
 
     #[test]
     fn test_functionality() {
-        pub const D: usize = 4;
+        pub const D: usize = 1024;
         pub const INTEGER_WIDTH: usize = 2 * D;
         pub const INTEGER_HEIGHT: usize = 2 * D;
         pub type F = Field64;
