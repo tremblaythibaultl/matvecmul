@@ -170,6 +170,11 @@ where
         let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
         let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
 
+        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
+
+        println!("m_mle_proof_size: {}", m_mle_proof.proof.len());
+
         // sanity check with z_2
 
         // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
