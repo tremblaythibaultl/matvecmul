@@ -2,12 +2,16 @@ use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use sha3::Shake256;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix},
     protocol::{
-        Proof, pcs::whir::Whir, sumcheck::multilinear::MultilinearPolynomial,
-        transcript::PoseidonTranscript, utils::build_eq_poly,
+        Proof,
+        pcs::whir::Whir,
+        sumcheck::multilinear::MultilinearPolynomial,
+        transcript::{self, PoseidonTranscript, ShakeTranscript},
+        utils::build_eq_poly,
     },
     rand::get_rng,
     rlwe::RLWE,
@@ -27,7 +31,7 @@ where
     ) -> (
         Matrix<CyclotomicRing<D, F::BasePrimeField>>,
         usize,
-        PoseidonTranscript<F::BasePrimeField>,
+        ShakeTranscript<F>,
     ) {
         // interpret each row as a ring elements and rearrange columns
         let m_rq = m.lift_to_rq::<D>();
@@ -35,20 +39,14 @@ where
         // this clones the coefficients. should look into optimizing.
         let (m_mle_evals, num_vars): (Vec<F::BasePrimeField>, usize) = m_rq.to_mle_evals();
 
-        let m_mle = MultilinearPolynomial::new(
-            m_mle_evals
-                .into_iter()
-                .map(|e| F::from_base_prime_field(e))
-                .collect(),
-            num_vars,
-        );
+        // let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
+        // let mut transcript: PoseidonTranscript<F::BasePrimeField> =
+        //     PoseidonTranscript::new(poseidon_config);
 
-        let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
-        let mut transcript: PoseidonTranscript<F::BasePrimeField> =
-            PoseidonTranscript::new(poseidon_config);
+        let mut transcript = ShakeTranscript::<F>::new();
 
         for elem in m.data.iter() {
-            transcript.absorb(elem);
+            transcript.absorb(&F::from_base_prime_field(*elem))
         }
 
         (m_rq, num_vars, transcript)
@@ -57,15 +55,16 @@ where
     pub fn verify(
         m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
         z1_num_vars: usize,
-        transcript: &mut PoseidonTranscript<F::BasePrimeField>,
+        transcript: &mut ShakeTranscript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
         let start = std::time::Instant::now();
+        // TODO: make sure that the time taken here is representative of that measured in the benchmarks
         // only consider mask for now
         for ct in x.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(coeff);
+                transcript.absorb(&F::from_base_prime_field(*coeff));
             }
         }
         let after_absorb_x = start.elapsed();
@@ -76,30 +75,20 @@ where
         // only consider mask for now
         for ct in proof.y.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(coeff);
+                transcript.absorb(&F::from_base_prime_field(*coeff));
             }
         }
         let after_absorb_y = start.elapsed();
         println!("Absorbing y took: {:?}", after_absorb_y);
 
-        let start = std::time::Instant::now();
-        let alpha =
-            F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
-        let after_squeeze = start.elapsed();
-        println!("Squeezing alpha took: {:?}", after_squeeze);
-
         let m = m_rq.height().ilog2() as usize;
-
         let start = std::time::Instant::now();
-        let mut vec_tau = Vec::<F>::with_capacity(m);
-        for _ in 0..m {
-            vec_tau.push(
-                F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
-                    .unwrap(),
-            );
-        }
-        let after_squeeze_tau = start.elapsed();
-        println!("Squeezing tau took: {:?}", after_squeeze_tau);
+        let mut challenges = transcript.squeeze(m + 1);
+        let alpha = challenges.pop().unwrap();
+        let vec_tau = challenges;
+
+        let after_squeeze = start.elapsed();
+        println!("Squeezing challenges took: {:?}", after_squeeze);
 
         let start = std::time::Instant::now();
         // compute unpadded MLEs
@@ -147,15 +136,9 @@ where
         let start = std::time::Instant::now();
         whir.verify(&proof.m_mle_proof, &z1_challenges)
             .expect("m_mle proof does not verify");
-        let after_whir_verify = start.elapsed();
-        println!("WHIR Verifying m took: {:?}", after_whir_verify);
         let m_eval = proof.m_mle_proof.claim;
-
         let after_m_eval = start.elapsed();
-        println!(
-            "Evaluating m took: {:?} ~~~ This one should be deducted from total time",
-            after_m_eval
-        );
+        println!("WHIR verifying m took: {:?}", after_m_eval);
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 

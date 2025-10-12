@@ -1,21 +1,29 @@
+use ark_ff::{BigInteger, Field, PrimeField};
 use criterion::{Criterion, criterion_group, criterion_main};
 use matvec::{
     arith::{
         cyclotomic_ring::CyclotomicRing,
-        field::{Field64, Field64_2},
+        field::{Field64, Field64_2, get_field64_poseidon_config},
         linalg::Matrix,
     },
     protocol::{
-        pcs::whir::Whir, prover::Prover, sumcheck::multilinear::MultilinearPolynomial,
+        pcs::whir::Whir,
+        prover::Prover,
+        sumcheck::multilinear::MultilinearPolynomial,
+        transcript::{PoseidonTranscript, ShakeTranscript},
         verifier::Verifier,
     },
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
 };
+use sha3::{
+    Shake256,
+    digest::{ExtendableOutput, Update, XofReader},
+};
 
 pub const D: usize = 1024;
-pub const INTEGER_WIDTH: usize = 2 * D;
-pub const INTEGER_HEIGHT: usize = 2 * D;
+pub const INTEGER_WIDTH: usize = 1 << 20;
+pub const INTEGER_HEIGHT: usize = 2;
 pub type F = Field64;
 pub type F2 = Field64_2;
 
@@ -101,11 +109,20 @@ fn bench_vector_encryption(c: &mut Criterion) {
 fn bench_prover_computation(c: &mut Criterion) {
     let (m, _, _, _, x) = setup_benchmark_data();
 
-    let (m_rq, m_polyring, m_mle, z1_num_vars, mut transcript) = Prover::<D, F2>::preprocess(&m);
+    let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
+        Prover::<D, F2>::preprocess(&m);
 
     c.bench_function("prover_computation", |b| {
         b.iter(|| {
-            Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x)
+            Prover::<D, F2>::prove(
+                &m_rq,
+                &m_polyring,
+                &m_mle,
+                &m_mle_over_base_f,
+                z1_num_vars,
+                &mut transcript,
+                &x,
+            )
         });
     });
 }
@@ -113,10 +130,18 @@ fn bench_prover_computation(c: &mut Criterion) {
 fn bench_result_decryption(c: &mut Criterion) {
     let (m, _, _v, sk, x) = setup_benchmark_data();
 
-    let (m_rq, m_polyring, m_mle, z1_num_vars, mut transcript) = Prover::<D, F2>::preprocess(&m);
+    let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
+        Prover::<D, F2>::preprocess(&m);
 
-    let proof =
-        Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x);
+    let proof = Prover::<D, F2>::prove(
+        &m_rq,
+        &m_polyring,
+        &m_mle,
+        &m_mle_over_base_f,
+        z1_num_vars,
+        &mut transcript,
+        &x,
+    );
 
     // only consider the mask for now
     c.bench_function("result_decryption", |b| {
@@ -133,23 +158,105 @@ fn bench_result_decryption(c: &mut Criterion) {
 fn bench_verifier_computation(c: &mut Criterion) {
     let (m, _, _v, _sk, x) = setup_benchmark_data();
 
-    let (m_rq, m_polyring, m_mle, z1_num_vars, mut transcript) = Prover::<D, F2>::preprocess(&m);
+    let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
+        Prover::<D, F2>::preprocess(&m);
 
-    let proof =
-        Prover::<D, F2>::prove(&m_rq, &m_polyring, &m_mle, z1_num_vars, &mut transcript, &x);
+    let proof = Prover::<D, F2>::prove(
+        &m_rq,
+        &m_polyring,
+        &m_mle,
+        &m_mle_over_base_f,
+        z1_num_vars,
+        &mut transcript,
+        &x,
+    );
 
-    let (m_rq, m_mle, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
+    let (m_rq, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
 
     c.bench_function("verifier_computation", |b| {
         b.iter(|| {
-            Verifier::<D, F2>::verify(
-                &m_rq,
-                &m_mle,
-                z1_num_vars,
-                &mut transcript,
-                &x,
-                proof.clone(),
-            )
+            Verifier::<D, F2>::verify(&m_rq, z1_num_vars, &mut transcript, &x, proof.clone())
+        });
+    });
+}
+
+fn bench_poseidon_absorb(c: &mut Criterion) {
+    let config = get_field64_poseidon_config();
+    let mut transcript = PoseidonTranscript::<F>::new(config);
+    let element = F2::from(42u64);
+
+    c.bench_function("transcript_absorb", |b| {
+        b.iter(|| {
+            for _ in 0..1000 {
+                for elt in element.to_base_prime_field_elements() {
+                    transcript.absorb(&elt);
+                }
+            }
+        });
+    });
+}
+
+fn bench_shake_transcript_absorb(c: &mut Criterion) {
+    let mut transcript = ShakeTranscript::<F2>::new();
+
+    let element = F2::from(42u64);
+
+    c.bench_function("shake_transcript_absorb", |b| {
+        b.iter(|| {
+            for _ in 0..1000 {
+                transcript.absorb(&element);
+            }
+        })
+    });
+}
+
+fn bench_shake_transcript_sqeeze(c: &mut Criterion) {
+    let mut transcript = ShakeTranscript::<F2>::new();
+
+    let element = F2::from(42u64);
+    for _ in 0..1000 {
+        transcript.absorb(&element);
+    }
+    c.bench_function("shake_transcript_absorb_squeeze", |b| {
+        b.iter(|| {
+            transcript.squeeze(1000);
+        })
+    });
+}
+
+fn bench_shake_absorb(c: &mut Criterion) {
+    let element = F2::from(42u64);
+
+    c.bench_function("shake256_absorb", |b| {
+        b.iter(|| {
+            let mut hasher = Shake256::default();
+            for _ in 0..1000 {
+                for elt in element.to_base_prime_field_elements() {
+                    let bytes = elt.into_bigint().to_bytes_le();
+                    hasher.update(&bytes);
+                }
+            }
+        });
+    });
+}
+
+fn bench_shake_absorb_squeeze(c: &mut Criterion) {
+    let element = F2::from(42u64);
+
+    c.bench_function("shake256_absorb_squeeze", |b| {
+        b.iter(|| {
+            let mut hasher = Shake256::default();
+
+            for _ in 0..1000 {
+                for elt in element.to_base_prime_field_elements() {
+                    let bytes = elt.into_bigint().to_bytes_le();
+                    hasher.update(&bytes);
+                }
+            }
+
+            let mut reader = hasher.finalize_xof();
+            let mut output = [0u8; 8000];
+            reader.read(&mut output);
         });
     });
 }
@@ -164,7 +271,12 @@ criterion_group!(
         bench_prover_computation,
         bench_result_decryption,
         bench_verifier_computation,
-        bench_whir_prover
+        bench_whir_prover,
+        bench_poseidon_absorb,
+        bench_shake_absorb,
+        bench_shake_absorb_squeeze,
+        bench_shake_transcript_absorb,
+        bench_shake_transcript_sqeeze,
 );
 
 criterion_main!(benches);

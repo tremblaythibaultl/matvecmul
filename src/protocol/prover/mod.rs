@@ -11,7 +11,7 @@ use crate::{
         Proof,
         pcs::whir::Whir,
         sumcheck::{multilinear::MultilinearPolynomial, prove},
-        transcript::PoseidonTranscript,
+        transcript::{PoseidonTranscript, ShakeTranscript},
         utils::{build_eq_poly, sum_over_boolean_hypercube},
     },
     rand::get_rng,
@@ -40,7 +40,7 @@ where
         MultilinearPolynomial<F>,
         MultilinearPolynomial<F::BasePrimeField>,
         usize,
-        PoseidonTranscript<F::BasePrimeField>,
+        ShakeTranscript<F>,
     ) {
         // interpret each row as a ring elements and rearrange columns
         let m_rq = m.lift_to_rq::<D>();
@@ -62,12 +62,14 @@ where
             num_vars,
         );
 
-        let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
-        let mut transcript: PoseidonTranscript<F::BasePrimeField> =
-            PoseidonTranscript::new(poseidon_config);
+        // let poseidon_config = <F::BasePrimeField>::get_poseidon_config();
+        // let mut transcript: PoseidonTranscript<F::BasePrimeField> =
+        // PoseidonTranscript::new(poseidon_config);
+
+        let mut transcript = ShakeTranscript::<F>::new();
 
         for elem in m.data.iter() {
-            transcript.absorb(elem);
+            transcript.absorb(&F::from_base_prime_field(*elem))
         }
 
         (
@@ -86,7 +88,7 @@ where
         m_mle: &MultilinearPolynomial<F>,
         m_mle_over_base_f: &MultilinearPolynomial<F::BasePrimeField>,
         z1_num_vars: usize,
-        transcript: &mut PoseidonTranscript<F::BasePrimeField>,
+        transcript: &mut ShakeTranscript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     ) -> Proof<D, F> {
         let x_polyring = x
@@ -115,28 +117,23 @@ where
         // only consider mask for now
         for ct in x.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(coeff);
+                transcript.absorb(&F::from_base_prime_field(*coeff));
             }
         }
 
         // only consider mask for now
         for ct in y.iter() {
             for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(coeff);
+                transcript.absorb(&F::from_base_prime_field(*coeff));
             }
         }
 
         // TODO: absorb the commitment to r too
-        let alpha =
-            F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()]).unwrap();
-        let mut vec_tau = Vec::<F>::with_capacity(m_rq.height().ilog2() as usize);
 
-        for _ in 0..m_rq.height().ilog2() as usize {
-            vec_tau.push(
-                F::from_base_prime_field_elems([transcript.squeeze(), transcript.squeeze()])
-                    .unwrap(),
-            );
-        }
+        let mut challenges = transcript.squeeze(m_rq.height().ilog2() as usize + 1);
+
+        let alpha = challenges.pop().unwrap();
+        let vec_tau = challenges;
 
         let powers_of_alpha: Vec<F> = (0..D)
             .scan(F::one(), |state, _| {
