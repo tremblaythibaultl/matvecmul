@@ -315,6 +315,7 @@ dependencies = [
  "cc",
  "cfg-if",
  "constant_time_eq",
+ "rayon-core",
 ]
 
 [[package]]
@@ -769,6 +770,7 @@ dependencies = [
  "ark-ff",
  "ark-serialize",
  "ark-std",
+ "blake3",
  "criterion",
  "rand 0.9.2",
  "rand_core 0.9.3",

@@ -1,4 +1,4 @@
-use ark_ff::{Field, PrimeField};
+use ark_ff::Field;
 
 use crate::rand::get_rng;
 

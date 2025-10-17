@@ -3,15 +3,12 @@ use criterion::{Criterion, criterion_group, criterion_main};
 use matvec::{
     arith::{
         cyclotomic_ring::CyclotomicRing,
-        field::{Field64, Field64_2, get_field64_poseidon_config},
+        field::{Field64, Field64_2},
         linalg::Matrix,
     },
     protocol::{
-        pcs::whir::Whir,
-        prover::Prover,
-        sumcheck::multilinear::MultilinearPolynomial,
-        transcript::{PoseidonTranscript, ShakeTranscript},
-        verifier::Verifier,
+        pcs::whir::Whir, prover::Prover, sumcheck::multilinear::MultilinearPolynomial,
+        transcript::Blake3Transcript, verifier::Verifier,
     },
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
@@ -23,7 +20,7 @@ use sha3::{
 
 pub const D: usize = 1024;
 pub const INTEGER_WIDTH: usize = 1 << 20;
-pub const INTEGER_HEIGHT: usize = 2;
+pub const INTEGER_HEIGHT: usize = 32;
 pub type F = Field64;
 pub type F2 = Field64_2;
 
@@ -180,46 +177,30 @@ fn bench_verifier_computation(c: &mut Criterion) {
     });
 }
 
-fn bench_poseidon_absorb(c: &mut Criterion) {
-    let config = get_field64_poseidon_config();
-    let mut transcript = PoseidonTranscript::<F>::new(config);
-    let element = F2::from(42u64);
-
-    c.bench_function("transcript_absorb", |b| {
-        b.iter(|| {
-            for _ in 0..1000 {
-                for elt in element.to_base_prime_field_elements() {
-                    transcript.absorb(&elt);
-                }
-            }
-        });
-    });
-}
-
-fn bench_shake_transcript_absorb(c: &mut Criterion) {
-    let mut transcript = ShakeTranscript::<F2>::new();
+fn bench_blake3_transcript_absorb(c: &mut Criterion) {
+    let mut transcript = Blake3Transcript::<F2>::new();
 
     let element = F2::from(42u64);
 
-    c.bench_function("shake_transcript_absorb", |b| {
+    c.bench_function("blake3_transcript_absorb", |b| {
         b.iter(|| {
-            for _ in 0..1000 {
+            for _ in 0..10000 {
                 transcript.absorb(&element);
             }
         })
     });
 }
 
-fn bench_shake_transcript_sqeeze(c: &mut Criterion) {
-    let mut transcript = ShakeTranscript::<F2>::new();
+fn bench_blake3_transcript_squeeze(c: &mut Criterion) {
+    let mut transcript = Blake3Transcript::<F2>::new();
 
     let element = F2::from(42u64);
-    for _ in 0..1000 {
+    for _ in 0..10000 {
         transcript.absorb(&element);
     }
-    c.bench_function("shake_transcript_absorb_squeeze", |b| {
+    c.bench_function("blake3_transcript_absorb_squeeze", |b| {
         b.iter(|| {
-            transcript.squeeze(1000);
+            transcript.squeeze(10000);
         })
     });
 }
@@ -272,11 +253,10 @@ criterion_group!(
         bench_result_decryption,
         bench_verifier_computation,
         bench_whir_prover,
-        bench_poseidon_absorb,
         bench_shake_absorb,
         bench_shake_absorb_squeeze,
-        bench_shake_transcript_absorb,
-        bench_shake_transcript_sqeeze,
+        bench_blake3_transcript_absorb,
+        bench_blake3_transcript_squeeze,
 );
 
 criterion_main!(benches);

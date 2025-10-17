@@ -219,18 +219,7 @@ mod test {
 
     type F = Field64;
     type TestRing = CyclotomicRing<4, F>;
-    const HEIGHT: usize = 4;
     const WIDTH: usize = 4;
-
-    fn pp(m: &Matrix<TestRing>) {
-        let mut iter = m.data.iter();
-        for _ in 0..HEIGHT {
-            for _ in 0..WIDTH {
-                print!("{:?} ", iter.next().unwrap().coeffs);
-            }
-            print! {"\n"}
-        }
-    }
 
     #[test]
     fn process() {

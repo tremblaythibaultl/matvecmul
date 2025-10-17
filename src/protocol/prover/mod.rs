@@ -1,17 +1,15 @@
 use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
-    arith::{
-        cyclotomic_ring::CyclotomicRing, field::GetPoseidonConfig, linalg::Matrix,
-        polynomial_ring::PolynomialRing,
-    },
+    arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
     protocol::{
         Proof,
         pcs::whir::Whir,
         sumcheck::{multilinear::MultilinearPolynomial, prove},
-        transcript::{PoseidonTranscript, ShakeTranscript},
+        transcript::Blake3Transcript,
         utils::{build_eq_poly, sum_over_boolean_hypercube},
     },
     rand::get_rng,
@@ -30,7 +28,6 @@ pub struct Prover<const D: usize, F: FftField> {
 impl<const D: usize, F> Prover<D, F>
 where
     F: FftField,
-    F::BasePrimeField: GetPoseidonConfig<F::BasePrimeField> + ark_crypto_primitives::sponge::Absorb,
 {
     pub fn preprocess(
         m: &Matrix<F::BasePrimeField>,
@@ -40,7 +37,7 @@ where
         MultilinearPolynomial<F>,
         MultilinearPolynomial<F::BasePrimeField>,
         usize,
-        ShakeTranscript<F>,
+        Blake3Transcript<F>,
     ) {
         // interpret each row as a ring elements and rearrange columns
         let m_rq = m.lift_to_rq::<D>();
@@ -66,7 +63,7 @@ where
         // let mut transcript: PoseidonTranscript<F::BasePrimeField> =
         // PoseidonTranscript::new(poseidon_config);
 
-        let mut transcript = ShakeTranscript::<F>::new();
+        let mut transcript = Blake3Transcript::<F>::new();
 
         for elem in m.data.iter() {
             transcript.absorb(&F::from_base_prime_field(*elem))
@@ -88,7 +85,7 @@ where
         m_mle: &MultilinearPolynomial<F>,
         m_mle_over_base_f: &MultilinearPolynomial<F::BasePrimeField>,
         z1_num_vars: usize,
-        transcript: &mut ShakeTranscript<F>,
+        transcript: &mut Blake3Transcript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     ) -> Proof<D, F> {
         let x_polyring = x
@@ -98,18 +95,13 @@ where
 
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
 
-        // reduce each polynomial ring element to cyclotomic ring using long division
-        let mut vec_quotients =
-            Vec::<Vec<PolynomialRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
-        let mut vec_remainders =
-            Vec::<Vec<CyclotomicRing<D, F::BasePrimeField>>>::with_capacity(y_polyring.len());
-
-        // TODO: parallelize this??
-        for elem in y_polyring {
-            let (quotients, remainders) = elem.long_division_by_cyclotomic();
-            vec_quotients.push(quotients);
-            vec_remainders.push(remainders);
-        }
+        let (vec_quotients, _vec_remainders): (
+            Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>,
+            Vec<Vec<CyclotomicRing<D, F::BasePrimeField>>>,
+        ) = y_polyring
+            .par_iter()
+            .map(|ct| ct.long_division_by_cyclotomic())
+            .collect();
 
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
@@ -166,9 +158,6 @@ where
         let mut rng = get_rng();
         let whir_r_mle = Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
         let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
-
-        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
-        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
 
         let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
         let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
