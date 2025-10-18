@@ -48,10 +48,6 @@ where
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
-        // maybe one could process x's owned data once to obtain a long Vec<u8>
-        // and then pass it as reference to the transcript
-        // and to the `compute_z1_mles` function
-
         let start = Instant::now();
         // TODO: look at how to get ring elements without cloning?? not even sure if the clones are optimized out by the compiler.
         let x_bytes_to_absorb = x
@@ -87,12 +83,12 @@ where
         println!("processing y took: {:?}", after_processing_y);
 
         let start = Instant::now();
-        let bytes_to_absorb = &[x_bytes_to_absorb, y_bytes_to_absorb].concat();
+        let bytes_to_absorb = [x_bytes_to_absorb, y_bytes_to_absorb].concat();
         let after_concat = start.elapsed();
         println!("time to concat: {:?}", after_concat);
 
         let start = Instant::now();
-        transcript.absorb_bytes(bytes_to_absorb);
+        transcript.absorb_bytes(&bytes_to_absorb);
         let after_absorb = start.elapsed();
         println!("time to absorb: {:?}", after_absorb);
 
@@ -281,7 +277,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
 
     // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
     let x_alpha_mle_evals = x
-        .iter()
+        .par_iter()
         .map(|ct| {
             ct.get_ring_elements()[1]
                 .coeffs

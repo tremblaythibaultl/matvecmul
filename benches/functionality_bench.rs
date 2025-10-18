@@ -13,6 +13,7 @@ use matvec::{
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
 };
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use sha3::{
     Shake256,
     digest::{ExtendableOutput, Update, XofReader},
@@ -140,12 +141,11 @@ fn bench_result_decryption(c: &mut Criterion) {
         &x,
     );
 
-    // only consider the mask for now
     c.bench_function("result_decryption", |b| {
         b.iter(|| {
             proof
                 .y
-                .iter()
+                .par_iter()
                 .map(|c| decrypt(&sk, c)[0])
                 .collect::<Vec<_>>()
         });
