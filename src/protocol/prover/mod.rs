@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use ark_ff::{FftField, Field};
+use ark_ff::{BigInteger, FftField, Field, PrimeField};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
@@ -106,19 +106,35 @@ where
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
 
-        // only consider mask for now
-        for ct in x.iter() {
-            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(&F::from_base_prime_field(*coeff));
-            }
-        }
+        // TODO: look at how to get ring elements without cloning?? not even sure if the clones are optimized out by the compiler.
+        let x_bytes_to_absorb = x
+            .par_iter()
+            .map(|ct| {
+                // consider mask only for now
+                ct.get_ring_elements()[0]
+                    .coeffs
+                    .iter()
+                    .flat_map(|c| c.into_bigint().to_bytes_le())
+                    .collect::<Vec<u8>>()
+            })
+            .flatten()
+            .collect::<Vec<u8>>();
 
-        // only consider mask for now
-        for ct in y.iter() {
-            for coeff in ct.get_ring_elements()[0].coeffs.iter() {
-                transcript.absorb(&F::from_base_prime_field(*coeff));
-            }
-        }
+        let y_bytes_to_absorb = y
+            .par_iter()
+            .map(|ct| {
+                // consider mask only for now
+                ct.get_ring_elements()[0]
+                    .coeffs
+                    .iter()
+                    .flat_map(|c| c.into_bigint().to_bytes_le())
+                    .collect::<Vec<u8>>()
+            })
+            .flatten()
+            .collect::<Vec<u8>>();
+
+        let bytes_to_absorb = &[x_bytes_to_absorb, y_bytes_to_absorb].concat();
+        transcript.absorb_bytes(bytes_to_absorb);
 
         // TODO: absorb the commitment to r too
 
