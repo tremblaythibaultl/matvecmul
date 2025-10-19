@@ -6,18 +6,19 @@ fn main() {
 mod test {
     use matvec::{
         arith::{
-            cyclotomic_ring::CyclotomicRing, field::Field64, field::Field64_2, linalg::Matrix,
+            cyclotomic_ring::CyclotomicRing,
+            field::{Field64, Field64_2},
+            linalg::Matrix,
         },
-        protocol::prover::Prover,
-        protocol::verifier::Verifier,
+        protocol::{prover::Prover, verifier::Verifier},
         rlwe::{decrypt, encrypt},
     };
 
     #[test]
     fn test_functionality() {
-        pub const D: usize = 4;
-        pub const INTEGER_WIDTH: usize = 2 * D;
-        pub const INTEGER_HEIGHT: usize = 2 * D;
+        pub const D: usize = 1024;
+        pub const INTEGER_WIDTH: usize = D * D;
+        pub const INTEGER_HEIGHT: usize = 2;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
@@ -30,7 +31,9 @@ mod test {
         // println!("m: {:#?}", m);
 
         // generate vector data
-        let v = (1..=INTEGER_WIDTH).map(|x| x as u64).collect::<Vec<_>>();
+        let v = (1..=INTEGER_WIDTH)
+            .map(|x| (x % 16) as u64)
+            .collect::<Vec<_>>();
 
         // compute plaintext matrix-vector multiplication
         let m_v = m.mat_vec_mul(&v.iter().map(|&x| F::from(x)).collect::<Vec<F>>());
@@ -45,7 +48,19 @@ mod test {
             .collect::<Vec<_>>();
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
-        let proof = Prover::<D, F2>::prove(&m, &x);
+
+        let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
+            Prover::<D, F2>::preprocess(&m);
+
+        let proof = Prover::<D, F2>::prove(
+            &m_rq,
+            &m_polyring,
+            &m_mle,
+            &m_mle_over_base_f,
+            z1_num_vars,
+            &mut transcript,
+            &x,
+        );
 
         let res = &proof
             .y
@@ -55,7 +70,10 @@ mod test {
 
         assert_eq!(m_v, *res);
 
-        let verifier_res = Verifier::<D, F2>::verify(&m, &x, proof.clone());
+        let (m_rq, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
+
+        let verifier_res =
+            Verifier::<D, F2>::verify(&m_rq, z1_num_vars, &mut transcript, &x, proof.clone());
 
         assert!(verifier_res.is_ok());
     }

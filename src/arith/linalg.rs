@@ -1,4 +1,5 @@
 use ark_ff::{Field, PrimeField};
+use rayon::{iter::ParallelIterator, slice::ParallelSlice};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing, ring::Ring},
@@ -21,10 +22,6 @@ impl<R: Ring> Matrix<R> {
             "Row-major representation length must be a multiple of width"
         );
         Matrix { data, width }
-    }
-
-    fn mul_vec(&self, _rhs: &Vec<R>) -> Self {
-        todo!()
     }
 
     /// Rearrange the columns of the matrix such that when rows are interpreted as elements of the cyclotomic ring of degree `d`,
@@ -223,18 +220,7 @@ mod test {
 
     type F = Field64;
     type TestRing = CyclotomicRing<4, F>;
-    const HEIGHT: usize = 4;
     const WIDTH: usize = 4;
-
-    fn pp(m: &Matrix<TestRing>) {
-        let mut iter = m.data.iter();
-        for _ in 0..HEIGHT {
-            for _ in 0..WIDTH {
-                print!("{:?} ", iter.next().unwrap().coeffs);
-            }
-            print! {"\n"}
-        }
-    }
 
     #[test]
     fn process() {

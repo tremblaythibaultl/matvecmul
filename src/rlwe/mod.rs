@@ -6,7 +6,7 @@ use ark_ff::PrimeField;
 // MLWE rank
 pub const K: usize = 1;
 // Log of message modulus
-const lg_p: usize = 4;
+const LG_P: usize = 4;
 
 #[derive(Debug, Clone)]
 pub struct RLWE<R> {
@@ -22,10 +22,10 @@ pub fn encrypt<const D: usize, F: PrimeField>(
     // ensure message is in message space
     for m in msg {
         assert!(
-            m >> lg_p == 0,
+            m >> LG_P == 0,
             "Message value {} is too large for the given plaintext modulus {}",
             m,
-            1 << lg_p
+            1 << LG_P
         );
     }
 
@@ -44,7 +44,7 @@ pub fn encrypt<const D: usize, F: PrimeField>(
     let b: CyclotomicRing<D, F> = a.iter().zip(sk).map(|(ai, si)| ai.mul(&si)).sum();
 
     // compute scaling factor (not exact)
-    let delta = F::MODULUS_BIT_SIZE as u64 - lg_p as u64;
+    let delta = F::MODULUS_BIT_SIZE as u64 - LG_P as u64;
 
     let mut mu_coeffs = Vec::<F>::with_capacity(D);
     for i in 0..D {
@@ -70,7 +70,7 @@ pub fn decrypt<const D: usize, F: PrimeField>(
 
     let mut res = Vec::<F>::with_capacity(D);
 
-    let delta = F::MODULUS_BIT_SIZE as u64 - lg_p as u64;
+    let delta = F::MODULUS_BIT_SIZE as u64 - LG_P as u64;
 
     for i in 0..D {
         res.push(mu_star.coeffs[i] / F::from(delta)); // scale down value - not quite correct.
@@ -142,6 +142,10 @@ impl<R: Ring> RLWE<R> {
             body: res_body,
         }
     }
+
+    // pub fn get_ring_elements_ref(self) -> &[R] {
+    //     &self.mask
+    // }
 
     pub fn get_ring_elements(&self) -> Vec<R> {
         let mut elements = self.mask.clone();

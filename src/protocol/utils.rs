@@ -23,17 +23,6 @@ pub fn build_eq_poly<F: Field>(r: &[F], buf: &mut Vec<F>) {
     }
 }
 
-pub fn eq_eval<F: Field>(a: &[F], b: &[F]) -> F {
-    assert_eq!(a.len(), b.len());
-    a.iter()
-        .zip(b.iter())
-        .map(|(a_i, b_i)| {
-            let a_i_b_i = *a_i * b_i;
-            a_i_b_i + a_i_b_i - a_i - b_i + F::ONE
-        })
-        .product()
-}
-
 // Computes the sum over the boolean hypercube of the product of a vector of MLEs
 pub fn sum_over_boolean_hypercube<F: Field>(mles: &[MultilinearPolynomial<F>]) -> F {
     let len = mles[0].evals().len();
