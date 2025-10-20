@@ -1,5 +1,4 @@
 use ark_ff::{Field, PrimeField};
-use rayon::{iter::ParallelIterator, slice::ParallelSlice};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, polynomial_ring::PolynomialRing, ring::Ring},

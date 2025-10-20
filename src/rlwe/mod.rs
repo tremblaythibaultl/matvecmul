@@ -143,14 +143,20 @@ impl<R: Ring> RLWE<R> {
         }
     }
 
-    // pub fn get_ring_elements_ref(self) -> &[R] {
-    //     &self.mask
-    // }
-
-    pub fn get_ring_elements(&self) -> Vec<R> {
-        let mut elements = self.mask.clone();
-        elements.push(self.body.clone());
+    pub fn get_ring_elements(&self) -> Vec<&R> {
+        let mut elements = self.mask.iter().collect::<Vec<_>>();
+        elements.push(&self.body);
         elements
+    }
+
+    pub fn get_ring_element(&self, index: usize) -> Option<&R> {
+        if index < self.mask.len() {
+            Some(&self.mask[index])
+        } else if index == self.mask.len() {
+            Some(&self.body)
+        } else {
+            None
+        }
     }
 }
 
