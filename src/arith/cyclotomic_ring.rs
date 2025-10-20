@@ -1,6 +1,7 @@
 use std::{iter::Sum, marker::PhantomData};
 
 use ark_ff::PrimeField;
+use ark_serialize::SerializationError;
 use ark_std::rand::Rng;
 
 use crate::{
@@ -118,6 +119,13 @@ impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> CyclotomicRing<D, 
             coeffs: N::mul::<D, F>(&self.coeffs, &rhs.coeffs),
             _ntt: PhantomData,
         }
+    }
+
+    pub fn serialize(&self, bytes: &mut Vec<u8>) -> Result<(), SerializationError> {
+        for coeff in &self.coeffs {
+            coeff.serialize_uncompressed(&mut *bytes)?;
+        }
+        Ok(())
     }
 }
 

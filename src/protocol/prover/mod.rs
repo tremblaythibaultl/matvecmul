@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
-use ark_ff::{BigInteger, FftField, Field, PrimeField};
+use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 use crate::{
@@ -106,32 +106,19 @@ where
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
 
-        // TODO: look at how to get ring elements without cloning?? not even sure if the clones are optimized out by the compiler.
-        let x_bytes_to_absorb = x
-            .par_iter()
-            .map(|ct| {
-                // consider mask only for now
-                ct.get_ring_elements()[0]
-                    .coeffs
-                    .iter()
-                    .flat_map(|c| c.into_bigint().to_bytes_le())
-                    .collect::<Vec<u8>>()
-            })
-            .flatten()
-            .collect::<Vec<u8>>();
+        let mut x_bytes_to_absorb = vec![];
+        for ct in x.iter() {
+            // consider mask only for now
+            let el = ct.get_ring_element(0).unwrap();
+            el.serialize(&mut x_bytes_to_absorb).unwrap();
+        }
 
-        let y_bytes_to_absorb = y
-            .par_iter()
-            .map(|ct| {
-                // consider mask only for now
-                ct.get_ring_elements()[0]
-                    .coeffs
-                    .iter()
-                    .flat_map(|c| c.into_bigint().to_bytes_le())
-                    .collect::<Vec<u8>>()
-            })
-            .flatten()
-            .collect::<Vec<u8>>();
+        let mut y_bytes_to_absorb = vec![];
+        for ct in y.iter() {
+            // consider mask only for now
+            let el = ct.get_ring_element(0).unwrap();
+            el.serialize(&mut y_bytes_to_absorb).unwrap();
+        }
 
         let bytes_to_absorb = &[x_bytes_to_absorb, y_bytes_to_absorb].concat();
         transcript.absorb_bytes(bytes_to_absorb);
@@ -235,7 +222,8 @@ fn compute_z1_mles<const D: usize, F: Field>(
     let x_alpha_mle_evals = x
         .iter()
         .map(|ct| {
-            ct.get_ring_elements()[1]
+            ct.get_ring_element(1)
+                .unwrap()
                 .coeffs
                 .iter()
                 .zip(powers_of_alpha.iter())

@@ -9,7 +9,7 @@ use crate::{
     rand::get_rng,
     rlwe::RLWE,
 };
-use ark_ff::{BigInteger, FftField, Field, PrimeField};
+use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 pub struct Verifier<const D: usize, F: Field> {
@@ -49,36 +49,23 @@ where
         proof: Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
         let start = Instant::now();
-        // TODO: look at how to get ring elements without cloning?? not even sure if the clones are optimized out by the compiler.
-        let x_bytes_to_absorb = x
-            .par_iter()
-            .map(|ct| {
-                // consider mask only for now
-                ct.get_ring_elements()[0]
-                    .coeffs
-                    .iter()
-                    .flat_map(|c| c.into_bigint().to_bytes_le())
-                    .collect::<Vec<u8>>()
-            })
-            .flatten()
-            .collect::<Vec<u8>>();
+        let mut x_bytes_to_absorb = vec![];
+        for ct in x.iter() {
+            // consider mask only for now
+            let el = ct.get_ring_element(0).unwrap();
+            el.serialize(&mut x_bytes_to_absorb).unwrap();
+        }
+
         let after_processing_x = start.elapsed();
         println!("processing x took: {:?}", after_processing_x);
 
         let start = Instant::now();
-        let y_bytes_to_absorb = proof
-            .y
-            .par_iter()
-            .map(|ct| {
-                // consider mask only for now
-                ct.get_ring_elements()[0]
-                    .coeffs
-                    .iter()
-                    .flat_map(|c| c.into_bigint().to_bytes_le())
-                    .collect::<Vec<u8>>()
-            })
-            .flatten()
-            .collect::<Vec<u8>>();
+        let mut y_bytes_to_absorb = vec![];
+        for ct in proof.y.iter() {
+            // consider mask only for now
+            let el = ct.get_ring_element(0).unwrap();
+            el.serialize(&mut y_bytes_to_absorb).unwrap();
+        }
         let after_processing_y = start.elapsed();
         println!("processing y took: {:?}", after_processing_y);
 
@@ -221,7 +208,8 @@ where
             .y
             .par_iter()
             .map(|ct| {
-                ct.get_ring_elements()[1]
+                ct.get_ring_element(1)
+                    .unwrap()
                     .coeffs
                     .iter()
                     .zip(powers_of_alpha.iter())
@@ -279,7 +267,8 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     let x_alpha_mle_evals = x
         .par_iter()
         .map(|ct| {
-            ct.get_ring_elements()[1]
+            ct.get_ring_element(1)
+                .unwrap()
                 .coeffs
                 .iter()
                 .zip(powers_of_alpha.iter())
