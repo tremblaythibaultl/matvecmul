@@ -2,8 +2,8 @@ use ark_ff::Field;
 use rayon::prelude::*;
 
 use crate::protocol::{
-    sample_random_challenge,
     sumcheck::{multilinear::MultilinearPolynomial, univariate::UnivariatePolynomial},
+    transcript::{self, Blake3Transcript},
 };
 
 pub mod multilinear;
@@ -15,18 +15,24 @@ pub struct SumCheckProof<F: Field> {
 }
 
 impl<F: Field> SumCheckProof<F> {
-    pub fn verify(&self, num_vars: usize, max_degree: usize) -> Result<(F, F, Vec<F>), usize> {
+    pub fn verify(
+        &self,
+        num_vars: usize,
+        max_degree: usize,
+        transcript: &mut Blake3Transcript<F>,
+    ) -> Result<(F, F, Vec<F>), usize> {
         assert_eq!(self.polys.len(), num_vars);
 
         let mut claim = self.claim;
         let mut challenges = Vec::<F>::with_capacity(num_vars);
 
+        transcript.absorb(&claim);
+
         for i in 0..self.polys.len() {
             // verify degree
             assert!(self.polys[i].coeffs().len() <= max_degree + 1);
 
-            // TODO: implement fiat-shamir logic
-            let challenge = sample_random_challenge::<F>(true);
+            let challenge = transcript.squeeze(1)[0];
 
             let zero_one_eval =
                 self.polys[i].coeffs()[0] + self.polys[i].coeffs().iter().sum::<F>();
@@ -51,11 +57,14 @@ pub fn prove<F: Field>(
     claim: F,
     mles: &mut Vec<MultilinearPolynomial<F>>,
     num_vars: usize,
+    transcript: &mut transcript::Blake3Transcript<F>,
 ) -> (SumCheckProof<F>, Vec<F>) {
     let max_degree = mles.len(); // Degree of the polynomial is equal to the number of MLEs being multiplied. We assume the factor of each MLE is `1`.
 
     let mut challenges = Vec::<F>::with_capacity(num_vars);
     let mut round_polys = Vec::<UnivariatePolynomial<F>>::with_capacity(num_vars);
+
+    transcript.absorb(&claim);
 
     for _ in 0..num_vars {
         // we assume all MLEs have the same size
@@ -110,8 +119,9 @@ pub fn prove<F: Field>(
             round_poly_evaluations,
         ));
 
-        let random_challenge = sample_random_challenge::<F>(true);
-        challenges.push(random_challenge); // TODO: Implement Fiat-Shamir logic
+        let random_challenge = transcript.squeeze(1)[0];
+
+        challenges.push(random_challenge);
 
         // bind to verifier's challenge
         mles.iter_mut()
@@ -131,7 +141,10 @@ pub fn prove<F: Field>(
 mod tests {
     use crate::{
         arith::field::Field64_2,
-        protocol::sumcheck::{multilinear::MultilinearPolynomial, prove},
+        protocol::{
+            sumcheck::{multilinear::MultilinearPolynomial, prove},
+            transcript,
+        },
     };
 
     pub type F = Field64_2;
@@ -143,20 +156,36 @@ mod tests {
             F::from(2),
             F::from(3),
             F::from(4),
+            F::from(5),
+            F::from(6),
+            F::from(7),
+            F::from(8),
             F::from(1),
             F::from(2),
             F::from(3),
             F::from(4),
+            F::from(5),
+            F::from(6),
+            F::from(7),
+            F::from(8),
         ];
         let evals_2 = vec![
             F::from(5),
             F::from(6),
             F::from(7),
             F::from(8),
+            F::from(9),
+            F::from(10),
+            F::from(11),
+            F::from(12),
             F::from(5),
             F::from(6),
             F::from(7),
             F::from(8),
+            F::from(9),
+            F::from(10),
+            F::from(11),
+            F::from(12),
         ];
 
         let claim = evals_1
@@ -165,18 +194,36 @@ mod tests {
             .map(|(a, b)| a * b)
             .sum::<F>();
 
-        println!("Claim: {:?}", claim);
-
-        let num_vars = 3;
+        let num_vars = 4;
         let max_degree = 2;
 
-        let mle_1 = MultilinearPolynomial::new(evals_1, num_vars);
-        let mle_2 = MultilinearPolynomial::new(evals_2, num_vars);
+        let mut mle_1 = MultilinearPolynomial::new(evals_1, num_vars);
+        let mut mle_2 = MultilinearPolynomial::new(evals_2, num_vars);
 
-        let (proof, _challenges) = prove(claim, &mut vec![mle_1, mle_2], num_vars);
+        let mut p_transcript = transcript::Blake3Transcript::<F>::new();
 
-        let v = proof.verify(num_vars, max_degree);
+        let (proof, _) = prove(
+            claim,
+            &mut vec![mle_1.clone(), mle_2.clone()],
+            num_vars,
+            &mut p_transcript,
+        );
 
-        println!("Verification result: {:?}", v);
+        let mut v_transcript = transcript::Blake3Transcript::<F>::new();
+
+        let (_, final_claim, verifier_challenges) = proof
+            .verify(num_vars, max_degree, &mut v_transcript)
+            .unwrap();
+
+        for chal in verifier_challenges {
+            mle_1.bind_to_challenge(&chal);
+            mle_2.bind_to_challenge(&chal);
+        }
+
+        let mle_1_eval = mle_1.evals()[0];
+        let mle_2_eval = mle_2.evals()[0];
+        let final_eval = mle_1_eval * mle_2_eval;
+
+        assert_eq!(final_eval, final_claim)
     }
 }

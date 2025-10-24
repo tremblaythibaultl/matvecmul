@@ -121,7 +121,7 @@ where
         }
 
         let bytes_to_absorb = &[x_bytes_to_absorb, y_bytes_to_absorb].concat();
-        transcript.absorb_bytes(bytes_to_absorb);
+        transcript.absorb_bytes_par(bytes_to_absorb);
 
         // TODO: absorb the commitment to r too
 
@@ -143,7 +143,8 @@ where
 
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
 
-        let (z1_sumcheck_proof, z1_challenges) = prove(z1_claim, &mut z1_mles, z1_num_vars);
+        let (z1_sumcheck_proof, z1_challenges) =
+            prove(z1_claim, &mut z1_mles, z1_num_vars, transcript);
 
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
@@ -155,7 +156,7 @@ where
         let z3_claim = sum_over_boolean_hypercube(&z3_mles.mles_over_f);
 
         let (z3_sumcheck_proof, z3_challenges) =
-            prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars);
+            prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars, transcript);
 
         // Whir proofs for r_mle and m_mle.
         let mut rng = get_rng();

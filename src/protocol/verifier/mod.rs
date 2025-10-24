@@ -1,4 +1,4 @@
-use std::{marker::PhantomData, time::Instant};
+use std::{marker::PhantomData, ops::Mul, time::Instant};
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix},
@@ -75,7 +75,7 @@ where
         println!("time to concat: {:?}", after_concat);
 
         let start = Instant::now();
-        transcript.absorb_bytes(&bytes_to_absorb);
+        transcript.absorb_bytes_par(&bytes_to_absorb);
         let after_absorb = start.elapsed();
         println!("time to absorb: {:?}", after_absorb);
 
@@ -97,36 +97,37 @@ where
             after_compute_z1_mles
         );
 
+        let start = Instant::now();
+        let mut padded_z1_mles = compute_padded_z1_mles(&m_rq, x, z1_num_vars, &alpha, &vec_tau);
+        let after_compute_padded_z1_mles = start.elapsed();
+        println!(
+            "Computing padded Z1 MLEs took: {:?}",
+            after_compute_padded_z1_mles
+        );
+
         let powers_of_alpha = unpadded_z1_mles[2].evals();
 
         let start = Instant::now();
-        let (z1_original_claim, z1_final_claim, z1_challenges) =
-            proof.z1_sumcheck_proof.verify(z1_num_vars, 4).unwrap();
+        let (z1_original_claim, z1_final_claim, z1_challenges) = proof
+            .z1_sumcheck_proof
+            .verify(z1_num_vars, 4, transcript)
+            .unwrap();
         let after_verify_z1 = start.elapsed();
         println!("Verifying Z1 took: {:?}", after_verify_z1);
 
         let start = Instant::now();
-        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
-        let after_eq_eval = start.elapsed();
-        println!("Evaluating eq_tau took: {:?}", after_eq_eval);
+        for chal in z1_challenges.iter() {
+            // TODO: par_iter_mut()?
+            for mle in padded_z1_mles.iter_mut() {
+                mle.bind_to_challenge(&chal);
+            }
+        }
+        let after_bind_challenges = start.elapsed();
+        println!("Binding Z1 challenges took: {:?}", after_bind_challenges);
 
-        let start = Instant::now();
-        let x_alpha_eval = evaluate_x_alpha_at_challenges(
-            &unpadded_z1_mles[1],
-            &z1_challenges[m_rq.height().ilog2() as usize
-                ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
-                .to_vec(),
-        );
-        let after_x_alpha_eval = start.elapsed();
-        println!("Evaluating x_alpha took: {:?}", after_x_alpha_eval);
-
-        let start = Instant::now();
-        let z1_ell_eval = evaluate_ell_at_challenges(
-            &unpadded_z1_mles[2],
-            &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
-        );
-        let after_ell_eval = start.elapsed();
-        println!("Evaluating ell took: {:?}", after_ell_eval);
+        let eq_eval = padded_z1_mles[0].evals()[0];
+        let x_alpha_eval = padded_z1_mles[1].evals()[0];
+        let z1_ell_eval = padded_z1_mles[2].evals()[0];
 
         let mut rng = get_rng();
 
@@ -140,6 +141,11 @@ where
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
+        println!(
+            "z1_final_claim: {:?}, z1_eval_at_random_point: {:?}",
+            z1_final_claim, z1_eval_at_random_point
+        );
+
         if z1_eval_at_random_point != z1_final_claim {
             return Err(());
         } else {
@@ -147,21 +153,37 @@ where
         }
 
         // z_3 verification
-        let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
+        let m = m_rq.height().ilog2() as usize;
+        let t = m_rq.width().ilog2() as usize;
+
+        let z3_num_vars = z1_num_vars - t;
 
         let start = Instant::now();
-        let (z3_original_claim, z3_final_claim, z3_challenges) =
-            proof.z3_sumcheck_proof.verify(z3_num_vars, 3).unwrap();
+        let (z3_original_claim, z3_final_claim, z3_challenges) = proof
+            .z3_sumcheck_proof
+            .verify(z3_num_vars, 3, transcript)
+            .unwrap();
         let after_verify_z3 = start.elapsed();
         println!("Verifying Z3 took: {:?}", after_verify_z3);
 
+        let mut padded_z3_mles =
+            compute_padded_z3_mles::<D, F>(&powers_of_alpha.to_vec(), &vec_tau, m);
+
         let start = Instant::now();
-        let z3_ell_eval = evaluate_ell_at_challenges(
-            &unpadded_z1_mles[2],
-            &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
-        );
-        let after_ell_eval_z3 = start.elapsed();
-        println!("Evaluating ell for Z3 took: {:?}", after_ell_eval_z3);
+        for chal in z3_challenges.iter() {
+            // TODO: par_iter_mut()?
+            for mle in padded_z3_mles.iter_mut() {
+                mle.bind_to_challenge(&chal);
+            }
+        }
+        let after_bind_challenges = start.elapsed();
+        println!("Binding Z3 challenges took: {:?}", after_bind_challenges);
+
+        println!("padded_z3_mles[0] len: {}", padded_z3_mles[0].evals().len());
+        println!("padded_z3_mles[1] len: {}", padded_z3_mles[1].evals().len());
+
+        let eq_eval = padded_z3_mles[0].evals()[0];
+        let z3_ell_eval = padded_z3_mles[1].evals()[0];
 
         let r_eval = proof.r_mle_proof.claim;
 
@@ -175,12 +197,6 @@ where
         let after_whir_verify = start.elapsed();
         println!("WHIR Verifying r took: {:?}", after_whir_verify);
         assert_eq!(r_eval, proof.r_mle_proof.claim);
-
-        // eq_tau eval
-        let start = Instant::now();
-        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
-        let after_eq_eval_z3 = start.elapsed();
-        println!("Evaluating eq_tau for Z3 took: {:?}", after_eq_eval_z3);
 
         let z3_eval_at_random_point = eq_eval * r_eval * z3_ell_eval;
 
@@ -242,6 +258,95 @@ where
             alpha_factor * z3_original_claim,
         ])
     }
+}
+
+pub fn compute_padded_z1_mles<const D: usize, F: Field>(
+    m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
+    x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+    num_vars: usize,
+    alpha: &F,
+    vec_tau: &Vec<F>,
+) -> Vec<MultilinearPolynomial<F>> {
+    let powers_of_alpha: Vec<F> = (0..D)
+        .scan(F::one(), |state, _| {
+            let result = *state;
+            *state *= alpha;
+            Some(result)
+        })
+        .collect();
+    // pad alpha_mle_evals
+    let padded_alpha_mle_evals = (0..m_rq.width() * m_rq.height())
+        .flat_map(|_| powers_of_alpha.clone())
+        .collect::<Vec<_>>();
+
+    let padded_alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, num_vars);
+
+    // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
+    let x_alpha_mle_evals = x
+        .par_iter()
+        .map(|ct| {
+            ct.get_ring_elements()[1]
+                .coeffs
+                .iter()
+                .zip(powers_of_alpha.iter())
+                .map(|(c, a)| a.mul_by_base_prime_field(c))
+                .sum::<F>()
+        })
+        .collect::<Vec<F>>();
+
+    let padded_x_alpha_mle_evals = (0..m_rq.height() as usize)
+        .flat_map(|_| {
+            x_alpha_mle_evals
+                .iter()
+                .map(|e| vec![*e; D])
+                .flatten()
+                .collect::<Vec<F>>()
+        })
+        .collect::<Vec<F>>();
+
+    let padded_x_alpha_mle: MultilinearPolynomial<F> =
+        MultilinearPolynomial::new(padded_x_alpha_mle_evals, num_vars);
+
+    let m = m_rq.height().ilog2() as usize;
+    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
+    build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+    let padded_eq_tau_mle_evals = eq_tau_mle_evals
+        .iter()
+        .map(|e| vec![*e; m_rq.width() as usize * D])
+        .flatten()
+        .collect::<Vec<F>>();
+
+    let padded_eq_tau_mle = MultilinearPolynomial::new(padded_eq_tau_mle_evals, num_vars);
+    vec![padded_eq_tau_mle, padded_x_alpha_mle, padded_alpha_mle]
+}
+
+fn compute_padded_z3_mles<const D: usize, F: Field>(
+    powers_of_alpha: &Vec<F>,
+    vec_tau: &Vec<F>,
+    m: usize,
+) -> Vec<MultilinearPolynomial<F>> {
+    // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
+
+    let z3_num_vars = m + D.ilog2() as usize;
+
+    let padded_alpha_mle_evals = (0..1 << m)
+        .flat_map(|_| powers_of_alpha.clone())
+        .collect::<Vec<_>>();
+    let padded_alpha_mle = MultilinearPolynomial::new(padded_alpha_mle_evals, z3_num_vars);
+
+    // compute eq polynomial
+    let mut eq_tau_mle_evals = Vec::<F>::with_capacity(1 << m);
+    build_eq_poly(&vec_tau, &mut eq_tau_mle_evals);
+
+    let padded_eq_tau_mle_evals = eq_tau_mle_evals
+        .iter()
+        .map(|e| vec![*e; D])
+        .flatten()
+        .collect::<Vec<F>>();
+
+    let padded_eq_tau_mle = MultilinearPolynomial::new(padded_eq_tau_mle_evals, z3_num_vars);
+
+    vec![padded_alpha_mle, padded_eq_tau_mle]
 }
 
 pub fn compute_z1_mles<const D: usize, F: Field>(
