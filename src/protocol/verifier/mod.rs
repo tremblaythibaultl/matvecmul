@@ -75,7 +75,7 @@ where
         println!("time to concat: {:?}", after_concat);
 
         let start = Instant::now();
-        transcript.absorb_bytes(&bytes_to_absorb);
+        transcript.absorb_bytes_par(&bytes_to_absorb);
         let after_absorb = start.elapsed();
         println!("time to absorb: {:?}", after_absorb);
 
@@ -100,8 +100,10 @@ where
         let powers_of_alpha = unpadded_z1_mles[2].evals();
 
         let start = Instant::now();
-        let (z1_original_claim, z1_final_claim, z1_challenges) =
-            proof.z1_sumcheck_proof.verify(z1_num_vars, 4).unwrap();
+        let (z1_original_claim, z1_final_claim, z1_challenges) = proof
+            .z1_sumcheck_proof
+            .verify(z1_num_vars, 4, transcript)
+            .unwrap();
         let after_verify_z1 = start.elapsed();
         println!("Verifying Z1 took: {:?}", after_verify_z1);
 
@@ -150,8 +152,10 @@ where
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
         let start = Instant::now();
-        let (z3_original_claim, z3_final_claim, z3_challenges) =
-            proof.z3_sumcheck_proof.verify(z3_num_vars, 3).unwrap();
+        let (z3_original_claim, z3_final_claim, z3_challenges) = proof
+            .z3_sumcheck_proof
+            .verify(z3_num_vars, 3, transcript)
+            .unwrap();
         let after_verify_z3 = start.elapsed();
         println!("Verifying Z3 took: {:?}", after_verify_z3);
 

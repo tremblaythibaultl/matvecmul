@@ -24,6 +24,10 @@ impl<F: Field> Blake3Transcript<F> {
     }
 
     pub fn absorb_bytes(&mut self, bytes: &[u8]) {
+        self.hasher.update(bytes);
+    }
+
+    pub fn absorb_bytes_par(&mut self, bytes: &[u8]) {
         println!("bytes to absorb len: {}", bytes.len());
         self.hasher.update_rayon(bytes);
     }
@@ -53,7 +57,7 @@ impl<F: Field> Blake3Transcript<F> {
         let mut output = vec![0u8; 8 * ext_deg * num];
 
         output_reader.fill(&mut output);
-
+        self.absorb_bytes(&output);
         output
             .chunks(8 * ext_deg)
             .map(|bytes| {
