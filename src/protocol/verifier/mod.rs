@@ -108,12 +108,12 @@ where
         println!("Verifying Z1 took: {:?}", after_verify_z1);
 
         let start = Instant::now();
-        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
+        let eq_eval = evaluate_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
         let after_eq_eval = start.elapsed();
         println!("Evaluating eq_tau took: {:?}", after_eq_eval);
 
         let start = Instant::now();
-        let x_alpha_eval = evaluate_x_alpha_at_challenges(
+        let x_alpha_eval = evaluate_at_challenges(
             &unpadded_z1_mles[1],
             &z1_challenges[m_rq.height().ilog2() as usize
                 ..m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize]
@@ -123,7 +123,7 @@ where
         println!("Evaluating x_alpha took: {:?}", after_x_alpha_eval);
 
         let start = Instant::now();
-        let z1_ell_eval = evaluate_ell_at_challenges(
+        let z1_ell_eval = evaluate_at_challenges(
             &unpadded_z1_mles[2],
             &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
@@ -160,7 +160,7 @@ where
         println!("Verifying Z3 took: {:?}", after_verify_z3);
 
         let start = Instant::now();
-        let z3_ell_eval = evaluate_ell_at_challenges(
+        let z3_ell_eval = evaluate_at_challenges(
             &unpadded_z1_mles[2],
             &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
         );
@@ -182,7 +182,7 @@ where
 
         // eq_tau eval
         let start = Instant::now();
-        let eq_eval = evaluate_eq_tau_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
+        let eq_eval = evaluate_at_challenges(&unpadded_z1_mles[0], &z3_challenges[0..m]);
         let after_eq_eval_z3 = start.elapsed();
         println!("Evaluating eq_tau for Z3 took: {:?}", after_eq_eval_z3);
 
@@ -300,45 +300,20 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
 // Its evaluations `evals` are the `D` repetitions of each evaluation of the unpadded x_alpha MLE, concatenated `m` times.
 // In other words, `evals[0] = evals[1] = ... = evals[D-1], evals[D] = evals[D+1] = ... = evals[2D-1]` up to `evals [t*D-1]`, then
 // `evals[0] = evals[t*D]` and so on and so forth
-fn evaluate_x_alpha_at_challenges<F: Field>(
-    unpadded_x_alpha_mle: &MultilinearPolynomial<F>,
+// we exploit this structure to evaluate the padded x_alpha MLE at the point defined by `challenges_subvec`
+// see MultilinearPolynomial::test_fast_eval_structured for more details
+fn evaluate_at_challenges<F: Field>(
+    unpadded_mle: &MultilinearPolynomial<F>,
     challenges_subvec: &[F],
 ) -> F {
+    assert_eq!(1 << challenges_subvec.len(), unpadded_mle.evals().len());
     let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
-    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
+    build_eq_poly(
+        &challenges_subvec.iter().rev().cloned().collect::<Vec<F>>(),
+        &mut eq_x_challenges_mle_evals,
+    );
 
-    unpadded_x_alpha_mle
-        .evals()
-        .iter()
-        .zip(eq_x_challenges_mle_evals.iter())
-        .map(|(a, b)| *a * *b)
-        .sum::<F>()
-}
-
-// Similar reasoning as `evaluate_x_alpha_at_challenges`
-fn evaluate_ell_at_challenges<F: Field>(
-    unpadded_ell_mle: &MultilinearPolynomial<F>,
-    challenges_subvec: &[F],
-) -> F {
-    let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
-    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
-
-    unpadded_ell_mle
-        .evals()
-        .iter()
-        .zip(eq_x_challenges_mle_evals.iter())
-        .map(|(a, b)| *a * *b)
-        .sum::<F>()
-}
-
-fn evaluate_eq_tau_at_challenges<F: Field>(
-    unpadded_eq_tau_mle: &MultilinearPolynomial<F>,
-    challenges_subvec: &[F],
-) -> F {
-    let mut eq_x_challenges_mle_evals = Vec::<F>::with_capacity(1 << challenges_subvec.len());
-    build_eq_poly(&challenges_subvec, &mut eq_x_challenges_mle_evals);
-
-    unpadded_eq_tau_mle
+    unpadded_mle
         .evals()
         .iter()
         .zip(eq_x_challenges_mle_evals.iter())
