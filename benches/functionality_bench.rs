@@ -47,7 +47,7 @@ fn setup_benchmark_data(
     let integer_height = height;
 
     let data = (1..=integer_height * integer_width)
-        .map(|x| F::from(x as u64))
+        .map(|x| F::from((x % 16) as u64))
         .collect::<Vec<_>>();
     let m = Matrix::from_vec(data, integer_width);
 
@@ -283,11 +283,11 @@ criterion_group!(
     name = benches;
     config = Criterion::default().sample_size(10);
     targets =
-        // bench_plaintext_matvec,
+        bench_plaintext_matvec,
         // bench_parallel_plaintext_matvec,
-        // bench_vector_encryption,
-        // bench_prover_computation,
-        // bench_result_decryption,
+        bench_vector_encryption,
+        bench_prover_computation,
+        bench_result_decryption,
         bench_verifier_computation,
         // bench_whir_prover,
 );

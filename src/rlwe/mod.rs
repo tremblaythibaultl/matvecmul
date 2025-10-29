@@ -1,12 +1,14 @@
-use crate::arith::cyclotomic_ring::CyclotomicRing;
 use crate::arith::polynomial_ring::PolynomialRing;
 use crate::arith::ring::Ring;
-use ark_ff::PrimeField;
+use crate::{arith::cyclotomic_ring::CyclotomicRing, rand::get_rng};
+use ark_ff::{BigInteger, PrimeField};
+use rand_distr::{Distribution, Normal};
 
 // MLWE rank
 pub const K: usize = 1;
 // Log of message modulus
-const LG_P: usize = 4;
+const LG_P: u32 = 4;
+const SIGMA: f64 = 8589934592.0; // 2^33
 
 #[derive(Debug, Clone)]
 pub struct RLWE<R> {
@@ -44,12 +46,18 @@ pub fn encrypt<const D: usize, F: PrimeField>(
     let b: CyclotomicRing<D, F> = a.iter().zip(sk).map(|(ai, si)| ai.mul(&si)).sum();
 
     // compute scaling factor (not exact)
-    let delta = F::MODULUS_BIT_SIZE as u64 - LG_P as u64;
+    let delta = F::MODULUS_BIT_SIZE - LG_P;
+
+    // sample error
+    let normal = Normal::new(0.0, SIGMA).unwrap();
+
+    let mut rng = get_rng();
 
     let mut mu_coeffs = Vec::<F>::with_capacity(D);
     for i in 0..D {
-        mu_coeffs.push(F::from(delta * msg[i]));
-        // TODO: add error
+        // TODO: this can be parallelized
+        let e = normal.sample(&mut rng).round() as i64;
+        mu_coeffs.push(F::from((msg[i] << delta).wrapping_add_signed(e)));
     }
 
     RLWE {
@@ -70,10 +78,18 @@ pub fn decrypt<const D: usize, F: PrimeField>(
 
     let mut res = Vec::<F>::with_capacity(D);
 
-    let delta = F::MODULUS_BIT_SIZE as u64 - LG_P as u64;
+    let delta = F::MODULUS_BIT_SIZE - LG_P;
 
     for i in 0..D {
-        res.push(mu_star.coeffs[i] / F::from(delta)); // scale down value - not quite correct.
+        // assumes the field is 64 bits
+        let mu_star_coeff = u64::from_le_bytes(
+            // TODO: not sure if there is a clone here, there is probably a better way to do this
+            mu_star.coeffs[i].into_bigint().to_bytes_le()[..8]
+                .try_into()
+                .unwrap(),
+        );
+
+        res.push(F::from(((mu_star_coeff >> (delta - 1)) + 1) >> 1));
     }
 
     res

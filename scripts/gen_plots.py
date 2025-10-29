@@ -158,9 +158,8 @@ def main():
             if pr is not None:
                 prover_points.append((pr, h))
 
-            # compiled verifier time (vector_encryption + 2*verifier_computation + result_decryption)
             if ve is not None and vc is not None and rd is not None:
-                compiled_verifier_points.append((ve + 2.0 * vc + rd, h))
+                compiled_verifier_points.append((ve + vc + rd, h))
 
         # helper to write a list of points to a file
         def write_points(name, pts):
@@ -239,7 +238,7 @@ def main():
             for t in all_T:
                 grp = per_param.get((t, H), {})
                 ps_bytes = grp.get('proof_size_bytes')
-                ps_kb = float.__round__(2*ps_bytes / 1000) # factor two because need to repeat proof twice
+                ps_kb = float.__round__(ps_bytes / 1000)
                 cell = ps_kb
                 row.append(str(cell))
             pf.write(' & '.join(row) + ' \\\\\n')

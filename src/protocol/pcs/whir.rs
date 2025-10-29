@@ -63,7 +63,7 @@ where
     pub const RATE: usize = 1;
     pub const FIRST_ROUND_FOLDING_FACTOR: usize = 4;
     pub const FOLDING_FACTOR: usize = 4;
-    pub const SOUNDNESS_TYPE: SoundnessType = SoundnessType::UniqueDecoding;
+    pub const SOUNDNESS_TYPE: SoundnessType = SoundnessType::ConjectureList;
     pub const BATCH_SIZE: usize = 1;
 
     pub fn new<R: RngCore>(num_variables: usize, rng: &mut R) -> Self
