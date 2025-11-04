@@ -12,7 +12,10 @@ use matvec::{
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
 };
-use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use rayon::{
+    iter::{IntoParallelRefIterator, ParallelIterator},
+    slice::ParallelSlice,
+};
 use whir::crypto::fields::FieldWithSize;
 
 pub const D: usize = 1 << 10;
@@ -151,7 +154,7 @@ fn bench_vector_encryption(c: &mut Criterion) {
                         (v, sk)
                     },
                     |(v, sk)| {
-                        v.chunks(D)
+                        v.par_chunks(D)
                             .map(|subvec| encrypt(&sk, &subvec))
                             .collect::<Vec<_>>()
                     },

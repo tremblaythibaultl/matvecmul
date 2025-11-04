@@ -149,7 +149,7 @@ impl<const D: usize, F: PrimeField> Matrix<CyclotomicRing<D, F>> {
     }
 }
 
-impl<R: Ring> Matrix<R> {
+impl<R: Ring + Sync + Send> Matrix<R> {
     /// Multiplies a matrix over a ring by a vector over of RLWE ciphertexts over the same ring.
     pub fn mat_rlwe_vec_mul(&self, rhs: &Vec<RLWE<R>>) -> Vec<RLWE<R>> {
         assert!(
@@ -159,7 +159,7 @@ impl<R: Ring> Matrix<R> {
 
         let result = self
             .data
-            .chunks(self.width)
+            .par_chunks(self.width)
             .map(|row| {
                 row.iter()
                     .zip(rhs.iter())

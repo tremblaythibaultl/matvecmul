@@ -79,6 +79,7 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
         todo!()
     }
 
+    // Assumes that the input polynomials have maximal degree D
     fn mul(&self, other: &Self) -> Self {
         for i in D..2 * D {
             assert!(
@@ -91,9 +92,7 @@ impl<const D: usize, F: Field> Ring for PolynomialRing<D, F> {
 
         for i in 0..D {
             for j in 0..D {
-                if i + j < 2 * D {
-                    coeffs[i + j] += self.coeffs[i] * other.coeffs[j];
-                }
+                coeffs[i + j] += self.coeffs[i] * other.coeffs[j];
             }
         }
 

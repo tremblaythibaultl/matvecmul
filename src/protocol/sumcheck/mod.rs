@@ -140,7 +140,7 @@ pub fn prove<F: Field>(
         challenges.push(random_challenge);
 
         // bind to verifier's challenge
-        mles.iter_mut()
+        mles.par_iter_mut()
             .for_each(|mle| mle.bind_to_challenge(&random_challenge));
     }
 
