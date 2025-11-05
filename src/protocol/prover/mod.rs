@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::{marker::PhantomData, time::Instant};
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
@@ -84,12 +84,29 @@ where
         transcript: &mut Blake3Transcript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     ) -> Proof<D, F> {
+        // let start = Instant::now();
         let x_polyring = x
             .iter()
             .map(|elem| elem.lift_to_polynomial_ring())
             .collect::<Vec<_>>();
+        // let after_lifting_to_polyring = start.elapsed();
+        // println!(
+        //     "time taken to lift to polyring: {:?}",
+        //     after_lifting_to_polyring
+        // );
 
+        // let start = Instant::now();
+
+        // TODO: this is the bottleneck right now.
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
+
+        // let after_mat_vec_rlwe_mul = start.elapsed();
+        // println!(
+        //     "after_mat_vec_rlwe_mul POLYRING: {:?}",
+        //     after_mat_vec_rlwe_mul
+        // );
+
+        // let start = Instant::now();
 
         let (vec_quotients, _vec_remainders): (
             Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>,
@@ -99,29 +116,52 @@ where
             .map(|ct| ct.long_division_by_cyclotomic())
             .collect();
 
+        // let after_division = start.elapsed();
+        // println!("after_div: {:?}", after_division);
+
+        // let start = Instant::now();
+
         // mat vec mul -- this value should coincide with vec_remainders
         let y = m_rq.mat_rlwe_vec_mul(&x);
 
+        // let after_matvec_mul = start.elapsed();
+        // println!("after_mat_vec_mul RLWE: {:?}", after_matvec_mul);
+
+        // let start = Instant::now();
         let mut x_bytes_to_absorb = vec![];
         for ct in x.iter() {
             // consider mask only for now
             let el = ct.get_ring_element(0).unwrap();
             el.serialize(&mut x_bytes_to_absorb).unwrap();
         }
+        // let after_processing_x = start.elapsed();
+        // println!("processing x took: {:?}", after_processing_x);
 
+        // let start = Instant::now();
         let mut y_bytes_to_absorb = vec![];
         for ct in y.iter() {
             // consider mask only for now
             let el = ct.get_ring_element(0).unwrap();
             el.serialize(&mut y_bytes_to_absorb).unwrap();
         }
+        // let after_processing_y = start.elapsed();
+        // println!("processing y took: {:?}", after_processing_y);
 
+        // let start = Instant::now();
         let bytes_to_absorb = &[x_bytes_to_absorb, y_bytes_to_absorb].concat();
-        transcript.absorb_bytes_par(bytes_to_absorb);
+        // let after_concat = start.elapsed();
+        // println!("time to concat: {:?}", after_concat);
+
+        // let start = Instant::now();
+        transcript.absorb_bytes_par(&bytes_to_absorb);
+        // let after_absorb = start.elapsed();
+        // println!("time to absorb: {:?}", after_absorb);
 
         // TODO: absorb the commitment to r too
-
+        // let start = Instant::now();
         let mut challenges = transcript.squeeze(m_rq.height().ilog2() as usize + 1);
+        // let after_squeeze = start.elapsed();
+        // println!("Squeezing challenges took: {:?}", after_squeeze);
 
         let alpha = challenges.pop().unwrap();
         let vec_tau = challenges;
@@ -134,34 +174,65 @@ where
             })
             .collect();
 
+        // let start = Instant::now();
         let mut z1_mles =
             compute_z1_mles(&m_rq, &m_mle, x, z1_num_vars, &powers_of_alpha, &vec_tau);
+        // let after_z1_mles = start.elapsed();
+        // println!("time to compute z1 mles: {:?}", after_z1_mles);
 
+        // let start = Instant::now();
         let z1_claim = sum_over_boolean_hypercube(&z1_mles);
+        // let after_z1_claim = start.elapsed();
+        // println!(
+        //     "time to compute z1 claim over hypercube: {:?}",
+        //     after_z1_claim
+        // );
 
+        // let start = Instant::now();
         let (z1_sumcheck_proof, z1_challenges) =
             prove(z1_claim, &mut z1_mles, z1_num_vars, transcript);
+        // let after_z1_sc = start.elapsed();
+        // println!("time taken for 1st sumcheck: {:?}", after_z1_sc);
 
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
         // z_3
         let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
+        // let start = Instant::now();
         let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &vec_tau);
+        // let after_z3_mles = start.elapsed();
+        // println!("time taken to compute z3 mles: {:?}", after_z3_mles);
 
+        // let start = Instant::now();
         let z3_claim = sum_over_boolean_hypercube(&z3_mles.mles_over_f);
+        // let after_z3_hypercupe = start.elapsed();
+        // println!(
+        //     "time taken to compute z3 over hypercube: {:?}",
+        //     after_z3_hypercupe
+        // );
 
+        // let start = Instant::now();
         let (z3_sumcheck_proof, z3_challenges) =
             prove(z3_claim, &mut z3_mles.mles_over_f, z3_num_vars, transcript);
+        // let after_z3_sc = start.elapsed();
+        // println!("time taken for 2nd sumcheck: {:?}", after_z3_sc);
 
         // Whir proofs for r_mle and m_mle.
         let mut rng = get_rng();
         let whir_r_mle = Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
+
+        // let start = Instant::now();
         let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+        // let after_r_mle_proof = start.elapsed();
+        // println!("time taken to compute r_mle proof: {:?}", after_r_mle_proof);
 
         let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
-        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
 
+        // let start = Instant::now();
+        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
+        // let after_m_mle_proof = start.elapsed();
+        // println!("time taken to compute m_mle proof: {:?}", after_m_mle_proof);
         Proof {
             y,
             z1_sumcheck_proof,
