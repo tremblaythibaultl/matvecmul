@@ -196,7 +196,7 @@ def main():
         tf.write('\\centering\n')
         tf.write('\\begin{tabular}{%s}\n' % cols)
         tf.write('\\hline\n')
-        header_cells = ['\\diagbox{$\\lg n$}{$\\lg t$}'] + [f"${int(log2(t))}$" for t in all_T]
+        header_cells = ['\\diagbox{$\\log n$}{$\\log t$}'] + [f"${int(log2(t))}$" for t in all_T]
         tf.write(' & '.join(header_cells) + ' \\\\ \n\\hline\n')
 
         for H in all_H:
@@ -216,7 +216,9 @@ def main():
         tf.write('\\hline\n')
 
         tf.write('\\end{tabular}\n')
+        tf.write('\\vspace{0.5em}\n')
         tf.write('\\caption{Prover times (in seconds).}\n')
+        tf.write('\\label{tab:prover_times}\n')
         tf.write('\\end{table}\n')
 
     print(f"Wrote prover times LaTeX table to {table_path}")
@@ -229,7 +231,7 @@ def main():
         pf.write('\\centering\n')
         pf.write('\\begin{tabular}{%s}\n' % cols)
         pf.write('\\hline\n')
-        header_cells = ['\\diagbox{$\\lg n$}{$\\lg t$}'] + [f"${int(log2(t))}$" for t in all_T]
+        header_cells = ['\\diagbox{$\\log n$}{$\\log t$}'] + [f"${int(log2(t))}$" for t in all_T]
         pf.write(' & '.join(header_cells) + ' \\\\ \\hline\n')
 
         for H in all_H:
@@ -245,7 +247,9 @@ def main():
 
         pf.write('\\hline\n')
         pf.write('\\end{tabular}\n')
+        pf.write('\\vspace{0.5em}\n')
         pf.write('\\caption{Proof sizes (in kB).}\n')
+        pf.write('\\label{tab:proof_sizes}\n')
         pf.write('\\end{table}\n')
 
     print(f"Wrote proof sizes LaTeX table to {proof_table_path}")
@@ -258,7 +262,7 @@ def main():
             fh.write('\\centering\n')
             fh.write('\\begin{tikzpicture}\n')
             fh.write('  \\begin{axis}[\n')
-            fh.write('    xlabel={$\\lg n$},\n')
+            fh.write('    xlabel={$\\log n$},\n')
             fh.write('    ylabel={Time (ms)},\n')
             fh.write('    grid=major,\n')
             fh.write('    legend style={at={(0,1)}, anchor=north west, legend cell align=left}\n')
@@ -279,6 +283,7 @@ def main():
             fh.write('  \\end{axis}\n')
             fh.write('\\end{tikzpicture}\n')
             fh.write('\\caption{Timing for $t = 2^{%s}$ across $n$ values.}\n' % int(log2(t)))
+            fh.write('\\label{fig:verif_t%s}\n' % int(t))
             fh.write('\\end{figure}\n')
 
     print(f"Wrote PGFPlots fragments to {figs_dir}")
