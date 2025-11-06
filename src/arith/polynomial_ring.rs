@@ -164,14 +164,15 @@ mod test {
         cyclotomic_ring::CyclotomicRing, field::Field64, ntt::tfhe_based_ntt::TfheBasedNtt,
         polynomial_ring::PolynomialRing, ring::Ring,
     };
-    const D: usize = 1024;
+    const D: usize = 4;
 
     #[test]
     fn test_ntt_mul() {
+        const D: usize = 1024;
         let poly1 = PolynomialRing::<D, Field64, TfheBasedNtt> {
-            coeffs: (0..2048)
+            coeffs: (0..2 * D)
                 .map(|i| {
-                    if i < 1024 {
+                    if i < D {
                         Field64::from(i as u64)
                     } else {
                         Field64::zero()
@@ -181,10 +182,10 @@ mod test {
             _ntt: PhantomData,
         };
         let poly2 = PolynomialRing::<D, Field64, TfheBasedNtt> {
-            coeffs: (0..2048)
+            coeffs: (0..2 * D)
                 .map(|i| {
-                    if i < 1024 {
-                        Field64::from(i as u64 + 1024)
+                    if i < D {
+                        Field64::from((i + D) as u64)
                     } else {
                         Field64::zero()
                     }
