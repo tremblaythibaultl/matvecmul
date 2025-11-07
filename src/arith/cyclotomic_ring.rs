@@ -116,7 +116,7 @@ impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> CyclotomicRing<D, 
 
     pub fn ntt_mul(&self, rhs: &Self) -> Self {
         Self {
-            coeffs: N::mul::<D, F>(&self.coeffs, &rhs.coeffs),
+            coeffs: N::mul::<F>(&self.coeffs, &rhs.coeffs),
             _ntt: PhantomData,
         }
     }

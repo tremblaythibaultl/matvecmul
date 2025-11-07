@@ -57,7 +57,7 @@ impl<const D: usize, F: PrimeField, N: Ntt + Clone + Default> PolynomialRing<D, 
 
     pub fn ntt_mul(&self, rhs: &Self) -> Self {
         Self {
-            coeffs: N::mul::<2048, F>(&self.coeffs, &rhs.coeffs),
+            coeffs: N::mul::<F>(&self.coeffs, &rhs.coeffs),
             _ntt: PhantomData,
         }
     }

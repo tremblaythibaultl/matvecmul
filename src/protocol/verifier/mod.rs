@@ -1,4 +1,4 @@
-use std::{marker::PhantomData, time::Instant};
+use std::marker::PhantomData;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix},
