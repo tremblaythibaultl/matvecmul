@@ -108,32 +108,30 @@ fn bench_plaintext_matvec(c: &mut Criterion) {
             group.bench_with_input(id, &(t, h), |b, &(t, h)| {
                 b.iter_batched(
                     || {
-                        let (m, _, v, _, _) = setup_benchmark_data(t, h);
-                        let v_field = v.iter().map(|&x| F::from(x)).collect::<Vec<F>>();
-                        (m, v_field)
-                    },
-                    |(m, v_field)| m.mat_vec_mul(&v_field),
-                    BatchSize::SmallInput,
-                )
-            });
-        }
-    }
-    group.finish();
-}
+                        // Generate matrix data
+                        let integer_width = D * t;
+                        let integer_height = h;
 
-fn bench_parallel_plaintext_matvec(c: &mut Criterion) {
-    let mut group = c.benchmark_group("par_plaintext_matvec");
-    for &t in TS.iter() {
-        for &h in HEIGHTS.iter() {
-            let id = BenchmarkId::new("par_plaintext_matvec", format!("T{}_H{}", t, h));
-            group.bench_with_input(id, &(t, h), |b, &(t, h)| {
-                b.iter_batched(
-                    || {
-                        let (m, _, v, _, _) = setup_benchmark_data(t, h);
-                        let v_field = v.iter().map(|&x| F::from(x)).collect::<Vec<F>>();
-                        (m, v_field)
+                        let m_data = (1..=integer_height * integer_width)
+                            .map(|x| x % 16)
+                            .collect::<Vec<_>>();
+
+                        // Generate vector data
+                        let v = (1..=integer_width).map(|x| x % 16).collect::<Vec<_>>();
+                        (m_data, v, integer_width)
                     },
-                    |(m, v_field)| m.par_mat_vec_mul(&v_field),
+                    |(m, v, w)| {
+                        m.chunks(w)
+                            .map(|row| {
+                                row.iter()
+                                    .zip(v.iter())
+                                    .fold(0, |acc, (elem, rhs_elem)| acc + *elem * *rhs_elem)
+                            })
+                            .collect::<Vec<_>>()
+                            .iter()
+                            .map(|x| x % 16)
+                            .collect::<Vec<_>>()
+                    },
                     BatchSize::SmallInput,
                 )
             });
@@ -287,7 +285,6 @@ criterion_group!(
     config = Criterion::default().sample_size(10);
     targets =
         bench_plaintext_matvec,
-        // bench_parallel_plaintext_matvec,
         bench_vector_encryption,
         bench_prover_computation,
         bench_result_decryption,

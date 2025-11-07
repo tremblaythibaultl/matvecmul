@@ -59,7 +59,7 @@ where
     ProverState: DigestToUnitSerialize<MerkleConfig>,
     for<'a> VerifierState<'a>: DigestToUnitDeserialize<MerkleConfig>,
 {
-    pub const SECURITY_LEVEL: usize = 80;
+    pub const SECURITY_LEVEL: usize = 100;
     pub const RATE: usize = 1;
     pub const FIRST_ROUND_FOLDING_FACTOR: usize = 4;
     pub const FOLDING_FACTOR: usize = 4;
