@@ -21,17 +21,20 @@ pub struct TfheBasedNtt;
 
 impl TfheBasedNtt {
     // Gets a static plan for the 64 bit NTT. If the polynomial size or the prime modulus are not suitable, it panics.
-    fn ntt_plan_64<const D: usize, F: PrimeField>() -> Arc<Plan> {
+    fn ntt_plan_64<F: PrimeField>(polynomial_size: usize) -> Arc<Plan> {
         assert_eq!(F::MODULUS.as_ref().len(), 1, "Modulus must fit in 64 bits.");
         let modulus = F::MODULUS.as_ref()[0];
         let global_plans = plans();
         let get_plan = || {
             let plans = global_plans.read().unwrap();
-            let plan = plans.get(&(D, modulus)).cloned();
+            let plan = plans.get(&(polynomial_size, modulus)).cloned();
             drop(plans);
             plan.map(|p| {
                 p.get_or_init(|| {
-                    Arc::new(Plan::try_new(D, modulus).expect("Failed to create tfhe-ntt plan"))
+                    Arc::new(
+                        Plan::try_new(polynomial_size, modulus)
+                            .expect("Failed to create tfhe-ntt plan"),
+                    )
                 })
                 .clone()
             })
@@ -43,7 +46,7 @@ impl TfheBasedNtt {
 
         // Could not find a plan of the given size, we lock the map again and try to insert it.
         let mut plans = global_plans.write().unwrap();
-        if let Entry::Vacant(v) = plans.entry((D, modulus)) {
+        if let Entry::Vacant(v) = plans.entry((polynomial_size, modulus)) {
             v.insert(Arc::new(OnceLock::new()));
         }
 
@@ -53,8 +56,14 @@ impl TfheBasedNtt {
 }
 
 impl Ntt for TfheBasedNtt {
-    fn mul<const D: usize, F: PrimeField>(lhs: &[F], rhs: &[F]) -> Vec<F> {
-        let plan = Self::ntt_plan_64::<D, F>();
+    fn mul<F: PrimeField>(lhs: &[F], rhs: &[F]) -> Vec<F> {
+        assert_eq!(
+            lhs.len(),
+            rhs.len(),
+            "NTT multiplication requires equal sized inputs."
+        );
+        let polynomial_size = lhs.len();
+        let plan = Self::ntt_plan_64::<F>(polynomial_size);
         // From https://github.com/zama-ai/tfhe-rs/blob/main/tfhe-ntt/examples/mul_poly_prime.rs
         // Converting to u64 should be safe as we assume that the modulus fits in 64 bits and that's checked at NTT plan creation.
         let mut lhs_u64 = lhs

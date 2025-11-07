@@ -1,4 +1,4 @@
-use std::{marker::PhantomData, time::Instant};
+use std::marker::PhantomData;
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
