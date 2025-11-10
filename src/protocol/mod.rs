@@ -18,8 +18,8 @@ pub struct Proof<const D: usize, F: Field> {
     pub y: Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     pub z1_sumcheck_proof: SumCheckProof<F>,
     pub z3_sumcheck_proof: SumCheckProof<F>,
-    pub r_mle_proof: WhirProof<F>,
-    pub m_mle_proof: WhirProof<F>,
+    pub r_mle_proof: Option<WhirProof<F>>,
+    pub m_mle_proof: Option<WhirProof<F>>,
 }
 
 pub fn sample_random_challenge<F: Field>(test_mode: bool) -> F {

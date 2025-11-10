@@ -136,9 +136,12 @@ where
 
         let whir = Whir::<F>::new(z1_num_vars, &mut rng);
         // let start = Instant::now();
-        whir.verify(&proof.m_mle_proof, &z1_challenges)
-            .expect("m_mle proof does not verify");
-        let m_eval = proof.m_mle_proof.claim;
+        whir.verify(
+            &proof.m_mle_proof.as_ref().expect("PCS not implemented"),
+            &z1_challenges,
+        )
+        .expect("m_mle proof does not verify");
+        let m_eval = proof.m_mle_proof.as_ref().unwrap().claim;
         // let after_m_eval = start.elapsed();
         // println!("WHIR verifying m took: {:?}", after_m_eval);
 
@@ -167,18 +170,18 @@ where
         // let after_ell_eval_z3 = start.elapsed();
         // println!("Evaluating ell for Z3 took: {:?}", after_ell_eval_z3);
 
-        let r_eval = proof.r_mle_proof.claim;
+        let r_eval = proof.r_mle_proof.as_ref().unwrap().claim;
 
         // let start = Instant::now();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
         // let after_whir_setup = start.elapsed();
         // println!("Setting up Whir took: {:?}", after_whir_setup);
         // let start = Instant::now();
-        whir.verify(&proof.r_mle_proof, &z3_challenges)
+        whir.verify(&proof.r_mle_proof.as_ref().unwrap(), &z3_challenges)
             .expect("r_mle proof does not verify");
         // let after_whir_verify = start.elapsed();
         // println!("WHIR Verifying r took: {:?}", after_whir_verify);
-        assert_eq!(r_eval, proof.r_mle_proof.claim);
+        assert_eq!(r_eval, proof.r_mle_proof.as_ref().unwrap().claim);
 
         // eq_tau eval
         // let start = Instant::now();

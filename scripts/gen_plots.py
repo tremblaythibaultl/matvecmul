@@ -137,6 +137,7 @@ def main():
     for t in all_Ts:
         baseline_points = []
         prover_points = []
+        no_pcs_points = []
         compiled_verifier_points = []
 
         for (tt, h), grp in per_param.items():
@@ -149,6 +150,7 @@ def main():
             rd = grp.get('result_decryption')
             pm = grp.get('plaintext_matvec')
             pr = grp.get('prover_computation')
+            np = grp.get('no_pcs')
 
             # baseline: plaintext_matvec
             if pm is not None:
@@ -157,6 +159,9 @@ def main():
             # prover computation
             if pr is not None:
                 prover_points.append((pr, h))
+            
+            if np is not None:
+                no_pcs_points.append((np, h))
 
             if ve is not None and vc is not None and rd is not None:
                 compiled_verifier_points.append((ve + vc + rd, h))
@@ -191,33 +196,43 @@ def main():
     table_path = tables_dir / 'prover_times.tex'
     with table_path.open('w') as tf:
         tf.write('% Auto-generated LaTeX table of prover times (seconds)\n')
-        cols = '|c|' + 'c' * len(all_T) + '|'
+        cols = '|c|c|' + 'c' * len(all_T) + '|'
         tf.write('\\begin{table}\n')
         tf.write('\\centering\n')
         tf.write('\\begin{tabular}{%s}\n' % cols)
         tf.write('\\hline\n')
-        header_cells = ['\\diagbox{$\\log n$}{$\\log t$}'] + [f"${int(log2(t))}$" for t in all_T]
+        header_cells = ['\\diagbox{$\\log n$}{$\\log t$} & '] + [f"${int(log2(t))}$" for t in all_T]
         tf.write(' & '.join(header_cells) + ' \\\\ \n\\hline\n')
 
         for H in all_H:
             lg = log2(H)
-            lg_label = f"{int(lg)}" if abs(lg - round(lg)) < 1e-9 else f"{lg:.2f}"
-            row = [lg_label]
+            lg_label = f"\\multirow{{2}}{{*}}{{{int(lg)}}} & \\Checkmark"
+            with_pcs_row = [lg_label]
+            without_pcs_row = ['& \\XSolidBrush']
             for t in all_T:
                 grp = per_param.get((t, H), {})
                 pr_ms = grp.get('prover_computation')
-                if pr_ms is None:
-                    cell = '-' 
+                np_ms = grp.get('no_pcs')
+                if np_ms is None:
+                    without_pcs_cell = '-' 
                 else:
-                    pr_s = pr_ms / 1000.0
-                    cell = f"{pr_s:.2f}"
-                row.append(cell)
-            tf.write(' & '.join(row) + ' \\\\\n')
-        tf.write('\\hline\n')
+                    np_s = (np_ms / 1000.0) 
+                    without_pcs_cell = f"{np_s:.2f}"
+                
+                if pr_ms is None:
+                    with_pcs_cell = '-'
+                else:
+                    with_pcs_s = (pr_ms / 1000.0) 
+                    with_pcs_cell = f"{with_pcs_s:.2f}"
+                with_pcs_row.append(with_pcs_cell)
+                without_pcs_row.append(without_pcs_cell)
+            tf.write(' & '.join(with_pcs_row) + ' \\\\\n')
+            tf.write(' & '.join(without_pcs_row) + ' \\\\\n')
+            tf.write('\\hline\n')
 
         tf.write('\\end{tabular}\n')
         tf.write('\\vspace{0.5em}\n')
-        tf.write('\\caption{Prover times (in seconds).}\n')
+        tf.write('\\caption{Prover times (in seconds). The rows with a \\Checkmark indicate measurements with the PCS enabled, while the rows with a \\XSolidBrush indicate measurements without the PCS.}\n')
         tf.write('\\label{tab:prover_times}\n')
         tf.write('\\end{table}\n')
 

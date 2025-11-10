@@ -19,7 +19,7 @@ mod test {
     fn test_functionality() {
         pub const D: usize = 1 << 10;
         pub const INTEGER_WIDTH: usize = 1 << 20;
-        pub const INTEGER_HEIGHT: usize = 1 << 5;
+        pub const INTEGER_HEIGHT: usize = 1 << 8;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
@@ -68,6 +68,7 @@ mod test {
             z1_num_vars,
             &mut transcript,
             &x,
+            true,
         );
 
         let res = &proof

@@ -1,3 +1,4 @@
+use ark_ff::UniformRand;
 use criterion::{BatchSize, BenchmarkId, Criterion, criterion_group, criterion_main};
 use matvec::{
     arith::{
@@ -31,7 +32,18 @@ pub const TS: &[usize] = &[
     (1 << 9),
     (1 << 10),
 ];
-pub const HEIGHTS: &[usize] = &[(1 << 1), (1 << 2), (1 << 3), (1 << 4), (1 << 5), (1 << 6)];
+pub const HEIGHTS: &[usize] = &[
+    (1 << 1),
+    (1 << 2),
+    (1 << 3),
+    (1 << 4),
+    (1 << 5),
+    (1 << 6),
+    (1 << 7),
+    (1 << 8),
+    // (1 << 9),
+    // (1 << 10),
+];
 pub type F = Field64;
 pub type F2 = Field64_2;
 
@@ -79,21 +91,34 @@ fn bench_whir_prover(c: &mut Criterion) {
     let mut group = c.benchmark_group("whir_prover");
     for &t in TS.iter() {
         for &h in HEIGHTS.iter() {
-            // Number of variables is log2(D * height). We assume D*height is a power of two or
+            // Number of variables for M~ is log2(D * t * height). We assume D*height is a power of two or
             // the workload is padded to the next power of two for the dummy MLE.
-            let num_vars = (D * h).next_power_of_two().ilog2() as usize;
-            let mle = MultilinearPolynomial::new(vec![F::from(1u64); 1 << num_vars], num_vars);
-
-            let eval_point = (0..num_vars)
-                .map(|i| F2::from(i as u64))
+            let m_mle_num_vars = (D * t * h).next_power_of_two().ilog2() as usize;
+            let m_mle_evals = (0..1 << m_mle_num_vars)
+                .map(|i| F::from(i as u64))
+                .collect::<Vec<_>>();
+            let m_mle = MultilinearPolynomial::new(m_mle_evals, m_mle_num_vars);
+            let m_eval_point = (0..m_mle_num_vars)
+                .map(|_| F2::rand(&mut rng))
                 .collect::<Vec<F2>>();
+            let m_whir = Whir::<F2>::new(m_mle_num_vars, &mut rng);
 
-            let whir = Whir::<F2>::new(mle.num_variables(), &mut rng);
+            let r_mle_num_vars = (D * h).next_power_of_two().ilog2() as usize;
+            let r_mle_evals = (0..1 << r_mle_num_vars)
+                .map(|i| F::from(i as u64))
+                .collect::<Vec<_>>();
+            let r_mle = MultilinearPolynomial::new(r_mle_evals, r_mle_num_vars);
+            let r_eval_point = (0..r_mle_num_vars)
+                .map(|_| F2::rand(&mut rng))
+                .collect::<Vec<F2>>();
+            let r_whir = Whir::<F2>::new(r_mle_num_vars, &mut rng);
 
             let id = BenchmarkId::new("whir_prover", format!("T{}_H{}", t, h));
             group.bench_with_input(id, &(t, h), move |b, _inp| {
-                // We measure just the prove call on the dummy mle
-                b.iter(|| whir.prove(&mle, &eval_point));
+                b.iter(|| {
+                    m_whir.prove(&m_mle, &m_eval_point);
+                    r_whir.prove(&r_mle, &r_eval_point);
+                });
             });
         }
     }
@@ -186,6 +211,38 @@ fn bench_prover_computation(c: &mut Criterion) {
                         z1_num_vars,
                         &mut transcript,
                         &x,
+                        true,
+                    )
+                });
+            });
+        }
+    }
+    group.finish();
+}
+
+fn bench_prover_computation_without_pcs(c: &mut Criterion) {
+    let mut group = c.benchmark_group("no_pcs");
+    for &t in TS.iter() {
+        for &h in HEIGHTS.iter() {
+            let id = BenchmarkId::new("no_pcs", format!("T{}_H{}", t, h));
+
+            // Preprocess once per parameter combination, then measure prove.
+            let (m, _, _, _, x) = setup_benchmark_data(t, h);
+
+            let (m_rq, m_polyring, m_mle, m_mle_over_base_f, z1_num_vars, mut transcript) =
+                Prover::<D, F2>::preprocess(&m);
+
+            group.bench_with_input(id, &(t, h), move |b, _| {
+                b.iter(|| {
+                    Prover::<D, F2>::prove(
+                        &m_rq,
+                        &m_polyring,
+                        &m_mle,
+                        &m_mle_over_base_f,
+                        z1_num_vars,
+                        &mut transcript,
+                        &x,
+                        false,
                     )
                 });
             });
@@ -213,6 +270,7 @@ fn bench_result_decryption(c: &mut Criterion) {
                 z1_num_vars,
                 &mut transcript,
                 &x,
+                true,
             );
 
             group.bench_with_input(id, &(t, h), |b, _| {
@@ -248,6 +306,7 @@ fn bench_verifier_computation(c: &mut Criterion) {
                 z1_num_vars,
                 &mut transcript,
                 &x,
+                true,
             );
 
             let field_elt_size = F2::field_size_in_bits() / 8;
@@ -256,9 +315,9 @@ fn bench_verifier_computation(c: &mut Criterion) {
 
             let proof_size = sumcheck_1_size
             + sumcheck_2_size
-            + proof.r_mle_proof.proof.len()
+            + proof.r_mle_proof.as_ref().unwrap().proof.len()
             + field_elt_size // add one field elt for the claim
-            + proof.m_mle_proof.proof.len()
+            + proof.m_mle_proof.as_ref().unwrap().proof.len()
             + field_elt_size; // add one field elt for the claim
 
             let (m_rq, z1_num_vars, transcript) = Verifier::<D, F2>::preprocess(&m);
@@ -287,9 +346,9 @@ criterion_group!(
         bench_plaintext_matvec,
         bench_vector_encryption,
         bench_prover_computation,
+        bench_prover_computation_without_pcs,
         bench_result_decryption,
         bench_verifier_computation,
-        // bench_whir_prover,
 );
 
 criterion_main!(benches);

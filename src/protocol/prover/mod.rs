@@ -1,4 +1,4 @@
-use std::marker::PhantomData;
+use std::{marker::PhantomData, time::Instant};
 
 use ark_ff::{FftField, Field};
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
@@ -7,7 +7,7 @@ use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix, polynomial_ring::PolynomialRing},
     protocol::{
         Proof,
-        pcs::whir::Whir,
+        pcs::whir::{Whir, WhirProof},
         sumcheck::{multilinear::MultilinearPolynomial, prove},
         transcript::Blake3Transcript,
         utils::{build_eq_poly, sum_over_boolean_hypercube},
@@ -83,6 +83,7 @@ where
         z1_num_vars: usize,
         transcript: &mut Blake3Transcript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
+        include_pcs: bool,
     ) -> Proof<D, F> {
         // let start = Instant::now();
         let x_polyring = x
@@ -97,7 +98,6 @@ where
 
         // let start = Instant::now();
 
-        // TODO: this is the bottleneck right now.
         let y_polyring = m_polyring.mat_rlwe_vec_mul(&x_polyring);
 
         // let after_mat_vec_rlwe_mul = start.elapsed();
@@ -112,7 +112,7 @@ where
             Vec<Vec<PolynomialRing<D, F::BasePrimeField>>>,
             Vec<Vec<CyclotomicRing<D, F::BasePrimeField>>>,
         ) = y_polyring
-            .par_iter()
+            .iter()
             .map(|ct| ct.long_division_by_cyclotomic())
             .collect();
 
@@ -220,19 +220,28 @@ where
 
         // Whir proofs for r_mle and m_mle.
         let mut rng = get_rng();
-        let whir_r_mle = Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
 
-        // let start = Instant::now();
-        let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
-        // let after_r_mle_proof = start.elapsed();
-        // println!("time taken to compute r_mle proof: {:?}", after_r_mle_proof);
+        let (m_mle_proof, r_mle_proof) = if include_pcs {
+            let whir_r_mle =
+                Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
 
-        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+            // let start = Instant::now();
+            let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+            // let after_r_mle_proof = start.elapsed();
+            // println!("time taken to compute r_mle proof: {:?}", after_r_mle_proof);
 
-        // let start = Instant::now();
-        let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
-        // let after_m_mle_proof = start.elapsed();
-        // println!("time taken to compute m_mle proof: {:?}", after_m_mle_proof);
+            let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+
+            // let start = Instant::now();
+            let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
+            // let after_m_mle_proof = start.elapsed();
+            // println!("time taken to compute m_mle proof: {:?}", after_m_mle_proof);
+
+            (Some(m_mle_proof), Some(r_mle_proof))
+        } else {
+            (None, None)
+        };
+
         Proof {
             y,
             z1_sumcheck_proof,

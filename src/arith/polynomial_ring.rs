@@ -196,7 +196,6 @@ mod test {
 
         let ntt = poly1.mul(&poly2);
         let basic = poly1.basic_mul(&poly2);
-        println!("NTT coeffs: {:?}", ntt.coeffs);
         assert_eq!(ntt.coeffs, basic.coeffs);
     }
 
