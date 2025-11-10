@@ -36,6 +36,8 @@ The results can then be compiled and visualized using the provided Python script
 cd scripts
 python3 gen_plots.py <filename>
 ```
+This will generate `pgfplots` plots from the benchmarks.
+The plots can be compiled by using LaTeX to compile the [`main.tex`](scripts/main.tex) file.
 
 ### Code structure
 
