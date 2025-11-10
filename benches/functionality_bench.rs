@@ -20,6 +20,7 @@ use rayon::{
 use whir::crypto::fields::FieldWithSize;
 
 pub const D: usize = 1 << 10;
+pub const P: usize = 1 << 4;
 pub const TS: &[usize] = &[
     (1 << 1),
     (1 << 2),
@@ -62,13 +63,13 @@ fn setup_benchmark_data(
     let integer_height = height;
 
     let data = (1..=integer_height * integer_width)
-        .map(|x| F::from((x % 16) as u64))
+        .map(|x| F::from((x % P) as u64))
         .collect::<Vec<_>>();
     let m = Matrix::from_vec(data, integer_width);
 
     // Generate vector data
     let v = (1..=integer_width)
-        .map(|x| (x % 16) as u64)
+        .map(|x| (x % P) as u64)
         .collect::<Vec<_>>();
 
     // Compute plaintext matrix-vector multiplication for verification
@@ -79,7 +80,7 @@ fn setup_benchmark_data(
 
     let x = v
         .chunks(D)
-        .map(|subvec| encrypt(&sk, &subvec))
+        .map(|subvec| encrypt::<D, P, F>(&sk, &subvec))
         .collect::<Vec<_>>();
 
     (m, m_v, v, sk, x)
@@ -138,11 +139,11 @@ fn bench_plaintext_matvec(c: &mut Criterion) {
                         let integer_height = h;
 
                         let m_data = (1..=integer_height * integer_width)
-                            .map(|x| x % 16)
+                            .map(|x| x % P)
                             .collect::<Vec<_>>();
 
                         // Generate vector data
-                        let v = (1..=integer_width).map(|x| x % 16).collect::<Vec<_>>();
+                        let v = (1..=integer_width).map(|x| x % P).collect::<Vec<_>>();
                         (m_data, v, integer_width)
                     },
                     |(m, v, w)| {
@@ -154,7 +155,7 @@ fn bench_plaintext_matvec(c: &mut Criterion) {
                             })
                             .collect::<Vec<_>>()
                             .iter()
-                            .map(|x| x % 16)
+                            .map(|x| x % P)
                             .collect::<Vec<_>>()
                     },
                     BatchSize::SmallInput,
@@ -178,7 +179,7 @@ fn bench_vector_encryption(c: &mut Criterion) {
                     },
                     |(v, sk)| {
                         v.par_chunks(D)
-                            .map(|subvec| encrypt(&sk, &subvec))
+                            .map(|subvec| encrypt::<D, P, F>(&sk, &subvec))
                             .collect::<Vec<_>>()
                     },
                     BatchSize::SmallInput,
@@ -278,7 +279,7 @@ fn bench_result_decryption(c: &mut Criterion) {
                     proof
                         .y
                         .par_iter()
-                        .map(|c| decrypt(&sk, c)[0])
+                        .map(|c| decrypt::<D, P, F>(&sk, c)[0])
                         .collect::<Vec<_>>()
                 })
             });

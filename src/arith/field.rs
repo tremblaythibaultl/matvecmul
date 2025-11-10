@@ -1,7 +1,7 @@
 use ark_ff::{Fp2, Fp2Config, Fp64, MontBackend, MontConfig, MontFp};
 
 #[derive(MontConfig)]
-#[modulus = "18446744069414584321"]
+#[modulus = "18446744069414584321"] // 2^64 - 2^32 + 1
 #[generator = "7"]
 pub struct FConfig64;
 pub type Field64 = Fp64<MontBackend<FConfig64, 1>>;

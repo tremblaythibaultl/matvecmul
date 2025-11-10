@@ -6,8 +6,6 @@ use rand_distr::{Distribution, Normal};
 
 // MLWE rank
 pub const K: usize = 1;
-// Log of message modulus
-const LG_P: u32 = 4;
 const SIGMA: f64 = 8589934592.0; // 2^33
 
 #[derive(Debug, Clone)]
@@ -17,17 +15,17 @@ pub struct RLWE<R> {
 }
 
 // Performs encryption
-pub fn encrypt<const D: usize, F: PrimeField>(
+pub fn encrypt<const D: usize, const P: usize, F: PrimeField>(
     sk: &Vec<CyclotomicRing<D, F>>,
     msg: &[u64],
 ) -> RLWE<CyclotomicRing<D, F>> {
     // ensure message is in message space
     for m in msg {
         assert!(
-            m >> LG_P == 0,
+            *m < P as u64,
             "Message value {} is too large for the given plaintext modulus {}",
             m,
-            1 << LG_P
+            P
         );
     }
 
@@ -46,7 +44,7 @@ pub fn encrypt<const D: usize, F: PrimeField>(
     let b: CyclotomicRing<D, F> = a.iter().zip(sk).map(|(ai, si)| ai.mul(&si)).sum();
 
     // compute scaling factor (not exact)
-    let delta = F::MODULUS_BIT_SIZE - LG_P;
+    let delta = F::MODULUS_BIT_SIZE - P.ilog2() as u32;
 
     // sample error
     let normal = Normal::new(0.0, SIGMA).unwrap();
@@ -66,7 +64,7 @@ pub fn encrypt<const D: usize, F: PrimeField>(
     }
 }
 
-pub fn decrypt<const D: usize, F: PrimeField>(
+pub fn decrypt<const D: usize, const P: usize, F: PrimeField>(
     sk: &Vec<CyclotomicRing<D, F>>,
     c: &RLWE<CyclotomicRing<D, F>>,
 ) -> Vec<F> {
@@ -78,7 +76,7 @@ pub fn decrypt<const D: usize, F: PrimeField>(
 
     let mut res = Vec::<F>::with_capacity(D);
 
-    let delta = F::MODULUS_BIT_SIZE - LG_P;
+    let delta = F::MODULUS_BIT_SIZE - P.ilog2() as u32;
 
     for i in 0..D {
         // assumes the field is 64 bits
@@ -185,14 +183,15 @@ mod test {
     #[test]
     fn test_enc_dec() {
         const D: usize = 2;
+        const P: usize = 16;
 
         let msg_enc = vec![2, 3];
 
         let sk = vec![CyclotomicRing::<D, Field64>::get_random_bin()];
 
-        let c = encrypt(&sk, &msg_enc);
+        let c = encrypt::<D, P, Field64>(&sk, &msg_enc);
 
-        let msg_dec = decrypt(&sk, &c);
+        let msg_dec = decrypt::<D, P, Field64>(&sk, &c);
 
         assert_eq!(
             msg_dec,

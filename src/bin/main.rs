@@ -1,6 +1,4 @@
-fn main() {
-    // println!("Hello world!")
-}
+fn main() {}
 
 #[cfg(test)]
 mod test {
@@ -18,14 +16,15 @@ mod test {
     #[test]
     fn test_functionality() {
         pub const D: usize = 1 << 10;
+        pub const P: usize = 1 << 4;
         pub const INTEGER_WIDTH: usize = 1 << 20;
-        pub const INTEGER_HEIGHT: usize = 1 << 8;
+        pub const INTEGER_HEIGHT: usize = 1 << 5;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
         // generate matrix data
         let data = (1..=INTEGER_HEIGHT * INTEGER_WIDTH)
-            .map(|x| F::from((x % 16) as u64))
+            .map(|x| F::from((x % P) as u64))
             .collect::<Vec<_>>();
 
         let m = Matrix::from_vec(data, INTEGER_WIDTH);
@@ -33,7 +32,7 @@ mod test {
 
         // generate vector data
         let v = (1..=INTEGER_WIDTH)
-            .map(|x| (x % 16) as u64)
+            .map(|x| (x % P) as u64)
             .collect::<Vec<_>>();
 
         // compute plaintext matrix-vector multiplication
@@ -42,7 +41,7 @@ mod test {
             .iter()
             .map(|y_i| {
                 let y_i_u64 = y_i.into_bigint().0[0];
-                F::from(y_i_u64 % 16)
+                F::from(y_i_u64 % P as u64)
             })
             .collect::<Vec<F>>();
 
@@ -52,7 +51,7 @@ mod test {
         // encrypt the vector
         let x = v
             .chunks(D)
-            .map(|subvec| encrypt(&sk, &subvec))
+            .map(|subvec| encrypt::<D, P, F>(&sk, &subvec))
             .collect::<Vec<_>>();
 
         // ask the prover to compute the encrypted matrix-vector multiplication and return the result
@@ -74,7 +73,7 @@ mod test {
         let res = &proof
             .y
             .iter()
-            .map(|c| decrypt(&sk, c)[0])
+            .map(|c| decrypt::<D, P, F>(&sk, c)[0])
             .collect::<Vec<_>>();
 
         assert_eq!(m_v, *res);
