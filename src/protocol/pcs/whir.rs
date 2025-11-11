@@ -20,7 +20,7 @@ use whir::{
     },
     poly_utils::{evals::EvaluationsList, multilinear::MultilinearPoint},
     whir::{
-        committer::{CommitmentReader, CommitmentWriter},
+        committer::{CommitmentReader, CommitmentWriter, Witness},
         domainsep::{DigestDomainSeparator, WhirDomainSeparator},
         parameters::WhirConfig,
         prover::Prover,
@@ -106,8 +106,46 @@ where
         }
     }
 
-    // Proves that `poly` evaluates to a particular value at `point`.
+    pub fn commit(
+        &self,
+        poly: &MultilinearPolynomial<F::BasePrimeField>,
+    ) -> (Witness<F, MerkleConfig>, ProverState) {
+        let mut prover_state = self.domainsep.to_prover_state();
+        let evals = EvaluationsList::new(poly.evals().to_vec());
+        let coeffs = evals.to_coeffs();
+        let committer = CommitmentWriter::new(self.params.clone());
+        (
+            committer.commit(&mut prover_state, &coeffs).unwrap(),
+            prover_state,
+        )
+    }
+
     pub fn prove(
+        &self,
+        commitment: Witness<F, MerkleConfig>,
+        mut prover_state: ProverState,
+        point: &[F],
+    ) -> WhirProof<F> {
+        let coeffs = commitment.batched_poly();
+        let mut statement: Statement<F> = Statement::<F>::new(self.num_variables);
+        let point = MultilinearPoint(point.to_vec());
+        let claim = coeffs.evaluate(&point);
+        let weights = Weights::evaluation(point.clone());
+        statement.add_constraint(weights, claim);
+        let prover = Prover::new(self.params.clone());
+
+        prover
+            .prove(&mut prover_state, statement.clone(), commitment)
+            .unwrap();
+
+        WhirProof {
+            proof: prover_state.narg_string().to_vec(),
+            claim,
+        }
+    }
+
+    // Proves that `poly` evaluates to a particular value at `point`.
+    pub fn commit_and_prove(
         &self,
         poly: &MultilinearPolynomial<F::BasePrimeField>,
         point: &[F],

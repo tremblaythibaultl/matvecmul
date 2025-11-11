@@ -115,9 +115,43 @@ where
             .iter()
             .map(|ct| ct.long_division_by_cyclotomic())
             .collect();
-
         // let after_division = start.elapsed();
         // println!("after_div: {:?}", after_division);
+
+        let mut rng = get_rng();
+        let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
+        let r_mle_base_prime_f_evals = vec_quotients
+            .iter()
+            .flat_map(|quotients| &quotients[1].coeffs[0..D]) // only consider the lower order coefficients
+            .copied()
+            .collect::<Vec<F::BasePrimeField>>();
+
+        let r_mle_over_base_prime_f =
+            MultilinearPolynomial::new(r_mle_base_prime_f_evals, z3_num_vars);
+
+        let whir_r_mle = Whir::<F>::new(r_mle_over_base_prime_f.num_variables(), &mut rng);
+
+        let start = Instant::now();
+
+        let whir_r_mle_commitment_and_prover_state = if include_pcs {
+            Some(whir_r_mle.commit(&r_mle_over_base_prime_f))
+        } else {
+            None
+        };
+
+        let after_r_commit = start.elapsed();
+        println!("time taken to commit r_mle: {:?}", after_r_commit);
+
+        let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
+
+        let start = Instant::now();
+        let whir_m_mle_commitment_and_prover_state = if include_pcs {
+            Some(whir_m_mle.commit(&m_mle_over_base_f))
+        } else {
+            None
+        };
+        let after_m_commit = start.elapsed();
+        println!("time taken to commit m_mle: {:?}", after_m_commit);
 
         // let start = Instant::now();
 
@@ -197,7 +231,6 @@ where
         // We probably will be able to batch the two sumchecks (z_1 and z_3). Not clear how yet.
 
         // z_3
-        let z3_num_vars = z1_num_vars - m_rq.width().ilog2() as usize;
 
         // let start = Instant::now();
         let mut z3_mles = compute_z3_mles(&vec_quotients, &powers_of_alpha, z3_num_vars, &vec_tau);
@@ -219,21 +252,24 @@ where
         // println!("time taken for 2nd sumcheck: {:?}", after_z3_sc);
 
         // Whir proofs for r_mle and m_mle.
-        let mut rng = get_rng();
 
         let (m_mle_proof, r_mle_proof) = if include_pcs {
-            let whir_r_mle =
-                Whir::<F>::new(z3_mles.r_mle_over_base_prime_f.num_variables(), &mut rng);
-
             // let start = Instant::now();
-            let r_mle_proof = whir_r_mle.prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
+            let (r_mle_commitment, r_mle_prover_state) =
+                whir_r_mle_commitment_and_prover_state.unwrap();
+
+            let r_mle_proof =
+                whir_r_mle.prove(r_mle_commitment, r_mle_prover_state, &z3_challenges);
+
+            // let r_mle_proof = whir_r_mle.commit_and_prove(&z3_mles.r_mle_over_base_prime_f, &z3_challenges);
             // let after_r_mle_proof = start.elapsed();
             // println!("time taken to compute r_mle proof: {:?}", after_r_mle_proof);
 
-            let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
-
             // let start = Instant::now();
-            let m_mle_proof = whir_m_mle.prove(&m_mle_over_base_f, &z1_challenges);
+            let (m_mle_commitment, m_mle_prover_state) =
+                whir_m_mle_commitment_and_prover_state.unwrap();
+            let m_mle_proof =
+                whir_m_mle.prove(m_mle_commitment, m_mle_prover_state, &z1_challenges);
             // let after_m_mle_proof = start.elapsed();
             // println!("time taken to compute m_mle proof: {:?}", after_m_mle_proof);
 

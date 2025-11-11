@@ -117,8 +117,8 @@ fn bench_whir_prover(c: &mut Criterion) {
             let id = BenchmarkId::new("whir_prover", format!("T{}_H{}", t, h));
             group.bench_with_input(id, &(t, h), move |b, _inp| {
                 b.iter(|| {
-                    m_whir.prove(&m_mle, &m_eval_point);
-                    r_whir.prove(&r_mle, &r_eval_point);
+                    m_whir.commit_and_prove(&m_mle, &m_eval_point);
+                    r_whir.commit_and_prove(&r_mle, &r_eval_point);
                 });
             });
         }
