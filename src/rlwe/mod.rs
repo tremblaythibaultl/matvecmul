@@ -4,7 +4,7 @@ use crate::{arith::cyclotomic_ring::CyclotomicRing, rand::get_rng};
 use ark_ff::{BigInteger, PrimeField};
 use rand_distr::{Distribution, Normal};
 
-// MLWE rank
+// RLWE rank
 pub const K: usize = 1;
 const SIGMA: f64 = 8589934592.0; // 2^33
 
@@ -171,6 +171,10 @@ impl<R: Ring> RLWE<R> {
         } else {
             None
         }
+    }
+
+    pub fn rank(&self) -> usize {
+        self.mask.len()
     }
 }
 

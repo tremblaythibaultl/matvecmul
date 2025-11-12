@@ -18,7 +18,7 @@ mod test {
         pub const D: usize = 1 << 10;
         pub const P: usize = 1 << 4;
         pub const INTEGER_WIDTH: usize = 1 << 20;
-        pub const INTEGER_HEIGHT: usize = 1 << 5;
+        pub const INTEGER_HEIGHT: usize = 1 << 6;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
@@ -28,7 +28,6 @@ mod test {
             .collect::<Vec<_>>();
 
         let m = Matrix::from_vec(data, INTEGER_WIDTH);
-        // println!("m: {:#?}", m);
 
         // generate vector data
         let v = (1..=INTEGER_WIDTH)

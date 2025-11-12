@@ -22,12 +22,12 @@ use whir::crypto::fields::FieldWithSize;
 pub const D: usize = 1 << 10;
 pub const P: usize = 1 << 4;
 pub const TS: &[usize] = &[
-    (1 << 1),
-    (1 << 2),
-    (1 << 3),
-    (1 << 4),
-    (1 << 5),
-    (1 << 6),
+    // (1 << 1),
+    // (1 << 2),
+    // (1 << 3),
+    // (1 << 4),
+    // (1 << 5),
+    // (1 << 6),
     (1 << 7),
     (1 << 8),
     (1 << 9),
@@ -40,8 +40,8 @@ pub const HEIGHTS: &[usize] = &[
     (1 << 4),
     (1 << 5),
     (1 << 6),
-    (1 << 7),
-    (1 << 8),
+    // (1 << 7),
+    // (1 << 8),
     // (1 << 9),
     // (1 << 10),
 ];
@@ -316,7 +316,9 @@ fn bench_verifier_computation(c: &mut Criterion) {
 
             let proof_size = sumcheck_1_size
             + sumcheck_2_size
-            + proof.r_mle_proof.as_ref().unwrap().proof.len()
+            + proof.r0_mle_proof.as_ref().unwrap().proof.len()
+            + field_elt_size // add one field elt for the claim
+            + proof.r1_mle_proof.as_ref().unwrap().proof.len()
             + field_elt_size // add one field elt for the claim
             + proof.m_mle_proof.as_ref().unwrap().proof.len()
             + field_elt_size; // add one field elt for the claim
@@ -344,12 +346,12 @@ criterion_group!(
     name = benches;
     config = Criterion::default().sample_size(10);
     targets =
-        bench_plaintext_matvec,
-        bench_vector_encryption,
+        // bench_plaintext_matvec,
+        // bench_vector_encryption,
         bench_prover_computation,
-        bench_prover_computation_without_pcs,
+        // bench_prover_computation_without_pcs,
         bench_result_decryption,
-        bench_verifier_computation,
+        // bench_verifier_computation,
 );
 
 criterion_main!(benches);

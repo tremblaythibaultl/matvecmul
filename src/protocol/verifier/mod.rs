@@ -51,31 +51,54 @@ where
         // let start = Instant::now();
         let mut x_bytes_to_absorb = vec![];
         for ct in x.iter() {
-            // consider mask only for now
-            let el = ct.get_ring_element(0).unwrap();
+            // consider body only (compressed ciphertext)
+            let el = ct.get_ring_element(1).unwrap();
             el.serialize(&mut x_bytes_to_absorb).unwrap();
         }
+
+        transcript.absorb_bytes_par(&x_bytes_to_absorb);
+
+        let mut beta = transcript.squeeze(1);
+        beta.push(beta[0] * beta[0]);
+
+        // assumes RLWE rank is 1
+        let y_batched_data = proof
+            .y
+            .iter()
+            .map(|ct| {
+                ct.get_ring_element(0)
+                    .unwrap()
+                    .coeffs
+                    .iter()
+                    .zip(ct.get_ring_element(1).unwrap().coeffs.iter())
+                    .map(|(c0, c1)| {
+                        beta[0].mul_by_base_prime_field(&c0) + beta[1].mul_by_base_prime_field(&c1)
+                    })
+                    .collect::<Vec<F>>()
+            })
+            .flatten()
+            .collect::<Vec<F>>();
 
         // let after_processing_x = start.elapsed();
         // println!("processing x took: {:?}", after_processing_x);
 
         // let start = Instant::now();
         let mut y_bytes_to_absorb = vec![];
-        for ct in proof.y.iter() {
-            // consider mask only for now
-            let el = ct.get_ring_element(0).unwrap();
-            el.serialize(&mut y_bytes_to_absorb).unwrap();
+        for y_batched_i in y_batched_data.iter() {
+            y_batched_i
+                .serialize_uncompressed(&mut y_bytes_to_absorb)
+                .unwrap();
         }
         // let after_processing_y = start.elapsed();
         // println!("processing y took: {:?}", after_processing_y);
 
         // let start = Instant::now();
-        let bytes_to_absorb = [x_bytes_to_absorb, y_bytes_to_absorb].concat();
+        // let bytes_to_absorb = [x_bytes_to_absorb, y_bytes_to_absorb].concat();
         // let after_concat = start.elapsed();
         // println!("time to concat: {:?}", after_concat);
 
         // let start = Instant::now();
-        transcript.absorb_bytes_par(&bytes_to_absorb);
+        transcript.absorb_bytes_par(&y_bytes_to_absorb);
         // let after_absorb = start.elapsed();
         // println!("time to absorb: {:?}", after_absorb);
 
@@ -92,7 +115,7 @@ where
 
         // let start = Instant::now();
         // compute unpadded MLEs
-        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &alpha, &vec_tau);
+        let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &beta, &alpha, &vec_tau);
         // let after_compute_z1_mles = start.elapsed();
         // println!(
         //     "Computing unpadded Z1 MLEs took: {:?}",
@@ -170,24 +193,26 @@ where
         // let after_ell_eval_z3 = start.elapsed();
         // println!("Evaluating ell for Z3 took: {:?}", after_ell_eval_z3);
 
-        let r_eval = proof.r_mle_proof.as_ref().unwrap().claim;
+        let r0_eval = proof.r0_mle_proof.as_ref().unwrap().claim;
+        let r1_eval = proof.r1_mle_proof.as_ref().unwrap().claim;
 
         // let start = Instant::now();
         let whir = Whir::<F>::new(z3_num_vars, &mut rng);
         // let after_whir_setup = start.elapsed();
         // println!("Setting up Whir took: {:?}", after_whir_setup);
         // let start = Instant::now();
-        whir.verify(&proof.r_mle_proof.as_ref().unwrap(), &z3_challenges)
-            .expect("r_mle proof does not verify");
-        // let after_whir_verify = start.elapsed();
-        // println!("WHIR Verifying r took: {:?}", after_whir_verify);
-        assert_eq!(r_eval, proof.r_mle_proof.as_ref().unwrap().claim);
+        whir.verify(&proof.r0_mle_proof.as_ref().unwrap(), &z3_challenges)
+            .expect("r0_mle proof does not verify");
+        whir.verify(&proof.r1_mle_proof.as_ref().unwrap(), &z3_challenges)
+            .expect("r1_mle proof does not verify");
 
         // eq_tau eval
         // let start = Instant::now();
         let eq_eval = evaluate_at_challenges(&unpadded_z1_mles[0], &z3_challenges[0..m]);
         // let after_eq_eval_z3 = start.elapsed();
         // println!("Evaluating eq_tau for Z3 took: {:?}", after_eq_eval_z3);
+
+        let r_eval = beta[0].mul(&r0_eval) + beta[1].mul(&r1_eval);
 
         let z3_eval_at_random_point = eq_eval * r_eval * z3_ell_eval;
 
@@ -207,18 +232,31 @@ where
         // let after_build_eq = start.elapsed();
         // println!("Building eq_tau for Z2 took: {:?}", after_build_eq);
 
-        // focus on the first component of the ciphertext only for now.
         // let start = Instant::now();
-        let y_alpha_mle_evals = proof
+        // assumes RLWE rank is 1
+        let y_batched = proof
             .y
-            .par_iter()
+            .iter()
             .map(|ct| {
-                ct.get_ring_element(1)
+                ct.get_ring_element(0)
                     .unwrap()
                     .coeffs
                     .iter()
+                    .zip(ct.get_ring_element(1).unwrap().coeffs.iter())
+                    .map(|(c0, c1)| {
+                        beta[0].mul_by_base_prime_field(&c0) + beta[1].mul_by_base_prime_field(&c1)
+                    })
+                    .collect::<Vec<F>>()
+            })
+            .collect::<Vec<Vec<F>>>();
+
+        let y_alpha_mle_evals = y_batched
+            .par_iter()
+            .map(|batched_ct| {
+                batched_ct
+                    .iter()
                     .zip(powers_of_alpha.iter())
-                    .map(|(c, a)| a.mul_by_base_prime_field(c))
+                    .map(|(c, a)| c.mul(a))
                     .sum::<F>()
             })
             .collect::<Vec<F>>();
@@ -251,6 +289,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     m_rq: &Matrix<CyclotomicRing<D, F::BasePrimeField>>,
     x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
     _num_vars: usize,
+    beta: &Vec<F>,
     alpha: &F,
     vec_tau: &Vec<F>,
 ) -> Vec<MultilinearPolynomial<F>> {
@@ -266,16 +305,29 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
     let unpadded_alpha_mle =
         MultilinearPolynomial::new(powers_of_alpha.clone(), powers_of_alpha_num_vars);
 
-    // only consider the mask for now. will probably need to run the protocol K+1 times where K is the RLWE rank
-    let x_alpha_mle_evals = x
-        .par_iter()
+    let batched_x = x
+        .iter()
         .map(|ct| {
-            ct.get_ring_element(1)
+            ct.get_ring_element(0)
                 .unwrap()
                 .coeffs
                 .iter()
+                .zip(ct.get_ring_element(1).unwrap().coeffs.iter())
+                .map(|(c0, c1)| {
+                    beta[0].mul_by_base_prime_field(c0) + beta[1].mul_by_base_prime_field(c1)
+                })
+                .collect::<Vec<F>>()
+        })
+        .flatten()
+        .collect::<Vec<F>>();
+
+    let x_alpha_mle_evals = batched_x
+        .chunks(D)
+        .map(|chunk| {
+            chunk
+                .iter()
                 .zip(powers_of_alpha.iter())
-                .map(|(c, a)| a.mul_by_base_prime_field(c))
+                .map(|(c, a)| c.mul(a))
                 .sum::<F>()
         })
         .collect::<Vec<F>>();
