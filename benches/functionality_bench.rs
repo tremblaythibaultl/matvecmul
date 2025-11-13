@@ -326,8 +326,15 @@ fn bench_verifier_computation(c: &mut Criterion) {
             let (m_rq, z1_num_vars, transcript) = Verifier::<D, F2>::preprocess(&m);
 
             group.bench_with_input(id, &(t, h), |b, _| {
-                let transcript = &mut transcript.clone();
-                b.iter(|| Verifier::<D, F2>::verify(&m_rq, z1_num_vars, transcript, &x, &proof))
+                b.iter(|| {
+                    Verifier::<D, F2>::verify(
+                        &m_rq,
+                        z1_num_vars,
+                        &mut transcript.clone(),
+                        &x,
+                        &proof,
+                    )
+                })
             });
             println!("Proof size (in bytes): {}", proof_size);
         }
