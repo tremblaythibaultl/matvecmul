@@ -80,7 +80,7 @@ mod test {
         let (m_rq, z1_num_vars, mut transcript) = Verifier::<D, F2>::preprocess(&m);
 
         let verifier_res =
-            Verifier::<D, F2>::verify(&m_rq, z1_num_vars, &mut transcript, &x, proof.clone());
+            Verifier::<D, F2>::verify(&m_rq, z1_num_vars, &mut transcript, &x, &proof);
 
         assert!(verifier_res.is_ok());
     }

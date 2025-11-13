@@ -46,7 +46,7 @@ where
         z1_num_vars: usize,
         transcript: &mut Blake3Transcript<F>,
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
-        proof: Proof<D, F>,
+        proof: &Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
         let start = Instant::now();
         let mut x_bytes_to_absorb = vec![];

@@ -22,26 +22,26 @@ use whir::crypto::fields::FieldWithSize;
 pub const D: usize = 1 << 10;
 pub const P: usize = 1 << 4;
 pub const TS: &[usize] = &[
-    (1 << 1),
-    (1 << 2),
-    (1 << 3),
-    (1 << 4),
-    (1 << 5),
-    (1 << 6),
-    (1 << 7),
-    (1 << 8),
-    (1 << 9),
+    // (1 << 1),
+    // (1 << 2),
+    // (1 << 3),
+    // (1 << 4),
+    // (1 << 5),
+    // (1 << 6),
+    // (1 << 7),
+    // (1 << 8),
+    // (1 << 9),
     (1 << 10),
 ];
 pub const HEIGHTS: &[usize] = &[
-    (1 << 1),
-    (1 << 2),
-    (1 << 3),
-    (1 << 4),
-    (1 << 5),
+    // (1 << 1),
+    // (1 << 2),
+    // (1 << 3),
+    // (1 << 4),
+    // (1 << 5),
     (1 << 6),
-    (1 << 7),
-    (1 << 8),
+    // (1 << 7),
+    // (1 << 8),
     // (1 << 9),
     // (1 << 10),
 ];
@@ -326,15 +326,8 @@ fn bench_verifier_computation(c: &mut Criterion) {
             let (m_rq, z1_num_vars, transcript) = Verifier::<D, F2>::preprocess(&m);
 
             group.bench_with_input(id, &(t, h), |b, _| {
-                b.iter(|| {
-                    Verifier::<D, F2>::verify(
-                        &m_rq,
-                        z1_num_vars,
-                        &mut transcript.clone(),
-                        &x,
-                        proof.clone(),
-                    )
-                })
+                let transcript = &mut transcript.clone();
+                b.iter(|| Verifier::<D, F2>::verify(&m_rq, z1_num_vars, transcript, &x, &proof))
             });
             println!("Proof size (in bytes): {}", proof_size);
         }
@@ -346,11 +339,11 @@ criterion_group!(
     name = benches;
     config = Criterion::default().sample_size(10);
     targets =
-        bench_plaintext_matvec,
-        bench_vector_encryption,
-        bench_prover_computation,
-        bench_prover_computation_without_pcs,
-        bench_result_decryption,
+        // bench_plaintext_matvec,
+        // bench_vector_encryption,
+        // bench_prover_computation,
+        // bench_prover_computation_without_pcs,
+        // bench_result_decryption,
         bench_verifier_computation,
 );
 
