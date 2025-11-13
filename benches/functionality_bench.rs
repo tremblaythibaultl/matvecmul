@@ -321,7 +321,8 @@ fn bench_verifier_computation(c: &mut Criterion) {
             + proof.r1_mle_proof.as_ref().unwrap().proof.len()
             + field_elt_size // add one field elt for the claim
             + proof.m_mle_proof.as_ref().unwrap().proof.len()
-            + field_elt_size; // add one field elt for the claim
+            + field_elt_size // add one field elt for the claim
+            + 128; // add 128 bytes for the commitments
 
             let (m_rq, z1_num_vars, transcript) = Verifier::<D, F2>::preprocess(&m);
 
