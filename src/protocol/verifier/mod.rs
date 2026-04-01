@@ -1,5 +1,4 @@
 use std::marker::PhantomData;
-// use std::time::Instant;
 
 use crate::{
     arith::{cyclotomic_ring::CyclotomicRing, linalg::Matrix},
@@ -11,7 +10,6 @@ use crate::{
     rlwe::RLWE,
 };
 use ark_ff::{FftField, Field};
-
 
 pub struct Verifier<const D: usize, F: Field> {
     _pd: PhantomData<F>,
@@ -49,8 +47,6 @@ where
         x: &Vec<RLWE<CyclotomicRing<D, F::BasePrimeField>>>,
         proof: &Proof<D, F>,
     ) -> Result<Vec<F>, ()> {
-        // let timer = Instant::now();
-
         let mut x_bytes_to_absorb = vec![];
         for ct in x.iter() {
             // consider body only (compressed ciphertext)
@@ -62,9 +58,6 @@ where
 
         let mut beta = transcript.squeeze(1);
         beta.push(beta[0] * beta[0]);
-
-        // println!("[verifier] absorb x + squeeze beta: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
 
         // assumes RLWE rank is 1
         let y_batched = proof
@@ -84,9 +77,6 @@ where
             .flatten()
             .collect::<Vec<F>>();
 
-        // println!("[verifier] compute y_batched: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
-
         let mut y_bytes_to_absorb = vec![];
         for y_batched_i in y_batched.iter() {
             y_batched_i
@@ -103,24 +93,15 @@ where
         let alpha = challenges.pop().unwrap();
         let vec_tau = challenges;
 
-        // println!("[verifier] absorb y + commitments + squeeze challenges: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
-
         // compute unpadded MLEs
         let unpadded_z1_mles = compute_z1_mles(&m_rq, x, z1_num_vars, &beta, &alpha, &vec_tau);
 
         let powers_of_alpha = unpadded_z1_mles[2].evals();
 
-        // println!("[verifier] compute z1 MLEs: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
-
         let (z1_original_claim, z1_final_claim, z1_challenges) = proof
             .z1_sumcheck_proof
             .verify(z1_num_vars, 4, transcript)
             .unwrap();
-
-        // println!("[verifier] z1 sumcheck verify: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
 
         let eq_eval = evaluate_at_challenges(&unpadded_z1_mles[0], &z1_challenges[0..m]);
 
@@ -136,9 +117,6 @@ where
             &z1_challenges[m_rq.height().ilog2() as usize + m_rq.width().ilog2() as usize..],
         );
 
-        // println!("[verifier] z1 MLE evaluations: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
-
         let mut rng = get_rng();
 
         let whir = Whir::<F>::new(z1_num_vars, &mut rng);
@@ -148,9 +126,6 @@ where
         )
         .expect("m_mle proof does not verify");
         let m_eval = proof.m_mle_proof.as_ref().unwrap().claim;
-
-        // println!("[verifier] m_mle WHIR verify: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
 
         let z1_eval_at_random_point = eq_eval * m_eval * x_alpha_eval * z1_ell_eval;
 
@@ -166,9 +141,6 @@ where
             .verify(z3_num_vars, 3, transcript)
             .unwrap();
 
-        // println!("[verifier] z3 sumcheck verify: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
-
         let z3_ell_eval = evaluate_at_challenges(
             &unpadded_z1_mles[2],
             &z3_challenges[m_rq.height().ilog2() as usize..].to_vec(),
@@ -182,9 +154,6 @@ where
             .expect("r0_mle proof does not verify");
         whir.verify(&proof.r1_mle_proof.as_ref().unwrap(), &z3_challenges)
             .expect("r1_mle proof does not verify");
-
-        // println!("[verifier] r0/r1 WHIR verify: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
-        // let timer = Instant::now();
 
         // eq_tau eval
         let eq_eval = evaluate_at_challenges(&unpadded_z1_mles[0], &z3_challenges[0..m]);
@@ -222,8 +191,6 @@ where
             .zip(eq_tau_mle_evals.iter())
             .map(|(a, b)| *a * *b)
             .sum::<F>();
-
-        // println!("[verifier] z2 computation: {:.2}ms", timer.elapsed().as_secs_f64() * 1000.0);
 
         assert_eq!(
             z1_original_claim - z_2 - (alpha_factor * z3_original_claim),
