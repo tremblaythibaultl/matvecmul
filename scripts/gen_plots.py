@@ -5,7 +5,7 @@ import re
 import sys
 from pathlib import Path
 
-BENCH_RE = re.compile(r"^Benchmarking\s+(.+?)/T(\d+)_H(\d+)")
+BENCH_RE = re.compile(r"^(?:Benchmarking\s+)?(.+?)/T(\d+)_H(\d+)")
 TIME_RE = re.compile(r"time:\s*\[([^\]]+)\]")
 COLLECT_RE = re.compile(r"Collecting\s+(\d+)\s+samples.*\(([^)]+)\s+iterations\)")
 PROOF_RE = re.compile(r"proof.*?size.*?([0-9]+(?:[.,][0-9]+)?)", re.IGNORECASE)
@@ -37,6 +37,10 @@ def main():
             parts = bench_path.split('/')
             group = parts[0]
             key = (group, int(t_str), int(h_str))
+            # Finalize previous entry if it has data and is different
+            if last_key is not None and last_key != key and last_key in in_progress:
+                if in_progress[last_key].get('median') is not None:
+                    results.append(in_progress.pop(last_key))
             last_key = key
             if key not in in_progress:
                 in_progress[key] = {

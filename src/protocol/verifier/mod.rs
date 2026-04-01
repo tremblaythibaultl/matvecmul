@@ -10,7 +10,6 @@ use crate::{
     rlwe::RLWE,
 };
 use ark_ff::{FftField, Field};
-use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 
 pub struct Verifier<const D: usize, F: Field> {
     _pd: PhantomData<F>,
@@ -55,7 +54,7 @@ where
             el.serialize(&mut x_bytes_to_absorb).unwrap();
         }
 
-        transcript.absorb_bytes_par(&x_bytes_to_absorb);
+        transcript.absorb_bytes(&x_bytes_to_absorb);
 
         let mut beta = transcript.squeeze(1);
         beta.push(beta[0] * beta[0]);
@@ -85,7 +84,7 @@ where
                 .unwrap();
         }
 
-        transcript.absorb_bytes_par(&y_bytes_to_absorb);
+        transcript.absorb_bytes(&y_bytes_to_absorb);
         transcript.absorb_bytes(&proof.r0_commitment);
         transcript.absorb_bytes(&proof.r1_commitment);
 
@@ -227,7 +226,7 @@ pub fn compute_z1_mles<const D: usize, F: Field>(
         MultilinearPolynomial::new(powers_of_alpha.clone(), powers_of_alpha_num_vars);
 
     let x_alpha_mle_evals = x
-        .par_iter()
+        .iter()
         .map(|ct| {
             ct.get_ring_element(0)
                 .unwrap()

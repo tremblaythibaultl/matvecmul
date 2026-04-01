@@ -14,12 +14,12 @@ mod test {
     };
 
     #[test]
-    #[ignore]
+    // #[ignore]
     fn test_functionality() {
         pub const D: usize = 1 << 10;
         pub const P: usize = 1 << 4;
-        pub const INTEGER_WIDTH: usize = 1 << 20;
-        pub const INTEGER_HEIGHT: usize = 1 << 6;
+        pub const INTEGER_WIDTH: usize = 1 << 18;
+        pub const INTEGER_HEIGHT: usize = 1 << 7;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
