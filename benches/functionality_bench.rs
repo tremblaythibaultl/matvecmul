@@ -13,35 +13,33 @@ use matvec::{
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
 };
-use rayon::{
-    iter::{IntoParallelRefIterator, ParallelIterator},
-    slice::ParallelSlice,
-};
 use whir::crypto::fields::FieldWithSize;
 
 pub const D: usize = 1 << 10;
 pub const P: usize = 1 << 4;
 pub const TS: &[usize] = &[
-    // (1 << 1),
-    // (1 << 2),
-    // (1 << 3),
-    // (1 << 4),
-    // (1 << 5),
-    // (1 << 6),
-    // (1 << 7),
+    (1 << 1),
+    (1 << 2),
+    (1 << 3),
+    (1 << 4),
+    (1 << 5),
+    (1 << 6),
+    (1 << 7),
     (1 << 8),
     (1 << 9),
     (1 << 10),
 ];
 pub const HEIGHTS: &[usize] = &[
-    // (1 << 1),
-    // (1 << 2),
-    // (1 << 3),
-    // (1 << 4),
-    // (1 << 5),
-    // (1 << 6),
-    // (1 << 7),
+    (1 << 1),
+    (1 << 2),
+    (1 << 3),
+    (1 << 4),
+    (1 << 5),
+    (1 << 6),
+    (1 << 7),
     (1 << 8),
+    (1 << 9),
+    (1 << 10),
 ];
 pub type F = Field64;
 pub type F2 = Field64_2;
@@ -347,8 +345,8 @@ criterion_group!(
     targets =
         bench_plaintext_matvec,
         bench_vector_encryption,
-        // bench_prover_computation,
-        // bench_prover_computation_without_pcs,
+        bench_prover_computation,
+        bench_prover_computation_without_pcs,
         bench_result_decryption,
         bench_verifier_computation,
 );
