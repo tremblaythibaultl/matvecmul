@@ -18,6 +18,10 @@ pub struct Verifier<const D: usize, F: Field> {
 impl<const D: usize, F> Verifier<D, F>
 where
     F: FftField,
+    // Bounds required by the WHIR PCS wrapper (satisfied by `Fp`/`Fp2`/... fields).
+    F: whir::transcript::Codec<[u8]>,
+    ark_std::rand::distributions::Standard: ark_std::rand::distributions::Distribution<F>
+        + ark_std::rand::distributions::Distribution<<F as Field>::BasePrimeField>,
 {
     pub fn preprocess(
         m: &Matrix<F::BasePrimeField>,

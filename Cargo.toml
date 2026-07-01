@@ -16,10 +16,11 @@ rand_distr = "0.4.3"
 rayon = "1.11.0"
 sha2 = "0.10.9"
 sha3 = "0.10.8"
-spongefish = { git = "https://github.com/arkworks-rs/spongefish" }
-spongefish-pow = { git = "https://github.com/arkworks-rs/spongefish" }
 tfhe-ntt = "0.6.0"
-whir = { git = "https://github.com/WizardOfMenlo/whir.git", rev = "22c675807fc9295fef68a11945713dc3e184e1c1" }
+whir = { git = "https://github.com/worldfnd/whir", rev = "655783c3b8466af34587d43f333ca967604e1954" }
+# Not used directly: enables the `derive` feature on the `zerocopy` version WHIR
+# depends on, via feature unification, so WHIR's zerocopy derives resolve.
+zerocopy = { version = "0.8.33", features = ["derive"] }
 
 [dev-dependencies]
 criterion = "0.7.0"

@@ -5,7 +5,7 @@ use crate::protocol::{
     sumcheck::{multilinear::MultilinearPolynomial, univariate::UnivariatePolynomial},
     transcript::{self, Blake3Transcript},
 };
-use whir::crypto::fields::FieldWithSize;
+use whir::algebra::fields::FieldWithSize;
 
 pub mod multilinear;
 pub mod univariate;
@@ -52,7 +52,7 @@ impl<F: Field> SumCheckProof<F> {
     }
 
     pub fn size_in_bytes(&self) -> usize {
-        let field_elt_size = F::field_size_in_bits() / 8;
+        let field_elt_size = (F::field_size_bits() / 8.0).ceil() as usize;
 
         let univariates_deg = self
             .polys

@@ -13,7 +13,7 @@ use matvec::{
     rand::get_rng,
     rlwe::{RLWE, decrypt, encrypt},
 };
-use whir::crypto::fields::FieldWithSize;
+use whir::algebra::fields::FieldWithSize;
 
 pub const D: usize = 1 << 10;
 pub const P: usize = 1 << 4;
@@ -306,17 +306,17 @@ fn bench_verifier_computation(c: &mut Criterion) {
                 true,
             );
 
-            let field_elt_size = F2::field_size_in_bits() / 8;
+            let field_elt_size = (F2::field_size_bits() / 8.0).ceil() as usize;
             let sumcheck_1_size = proof.z1_sumcheck_proof.size_in_bytes();
             let sumcheck_2_size = proof.z3_sumcheck_proof.size_in_bytes();
 
             let proof_size = sumcheck_1_size
             + sumcheck_2_size
-            + proof.r0_mle_proof.as_ref().unwrap().proof.len()
+            + proof.r0_mle_proof.as_ref().unwrap().size_in_bytes()
             + field_elt_size // add one field elt for the claim
-            + proof.r1_mle_proof.as_ref().unwrap().proof.len()
+            + proof.r1_mle_proof.as_ref().unwrap().size_in_bytes()
             + field_elt_size // add one field elt for the claim
-            + proof.m_mle_proof.as_ref().unwrap().proof.len()
+            + proof.m_mle_proof.as_ref().unwrap().size_in_bytes()
             + field_elt_size // add one field elt for the claim
             + 128; // add 128 bytes for the commitments
 

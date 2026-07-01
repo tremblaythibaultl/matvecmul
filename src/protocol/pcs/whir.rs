@@ -1,146 +1,129 @@
-use std::marker::PhantomData;
-
-use ark_crypto_primitives::{
-    crh::{CRHScheme, TwoToOneCRHScheme},
-    merkle_tree::Config,
+use ark_ff::Field;
+use ark_std::rand::{
+    RngCore,
+    distributions::{Distribution, Standard},
 };
-use ark_ff::{FftField, Field};
-use ark_serialize::CanonicalSerialize;
-use ark_std::rand::RngCore;
-use spongefish::{DomainSeparator, ProverState, VerifierState};
-use spongefish_pow::blake3::Blake3PoW;
+use std::borrow::Cow;
 use whir::{
-    crypto::merkle_tree::{
-        blake3::{Blake3Compress, Blake3LeafHash, Blake3MerkleTreeParams},
-        parameters::default_config,
+    algebra::{
+        embedding::Basefield,
+        linear_form::{Evaluate, LinearForm, MultilinearExtension},
     },
-    parameters::{
-        DeduplicationStrategy, FoldingFactor, MerkleProofStrategy, MultivariateParameters,
-        ProtocolParameters, SoundnessType, default_max_pow,
-    },
-    poly_utils::{evals::EvaluationsList, multilinear::MultilinearPoint},
-    whir::{
-        committer::{CommitmentReader, CommitmentWriter, Witness},
-        domainsep::{DigestDomainSeparator, WhirDomainSeparator},
-        parameters::WhirConfig,
-        prover::Prover,
-        statement::{Statement, Weights},
-        utils::{DigestToUnitDeserialize, DigestToUnitSerialize},
-        verifier::Verifier,
-    },
+    hash,
+    parameters::ProtocolParameters,
+    protocols::whir::Config,
+    transcript::{Codec, DomainSeparator, Proof, ProverState, VerifierState, codecs::Empty},
 };
 
 use crate::protocol::sumcheck::multilinear::MultilinearPolynomial;
 
-pub type PowStrategy = Blake3PoW;
-
 #[derive(Clone)]
-pub struct WhirProof<F> {
+pub struct WhirProof<F: Field> {
     pub claim: F,
-    pub proof: Vec<u8>,
+    pub proof: Proof,
 }
 
-pub struct Whir<
-    F: FftField + CanonicalSerialize,
-    MerkleConfig: Config<Leaf = [F]> + Clone = Blake3MerkleTreeParams<F>,
-> {
+impl<F: Field> WhirProof<F> {
+    pub fn size_in_bytes(&self) -> usize {
+        self.proof.narg_string.len() + self.proof.hints.len()
+    }
+}
+
+pub struct WhirCommitment<F: Field> {
+    evals: Vec<F::BasePrimeField>,
+    commitment_bytes: Vec<u8>,
+}
+
+impl<F: Field> WhirCommitment<F> {
+    pub fn narg_string(&self) -> &[u8] {
+        &self.commitment_bytes
+    }
+}
+
+pub struct Whir<F: Field> {
     num_variables: usize,
-    domainsep: DomainSeparator,
-    params: WhirConfig<F, MerkleConfig, PowStrategy>,
-    _phantom: PhantomData<MerkleConfig>,
+    config: Config<Basefield<F>>,
 }
 
-impl<F, MerkleConfig> Whir<F, MerkleConfig>
+impl<F> Whir<F>
 where
-    F: Field + FftField + CanonicalSerialize,
-    MerkleConfig: Config<Leaf = [F]> + Clone,
-    MerkleConfig::InnerDigest: AsRef<[u8]> + From<[u8; 32]>,
-    DomainSeparator: DigestDomainSeparator<MerkleConfig>,
-    ProverState: DigestToUnitSerialize<MerkleConfig>,
-    for<'a> VerifierState<'a>: DigestToUnitDeserialize<MerkleConfig>,
+    F: Field,
+    Standard: Distribution<F> + Distribution<F::BasePrimeField>,
+    F: Codec<[u8]>,
 {
     pub const SECURITY_LEVEL: usize = 100;
     pub const RATE: usize = 1;
     pub const FIRST_ROUND_FOLDING_FACTOR: usize = 4;
     pub const FOLDING_FACTOR: usize = 4;
-    pub const SOUNDNESS_TYPE: SoundnessType = SoundnessType::ConjectureList;
     pub const BATCH_SIZE: usize = 1;
 
-    pub fn new<R: RngCore>(num_variables: usize, rng: &mut R) -> Self
-    where
-        <<MerkleConfig as Config>::LeafHash as CRHScheme>::Parameters: From<()>,
-        <<MerkleConfig as Config>::TwoToOneHash as TwoToOneCRHScheme>::Parameters: From<()>,
-    {
-        let (leaf_hash_params, two_to_one_params) =
-            default_config::<F, Blake3LeafHash<F>, Blake3Compress>(rng);
-
-        let multivariate_params = MultivariateParameters::<F>::new(num_variables);
-        let whir_params = ProtocolParameters::<MerkleConfig, PowStrategy> {
-            initial_statement: true,
+    pub fn new<R: RngCore>(num_variables: usize, _rng: &mut R) -> Self {
+        let whir_params = ProtocolParameters {
             security_level: Self::SECURITY_LEVEL,
-            pow_bits: default_max_pow(num_variables, Self::RATE),
-            folding_factor: FoldingFactor::ConstantFromSecondRound(
-                Self::FIRST_ROUND_FOLDING_FACTOR,
-                Self::FOLDING_FACTOR,
-            ),
-            leaf_hash_params: leaf_hash_params.into(),
-            two_to_one_params: two_to_one_params.into(),
-            soundness_type: Self::SOUNDNESS_TYPE,
-            _pow_parameters: Default::default(),
+            // Mirrors the previous `default_max_pow(num_variables, rate)`,
+            // which was `num_variables + log_inv_rate - 3`.
+            pow_bits: (num_variables + Self::RATE).saturating_sub(3),
+            initial_folding_factor: Self::FIRST_ROUND_FOLDING_FACTOR,
+            folding_factor: Self::FOLDING_FACTOR,
+            unique_decoding: false,
             starting_log_inv_rate: Self::RATE,
             batch_size: Self::BATCH_SIZE,
-            deduplication_strategy: DeduplicationStrategy::Enabled,
-            merkle_proof_strategy: MerkleProofStrategy::Compressed,
+            hash_id: hash::BLAKE3,
         };
 
-        let params =
-            WhirConfig::<F, MerkleConfig, PowStrategy>::new(multivariate_params, whir_params);
+        let config = Config::<Basefield<F>>::new(1 << num_variables, &whir_params);
 
         Self {
             num_variables,
-            domainsep: DomainSeparator::new("matvecmul")
-                .commit_statement(&params)
-                .add_whir_proof(&params),
-            params,
-            _phantom: PhantomData,
+            config,
         }
     }
 
-    pub fn commit(
-        &self,
-        poly: &MultilinearPolynomial<F::BasePrimeField>,
-    ) -> (Witness<F, MerkleConfig>, ProverState) {
-        let mut prover_state = self.domainsep.to_prover_state();
-        let evals = EvaluationsList::new(poly.evals().to_vec());
-        let coeffs = evals.to_coeffs();
-        let committer = CommitmentWriter::new(self.params.clone());
-        (
-            committer.commit(&mut prover_state, &coeffs).unwrap(),
-            prover_state,
-        )
+    fn whir_point(point: &[F]) -> Vec<F> {
+        point.to_vec()
     }
 
-    pub fn prove(
-        &self,
-        commitment: Witness<F, MerkleConfig>,
-        mut prover_state: ProverState,
-        point: &[F],
-    ) -> WhirProof<F> {
-        let coeffs = commitment.batched_poly();
-        let mut statement: Statement<F> = Statement::<F>::new(self.num_variables);
-        let point = MultilinearPoint(point.to_vec());
-        let claim = coeffs.evaluate(&point);
-        let weights = Weights::evaluation(point.clone());
-        statement.add_constraint(weights, claim);
-        let prover = Prover::new(self.params.clone());
+    fn domain_separator(&self) -> DomainSeparator<'static, Empty> {
+        DomainSeparator::protocol(&self.config)
+            .session(&"matvecmul")
+            .instance(&Empty)
+    }
 
-        prover
-            .prove(&mut prover_state, statement.clone(), commitment)
-            .unwrap();
+    pub fn commit(&self, poly: &MultilinearPolynomial<F::BasePrimeField>) -> WhirCommitment<F> {
+        let evals = poly.evals().to_vec();
+
+        let ds = self.domain_separator();
+        let mut prover_state = ProverState::new_std(&ds);
+        let _witness = self.config.commit(&mut prover_state, &[&evals]);
+        let commitment_bytes = prover_state.proof().narg_string;
+
+        WhirCommitment {
+            evals,
+            commitment_bytes,
+        }
+    }
+
+    pub fn prove(&self, commitment: WhirCommitment<F>, point: &[F]) -> WhirProof<F> {
+        let WhirCommitment { evals, .. } = commitment;
+
+        let ds = self.domain_separator();
+        let mut prover_state = ProverState::new_std(&ds);
+        let witness = self.config.commit(&mut prover_state, &[&evals]);
+
+        let form = MultilinearExtension::new(Self::whir_point(point));
+        let claim = form.evaluate(self.config.embedding(), &evals);
+
+        let _ = self.config.prove(
+            &mut prover_state,
+            vec![Cow::Borrowed(evals.as_slice())],
+            vec![Cow::Owned(witness)],
+            vec![Box::new(form) as Box<dyn LinearForm<F>>],
+            Cow::Owned(vec![claim]),
+        );
 
         WhirProof {
-            proof: prover_state.narg_string().to_vec(),
             claim,
+            proof: prover_state.proof(),
         }
     }
 
@@ -150,39 +133,58 @@ where
         poly: &MultilinearPolynomial<F::BasePrimeField>,
         point: &[F],
     ) -> WhirProof<F> {
-        let mut prover_state = self.domainsep.to_prover_state();
-        let evals = EvaluationsList::new(poly.evals().to_vec());
-        let coeffs = evals.to_coeffs();
-        let committer = CommitmentWriter::new(self.params.clone());
-        let witness = committer.commit(&mut prover_state, &coeffs).unwrap();
-        let mut statement: Statement<F> = Statement::<F>::new(self.num_variables);
-        let point = MultilinearPoint(point.to_vec());
-        let claim = coeffs.evaluate_at_extension(&point);
-        let weights = Weights::evaluation(point.clone());
-        statement.add_constraint(weights, claim);
-        let prover = Prover::new(self.params.clone());
+        let evals = poly.evals().to_vec();
 
-        prover
-            .prove(&mut prover_state, statement.clone(), witness)
-            .unwrap();
+        let ds = self.domain_separator();
+        let mut prover_state = ProverState::new_std(&ds);
+        let witness = self.config.commit(&mut prover_state, &[&evals]);
+
+        let form = MultilinearExtension::new(Self::whir_point(point));
+        let claim = form.evaluate(self.config.embedding(), &evals);
+
+        let _ = self.config.prove(
+            &mut prover_state,
+            vec![Cow::Borrowed(evals.as_slice())],
+            vec![Cow::Owned(witness)],
+            vec![Box::new(form) as Box<dyn LinearForm<F>>],
+            Cow::Owned(vec![claim]),
+        );
 
         WhirProof {
-            proof: prover_state.narg_string().to_vec(),
             claim,
+            proof: prover_state.proof(),
         }
     }
 
     // Returns Ok if proof verification succeeded and Err otherwise.
     pub fn verify(&self, proof: &WhirProof<F>, point: &[F]) -> anyhow::Result<()> {
-        let commitment_reader = CommitmentReader::new(&self.params);
-        let verifier = Verifier::new(&self.params);
-        let mut verifier_state = self.domainsep.to_verifier_state(&proof.proof);
-        let parsed_commitment = commitment_reader.parse_commitment(&mut verifier_state)?;
-        let mut statement: Statement<F> = Statement::<F>::new(self.num_variables);
-        let point = MultilinearPoint(point.to_vec());
-        let weights = Weights::evaluation(point.clone());
-        statement.add_constraint(weights, proof.claim);
-        verifier.verify(&mut verifier_state, &parsed_commitment, &statement)?;
+        let _ = self.num_variables;
+        let ds = self.domain_separator();
+        let mut verifier_state = VerifierState::new_std(&ds, &proof.proof);
+
+        let commitment = self
+            .config
+            .receive_commitment(&mut verifier_state)
+            .map_err(|_| anyhow::anyhow!("failed to parse WHIR commitment"))?;
+
+        let evaluations = [proof.claim];
+        let final_claim = self
+            .config
+            .verify(&mut verifier_state, &[&commitment], &evaluations)
+            .map_err(|_| anyhow::anyhow!("WHIR proof verification failed"))?;
+
+        // Tie the deferred multilinear-extension constraint back to the claim.
+        let form = MultilinearExtension::new(Self::whir_point(point));
+        final_claim
+            .verify([&form as &dyn LinearForm<F>])
+            .map_err(|_| {
+                anyhow::anyhow!("WHIR final claim does not match the committed polynomial")
+            })?;
+
         Ok(())
+    }
+
+    pub fn num_variables(&self) -> usize {
+        self.num_variables
     }
 }

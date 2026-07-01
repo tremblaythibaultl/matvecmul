@@ -23,6 +23,10 @@ pub struct Prover<const D: usize, F: FftField> {
 impl<const D: usize, F> Prover<D, F>
 where
     F: FftField,
+    // Bounds required by the WHIR PCS wrapper (satisfied by `Fp`/`Fp2`/... fields).
+    F: whir::transcript::Codec<[u8]>,
+    ark_std::rand::distributions::Standard: ark_std::rand::distributions::Distribution<F>
+        + ark_std::rand::distributions::Distribution<<F as Field>::BasePrimeField>,
 {
     pub fn preprocess(
         m: &Matrix<F::BasePrimeField>,
@@ -122,19 +126,19 @@ where
         let whir_r1_mle = Whir::<F>::new(r1_mle_over_base_prime_f.num_variables(), &mut rng);
 
         let mut r0_commitment = vec![];
-        let whir_r0_mle_commitment_and_prover_state = if include_pcs {
-            let (commitment, prover_state) = whir_r0_mle.commit(&r0_mle_over_base_prime_f);
-            r0_commitment.extend_from_slice(prover_state.narg_string());
-            Some((commitment, prover_state))
+        let whir_r0_mle_commitment = if include_pcs {
+            let commitment = whir_r0_mle.commit(&r0_mle_over_base_prime_f);
+            r0_commitment.extend_from_slice(commitment.narg_string());
+            Some(commitment)
         } else {
             None
         };
 
         let mut r1_commitment = vec![];
-        let whir_r1_mle_commitment_and_prover_state = if include_pcs {
-            let (commitment, prover_state) = whir_r1_mle.commit(&r1_mle_over_base_prime_f);
-            r1_commitment.extend_from_slice(prover_state.narg_string());
-            Some((commitment, prover_state))
+        let whir_r1_mle_commitment = if include_pcs {
+            let commitment = whir_r1_mle.commit(&r1_mle_over_base_prime_f);
+            r1_commitment.extend_from_slice(commitment.narg_string());
+            Some(commitment)
         } else {
             None
         };
@@ -142,10 +146,10 @@ where
         let whir_m_mle = Whir::<F>::new(m_mle_over_base_f.num_variables(), &mut rng);
 
         let mut m_commitment = vec![];
-        let whir_m_mle_commitment_and_prover_state = if include_pcs {
-            let (commitment, prover_state) = whir_m_mle.commit(&m_mle_over_base_f);
-            m_commitment.extend_from_slice(prover_state.narg_string());
-            Some((commitment, prover_state))
+        let whir_m_mle_commitment = if include_pcs {
+            let commitment = whir_m_mle.commit(&m_mle_over_base_f);
+            m_commitment.extend_from_slice(commitment.narg_string());
+            Some(commitment)
         } else {
             None
         };
@@ -228,22 +232,14 @@ where
 
         // Whir proofs for r_mle and m_mle.
         let (m_mle_proof, r0_mle_proof, r1_mle_proof) = if include_pcs {
-            let (r0_mle_commitment, r0_mle_prover_state) =
-                whir_r0_mle_commitment_and_prover_state.unwrap();
+            let r0_mle_commitment = whir_r0_mle_commitment.unwrap();
+            let r0_mle_proof = whir_r0_mle.prove(r0_mle_commitment, &z3_challenges);
 
-            let r0_mle_proof =
-                whir_r0_mle.prove(r0_mle_commitment, r0_mle_prover_state, &z3_challenges);
+            let r1_mle_commitment = whir_r1_mle_commitment.unwrap();
+            let r1_mle_proof = whir_r1_mle.prove(r1_mle_commitment, &z3_challenges);
 
-            let (r1_mle_commitment, r1_mle_prover_state) =
-                whir_r1_mle_commitment_and_prover_state.unwrap();
-
-            let r1_mle_proof =
-                whir_r1_mle.prove(r1_mle_commitment, r1_mle_prover_state, &z3_challenges);
-
-            let (m_mle_commitment, m_mle_prover_state) =
-                whir_m_mle_commitment_and_prover_state.unwrap();
-            let m_mle_proof =
-                whir_m_mle.prove(m_mle_commitment, m_mle_prover_state, &z1_challenges);
+            let m_mle_commitment = whir_m_mle_commitment.unwrap();
+            let m_mle_proof = whir_m_mle.prove(m_mle_commitment, &z1_challenges);
 
             (Some(m_mle_proof), Some(r0_mle_proof), Some(r1_mle_proof))
         } else {

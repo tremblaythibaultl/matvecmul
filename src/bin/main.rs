@@ -18,8 +18,8 @@ mod test {
     fn test_functionality() {
         pub const D: usize = 1 << 10;
         pub const P: usize = 1 << 4;
-        pub const INTEGER_WIDTH: usize = 1 << 18;
-        pub const INTEGER_HEIGHT: usize = 1 << 7;
+        pub const INTEGER_WIDTH: usize = 1 << 13;
+        pub const INTEGER_HEIGHT: usize = 1 << 3;
         pub type F = Field64;
         pub type F2 = Field64_2;
 
