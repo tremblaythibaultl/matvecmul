@@ -65,7 +65,7 @@ where
             pow_bits: (num_variables + Self::RATE).saturating_sub(3),
             initial_folding_factor: Self::FIRST_ROUND_FOLDING_FACTOR,
             folding_factor: Self::FOLDING_FACTOR,
-            unique_decoding: false,
+            unique_decoding: true,
             starting_log_inv_rate: Self::RATE,
             batch_size: Self::BATCH_SIZE,
             hash_id: hash::BLAKE3,
